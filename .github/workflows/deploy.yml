@@ -17,7 +17,9 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Login to Docker Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-      - name: Build and Push Docker Image and set latest
-        run: |
-          docker buildx build -f config/docker/Dockerfile -t $IMAGE_TAG --push .
-          docker tag $IMAGE_TAG ${{ format('{0}:latest', secrets.CI_REGISTRY_IMAGE) }}
+      - name: Build and Push Docker Image
+        run: docker buildx build -f config/docker/Dockerfile -t $IMAGE_TAG .
+      - name: Push Docker Image
+        run: docker push $IMAGE_TAG
+      - name: Set as latest
+        run: docker tag $IMAGE_TAG ${{ format('{0}:latest', secrets.CI_REGISTRY_IMAGE) }}
