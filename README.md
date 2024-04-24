@@ -1,7 +1,6 @@
 # Supervisord Multi Server Monitoring Tool
 
-![Screenshot](https://gitlab.com/sdt7772416/railgun/-/wikis/uploads/206d3272877e29018554dac9641b6a33/image.png)
-
+![68747470733a2f2f6769746c61622e636f6d2f736474373737323431362f7261696c67756e2f2d2f77696b69732f75706c6f6164732f32303664333237323837376532393031383535346461633936343162366133332f696d6167652e706e67](https://github.com/KoNekoD/supervisord-monitor/assets/108808201/d486fc99-f352-4112-8581-88303026895b)
 
 ## Features
 
@@ -14,7 +13,7 @@
 
 1.Clone supervisord-monitor to your vhost/webroot:
 ```
-git clone git@gitlab.com:sdt7772416/railgun.git
+git clone git@github.com:KoNekoD/supervisord-monitor.git
 ```
 
 2.Copy config/docker/.env.dist to config/docker/.env
