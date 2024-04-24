@@ -1,0 +1,14 @@
+parameters:
+  supervisors_servers: '%env(json:SUPERVISORS_SERVERS)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/Kernel.php'
+      - '../src/{DTO,Enum,Exception}'
+      - '../src/Service/SupervisorApiClient.php'

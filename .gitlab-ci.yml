@@ -1,0 +1,15 @@
+build:
+  image: docker:20.10.16
+  stage: build
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker info
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build -f config/docker/Dockerfile -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+  only:
+    - main

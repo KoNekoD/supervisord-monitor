@@ -1,0 +1,95 @@
+version: "3.8"
+
+name: railgun-supervisor-monitor
+
+services:
+  railgun:
+    container_name: railgun
+    user: app
+    build:
+      context: ./../../
+      dockerfile: ./config/docker/Dockerfile
+      args:
+        - WEB_PORT=${WEB_PORT}
+        - BUILD_TYPE=dev
+        - PUID=${PUID}
+        - PGID=${PGID}
+        - SUPERVISORS_SERVERS=${SUPERVISORS_SERVERS}
+        - DEV_XDEBUG_AUTOSTART=${DEV_XDEBUG_AUTOSTART}
+    volumes:
+      - ./../../:/var/www/supervisor-monitor:cached
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+      - "5173:5173" # Dev mode
+    networks:
+      - railgun_network
+
+  railgun-test-server1:
+    container_name: railgun-test-server1
+    user: app
+    build:
+      context: ./../../tests/Functional/resources/
+      args:
+        - UID=${PUID}
+        - GID=${PGID}
+    volumes:
+      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+    networks:
+      - railgun_network
+
+  railgun-test-server2:
+    container_name: railgun-test-server2
+    user: app
+    build:
+      context: ./../../tests/Functional/resources/
+      args:
+        - UID=${PUID}
+        - GID=${PGID}
+    volumes:
+      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+    networks:
+      - railgun_network
+
+  railgun-test-server3:
+    container_name: railgun-test-server3
+    user: app
+    build:
+      context: ./../../tests/Functional/resources/
+      args:
+        - UID=${PUID}
+        - GID=${PGID}
+    volumes:
+      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+    networks:
+      - railgun_network
+
+  railgun-test-server4:
+    container_name: railgun-test-server4
+    user: app
+    build:
+      context: ./../../tests/Functional/resources/
+      args:
+        - UID=${PUID}
+        - GID=${PGID}
+    volumes:
+      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+    networks:
+      - railgun_network
+
+  railgun-test-server5:
+    container_name: railgun-test-server5
+    user: app
+    build:
+      context: ./../../tests/Functional/resources/
+      args:
+        - UID=${PUID}
+        - GID=${PGID}
+    volumes:
+      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+    networks:
+      - railgun_network
+
+networks:
+  railgun_network:
+    name: ${EXTERNAL_NETWORK_NAME}
+    external: true

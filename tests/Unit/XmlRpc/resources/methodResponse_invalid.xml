@@ -1,0 +1,28 @@
+This is an invalid xml file
+
+<methodResponse>
+    <params>
+        <param>
+            <value><array><data>
+                <value>
+                    <string>system.listMethods</string>
+                </value>
+                <value>
+                    <string>system.methodSignature</string>
+                </value>
+                <value>
+                    <string>system.methodHelp</string>
+                </value>
+                <value>
+                    <string>system.multicall</string>
+                </value>
+                <value>
+                    <string>system.shutdown</string>
+                </value>
+                <value>
+                    <string>sample.add</string>
+                </value>
+            </data></array></value>
+        </param>
+    </params>
+</methodResponse>

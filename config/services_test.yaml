@@ -1,0 +1,2 @@
+parameters:
+  supervisors_servers: [ { "ip": "railgun-test-server1","port": 9555,"name": "default","username": "default","password": "default" } ]

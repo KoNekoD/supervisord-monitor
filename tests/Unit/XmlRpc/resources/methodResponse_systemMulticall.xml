@@ -1,0 +1,38 @@
+<methodResponse>
+    <params>
+        <param>
+            <value>
+                <array>
+                    <data>
+                        <value>
+                            <struct>
+                                <member>
+                                    <name>success</name>
+                                    <value>
+                                        <boolean>1</boolean>
+                                    </value>
+                                </member>
+                            </struct>
+                        </value>
+                        <value>
+                            <struct>
+                                <member>
+                                    <name>faultCode</name>
+                                    <value>
+                                        <int>300</int>
+                                    </value>
+                                </member>
+                                <member>
+                                    <name>faultString</name>
+                                    <value>
+                                        <string>Invalid parameters</string>
+                                    </value>
+                                </member>
+                            </struct>
+                        </value>
+                    </data>
+                </array>
+            </value>
+        </param>
+    </params>
+</methodResponse>
