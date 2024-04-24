@@ -18,7 +18,7 @@ jobs:
       - name: Login to Docker Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Build and Push Docker Image
-        run: docker buildx build -f config/docker/Dockerfile -t $IMAGE_TAG .
+        run: docker buildx build -f config/docker/Dockerfile -t $IMAGE_TAG --load .
       - name: Push Docker Image
         run: docker push $IMAGE_TAG
       - name: Set as latest
