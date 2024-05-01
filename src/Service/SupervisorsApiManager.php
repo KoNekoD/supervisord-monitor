@@ -8,6 +8,7 @@ use App\DTO\Input\WorkerDTO;
 use App\DTO\Output\AllProcessInfoDTO;
 use App\DTO\Output\ChangedProcessesDTO;
 use App\DTO\Output\OperationResultDTO;
+use App\DTO\Output\ProcessStderrLogDTO;
 use App\DTO\Output\SupervisorServerDTO;
 use App\Exception\BaseException;
 use App\Exception\XmlRpcException;
@@ -77,6 +78,7 @@ readonly class SupervisorsApiManager
             $dto = $client->getAllProcessInfo();
 
             foreach ($dto->processes as $worker) {
+                $log = null;
                 try {
                     $log = $client->readProcessStderrLog(
                         name: $worker->getFullProcessName(),
@@ -84,7 +86,7 @@ readonly class SupervisorsApiManager
                         length: 0
                     );
                 } catch (XmlRpcException $e) { // Caused when supervisor send incorrect formatting data
-                    $log = 'Failed to fetch logs. Please clear logs. Error: '.$e->getMessage();
+                    $log = new ProcessStderrLogDTO('Failed to fetch logs. Please clear logs. Error: '.$e->getMessage());
                 }
 
                 $worker->log = $log;
