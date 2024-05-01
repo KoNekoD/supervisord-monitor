@@ -10,6 +10,7 @@ use App\DTO\Output\ChangedProcessesDTO;
 use App\DTO\Output\OperationResultDTO;
 use App\DTO\Output\SupervisorServerDTO;
 use App\Exception\BaseException;
+use App\Exception\XmlRpcException;
 use LogicException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -76,7 +77,15 @@ readonly class SupervisorsApiManager
             $dto = $client->getAllProcessInfo();
 
             foreach ($dto->processes as $worker) {
-                $log = $client->readProcessStderrLog(name: $worker->getFullProcessName(), offset: -10000, length: 0);
+                try {
+                    $log = $client->readProcessStderrLog(
+                        name: $worker->getFullProcessName(),
+                        offset: -10000,
+                        length: 0
+                    );
+                } catch (XmlRpcException $e) { // Caused when supervisor send incorrect formatting data
+                    $log = 'Failed to fetch logs. Please clear logs. Error: '.$e->getMessage();
+                }
 
                 $worker->log = $log;
             }
