@@ -6,8 +6,14 @@ export type AllProcessInfoDTO = {
   failError: string | null;
 };
 
+export type FaultDTO = {
+  code: number;
+  message: string;
+};
+
 export type ProcessInfoDTO = {
-  log: ProcessStderrLogDTO | null;
+  errLog: ProcessLogDTO | null;
+  outLog: ProcessLogDTO | null;
   descPid: string;
   descUptime: string;
   name: string;
@@ -26,7 +32,7 @@ export type ProcessInfoDTO = {
   description: string;
 };
 
-export type ProcessStderrLogDTO = {
+export type ProcessLogDTO = {
   log: string;
 };
 

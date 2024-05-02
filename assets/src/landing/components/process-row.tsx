@@ -1,10 +1,8 @@
 import {ProcessInfoDTO, SupervisorServerDTO, WorkerDTO} from "../../api-client/generated";
 import React from "react";
 import {useStore} from "../../main/context-provider";
-import {ProcessLog} from "./process-log";
+import {ProcessLog, ProcessLogPurpose} from "./process-log";
 import {ActButton, Type} from "./act-button";
-import {RiPlayFill, RiStopFill} from "react-icons/ri";
-import {TfiReload} from "react-icons/tfi";
 import {GoDuplicate} from "react-icons/go";
 import {GrErase} from "react-icons/gr";
 import {ProcessButtons} from "./process-buttons";
@@ -59,8 +57,8 @@ export const ProcessRow = ({process, server}: { process: ProcessInfoDTO, server:
                                     40
 
     return (
-            <div className="flex flex-col sm:flex-row sm:h-10">
-                <div className="flex items-center sm:flex-grow">
+            <div className="flex flex-row h-10">
+                <div className="flex items-center flex-grow">
                     <div className="px-2">
                         <p>
                             <a
@@ -73,13 +71,14 @@ export const ProcessRow = ({process, server}: { process: ProcessInfoDTO, server:
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-nowrap items-center space-x-2 justify-between sm:justify-start">
+                <div className="flex flex-nowrap items-center space-x-2">
                     {landingStore.isAllowMutatorsActive && <>
                         <ActButton onClick={() => landingStore.removeProcess(worker)} type={Type.Red}><GrErase/></ActButton>
                         <ActButton onClick={() => landingStore.cloneProcess(worker)} type={Type.Blue}><GoDuplicate/></ActButton>
                     </>}
-                    {process.log && <ProcessLog log={process.log} worker={worker}/>}
-                    <div className={"flex flex-row sm:flex-col items-center"}>
+                    {process.outLog && <ProcessLog log={process.outLog} worker={worker} purpose={ProcessLogPurpose.StdOut}/>}
+                    {process.errLog && <ProcessLog log={process.errLog} worker={worker} purpose={ProcessLogPurpose.StdErr}/>}
+                    <div className={"flex flex-col items-center"}>
                         <Status stateName={process.stateName}/>
                         <span>{process.descUptime}</span>
                     </div>

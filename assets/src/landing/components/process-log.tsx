@@ -1,21 +1,31 @@
-import {ProcessStderrLogDTO, WorkerDTO} from "../../api-client/generated";
+import {ProcessLogDTO, WorkerDTO} from "../../api-client/generated";
 import React from "react";
 import {IoIosWarning} from "react-icons/io";
 import {useStore} from "../../main/context-provider";
-import {RiCloseFill} from "react-icons/ri";
+import {RiBookletFill, RiCloseFill} from "react-icons/ri";
 
-export const ProcessLog = ({log, worker}: { worker: WorkerDTO, log: ProcessStderrLogDTO }) => {
+export enum ProcessLogPurpose {
+    StdErr,
+    StdOut
+}
+
+export const ProcessLog = ({log, worker, purpose}: { worker: WorkerDTO, log: ProcessLogDTO, purpose: ProcessLogPurpose }) => {
     const {landingStore} = useStore();
 
     const [showModal, setShowModal] = React.useState(false);
+
+    const btnClass = purpose === ProcessLogPurpose.StdErr ?
+            "bg-red-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" :
+            "bg-gray-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150";
+
     return (
             <>
                 <button
-                        className="bg-red-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+                        className={btnClass}
                         type="button"
                         onClick={() => setShowModal(true)}
                 >
-                    <IoIosWarning/>
+                    {purpose === ProcessLogPurpose.StdErr ? <IoIosWarning/> : <RiBookletFill/>}
                 </button>
                 {showModal ? (
                         <>
@@ -23,7 +33,7 @@ export const ProcessLog = ({log, worker}: { worker: WorkerDTO, log: ProcessStder
                                 <div className="pointer-events-none relative h-[calc(100%-1rem)] w-full">
                                     <div className="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
                                         <div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                                            <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">Error log</h5>
+                                            <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">Log</h5>
                                             <button type="button" className="h-10 box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" onClick={() => setShowModal(false)}>
                                                 <RiCloseFill/>
                                             </button>

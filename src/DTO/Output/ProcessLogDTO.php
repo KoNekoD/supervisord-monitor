@@ -8,7 +8,7 @@ use App\DTO\XmlRpc\ResponseDTO;
 use Riverwaysoft\PhpConverter\ClassFilter\Dto;
 
 #[Dto]
-class ProcessStderrLogDTO
+class ProcessLogDTO
 {
     public function __construct(public string $log) {}
 

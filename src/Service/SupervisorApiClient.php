@@ -8,7 +8,7 @@ use App\DTO\Output\AllProcessInfoDTO;
 use App\DTO\Output\ChangedProcessesDTO;
 use App\DTO\Output\ConfigDTO;
 use App\DTO\Output\OperationResultDTO;
-use App\DTO\Output\ProcessStderrLogDTO;
+use App\DTO\Output\ProcessLogDTO;
 use App\DTO\Output\SupervisorServerDTO;
 use App\DTO\XmlRpc\CallDTO;
 use App\DTO\XmlRpc\CallInterface;
@@ -227,9 +227,9 @@ class SupervisorApiClient
         return new OperationResultDTO(true);
     }
 
-    public function readProcessStderrLog(string $name, int $offset, int $length): ?ProcessStderrLogDTO
+    public function readProcessStderrLog(string $name, int $offset, int $length): ?ProcessLogDTO
     {
-        return ProcessStderrLogDTO::fromResponse(
+        return ProcessLogDTO::fromResponse(
             $this->request(CallDTO::readProcessStderrLog(name: $name, offset: $offset, length: $length))
         );
     }
@@ -283,4 +283,10 @@ class SupervisorApiClient
         );
     }
 
+    public function readProcessStdoutLog(string $name, int $offset, int $length): ?ProcessLogDTO
+    {
+        return ProcessLogDTO::fromResponse(
+            $this->request(CallDTO::readProcessStdoutLog(name: $name, offset: $offset, length: $length))
+        );
+    }
 }

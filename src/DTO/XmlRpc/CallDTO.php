@@ -73,6 +73,17 @@ readonly class CallDTO implements CallInterface
         );
     }
 
+    public static function readProcessStdoutLog(
+        string $name,
+        int $offset,
+        int $length
+    ): self {
+        return self::new(
+            'supervisor.readProcessStdoutLog',
+            ['name' => $name, 'offset' => $offset, 'length' => $length]
+        );
+    }
+
     public static function clearProcessLogs(string $name): self
     {
         return self::new(

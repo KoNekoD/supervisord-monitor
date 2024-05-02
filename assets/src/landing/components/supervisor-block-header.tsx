@@ -22,14 +22,18 @@ export const SupervisorBlockHeader = ({item}: { item: AllProcessInfoDTO }) => {
     const errMark = <span className="inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-danger-700">err</span>
 
     return (
-            <div className="flex justify-between flex-wrap space-x-1">
-                <div className="flex space-x-2 flex-wrap lg:flex-nowrap items-center">
-                    <a href={item.server.webOpenUrl} className="text-blue-400">{item.server.name}</a>
-                    <i>{item.server.ip + ':' + item.server.port}</i>
-                    <i>{item.ok && item.server.authenticated && <IoLockClosedSharp color="green"/>}</i>
-                    <i>{item.version}</i>
+            <div className="lg:flex lg:justify-between">
+                <div className="flex items-center flex-wrap">
+                    <a href={item.server.webOpenUrl} className="text-blue-400 pr-2">{item.server.name}</a>
+                    <div className="flex items-center space-x-1 flex-wrap">
+                        <span>{item.server.ip + ':' + item.server.port}</span>
+                        <span>{item.ok && item.server.authenticated && <IoLockClosedSharp color="green"/>}</span>
+                        <span>{item.version}</span>
+                    </div>
                 </div>
-                {item.ok ? buttons : errMark}
+                <div className="flex justify-end">
+                    {item.ok ? buttons : errMark}
+                </div>
             </div>
     );
 }

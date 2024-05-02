@@ -9,7 +9,8 @@ use Riverwaysoft\PhpConverter\ClassFilter\Dto;
 #[Dto]
 class ProcessInfoDTO
 {
-    public ?ProcessStderrLogDTO $log = null;
+    public ?ProcessLogDTO $errLog = null;
+    public ?ProcessLogDTO $outLog = null;
 
     public string $descPid = '';
     public string $descUptime = '';

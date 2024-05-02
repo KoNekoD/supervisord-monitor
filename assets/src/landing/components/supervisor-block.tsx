@@ -42,7 +42,7 @@ const Accordion2 = ({title, content}: { title: string, content: AccordItemConten
             <div className="accordion-item">
                 <div className="flex items-center space-x-2">
                     <div>
-                        <div className="flex items-center space-x-2 transititext-secondary text-sm text-secondary transition duration-150 ease-in-out hover:text-secondary-600 focus:text-secondary-600 active:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-500 dark:focus:text-secondary-500 dark:active:text-secondary-600"
+                        <div className="flex items-center space-x-2 transititext-secondary text-sm text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-secondary-600 focus:text-secondary-600 active:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-500 dark:focus:text-secondary-500 dark:active:text-secondary-600"
                                 onClick={() => setIsActive(!isActive)}
                         >
                             {isActive ? <FaChevronUp className={classStr}/> : <FaChevronDown className={classStr}/>}
@@ -99,14 +99,6 @@ export const SupervisorBlock = ({item}: { item: AllProcessInfoDTO }) => {
             ))
         }
     </div>
-
-    // const processes = <div className="flex flex-col">
-    //     {item.processes.map((process) => {
-    //         return <div key={process.name} className="border-b border-gray-200 px-2 py-1">
-    //             <ProcessRow process={process} server={item.server}/>
-    //         </div>
-    //     })}
-    // </div>
 
     return <div className="flex flex-col border-2 border-gray-200 rounded-xl">
         <div className="border-b border-gray-200 px-2 py-1"><SupervisorBlockHeader item={item}/></div>
