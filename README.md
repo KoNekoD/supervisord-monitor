@@ -4,6 +4,8 @@
 
 DockerHub: https://hub.docker.com/r/konekod/supervisord-monitor
 
+Telegram: https://t.me/supervisord_monitor
+
 ## Features
 
 * Monitor unlimited supervisord servers and processes
