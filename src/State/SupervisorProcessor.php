@@ -26,15 +26,17 @@ final readonly class SupervisorProcessor implements ProcessorInterface
         array $uriVariables = [],
         array $context = []
     ) {
-        $serverString = $uriVariables['server'] ?? '';
-        $group = $uriVariables['group'] ?? '';
-        $process = $uriVariables['process'] ?? '';
-        $full = $group.':'.$process;
-        $typeString = $uriVariables['type'] ?? '';
+        /** @var array{server: string, group?: string, process?: string, type: string} $uriVariables */
+
+        $serverString = $uriVariables['server'];
+        $typeString = $uriVariables['type'];
         $type = Enum::tryFrom($typeString);
         if (!$type instanceof Enum) {
             throw new BadRequestHttpException('Unknown type: '.$typeString);
         }
+        $group = $uriVariables['group'] ?? '';
+        $process = $uriVariables['process'] ?? '';
+        $full = $group.':'.$process;
 
         $server = $this->supervisorServerProvider->provide(server: $serverString);
 

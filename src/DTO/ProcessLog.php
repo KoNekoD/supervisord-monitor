@@ -10,11 +10,8 @@ class ProcessLog
 
     public static function fromResponse(ResponseDTO $response): ?self
     {
-        if ($response->isFault) {
-            $log = 'Failed to fetch logs. Error: '.$response->getFault()->message;
-        } else {
-            $log = $response->string();
-        }
+        $log = $response->isFault ? 'Failed to fetch logs. Error: '.$response->getFault()->message : $response->string(
+        );
 
 
         if ($log === '') {

@@ -18,7 +18,7 @@ use Riverwaysoft\PhpConverter\OutputWriter\OutputProcessor\PrependTextFileProces
 use Riverwaysoft\PhpConverter\OutputWriter\SingleFileOutputWriter\SingleFileOutputWriter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
-return static function (PhpConverterConfig $config) {
+return static function (PhpConverterConfig $config): void {
     $config->addVisitor(
         visitor: new DtoVisitor(
             filter: new PhpAttributeFilter(
