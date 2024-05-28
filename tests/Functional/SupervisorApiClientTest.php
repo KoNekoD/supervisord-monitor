@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\DTO\Output\ConfigDTO;
-use App\DTO\XmlRpc\CallDTO;
-use App\Service\SupervisorApiClient;
+use App\ApiClient\SupervisorApiClient;
+use App\DTO\CallDTO;
+use App\DTO\Config;
 use App\Service\SupervisorsApiManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -154,7 +154,7 @@ class SupervisorApiClientTest extends WebTestCase
         $group = $api->getAllConfigInfo()[0]->group;
         $program = 'test'.time();
 
-        $config = new ConfigDTO(command: 'ls /a', exitCodes: [0, 1], startSeconds: -1);
+        $config = new Config(command: 'ls /a', exitCodes: [0, 1], startSeconds: -1);
         $result1 = $api->addProgramToGroup($group, $program, $config);
         $result2 = $api->stopProcess("$group:$program");
         $result3 = $api->removeProcessFromGroup($group, $program);

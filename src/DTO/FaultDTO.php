@@ -2,17 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\XmlRpc;
+namespace App\DTO;
 
-use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
-
-#[Dto]
 class FaultDTO
 {
-    public function __construct(
-        public int $code,
-        public string $message
-    ) {}
+    public function __construct(public int $code, public string $message) {}
 
     /** @param array<string|int, mixed> $data */
     public static function fromArray(array $data): self

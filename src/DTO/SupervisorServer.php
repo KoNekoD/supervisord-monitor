@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\Output;
+namespace App\DTO;
 
-use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
-#[Dto]
-class SupervisorServerDTO
+class SupervisorServer
 {
     public string $webOpenUrl;
     public bool $authenticated;
