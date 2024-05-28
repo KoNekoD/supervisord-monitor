@@ -7,19 +7,21 @@ namespace App\Tests\Functional;
 use App\ApiClient\SupervisorApiClient;
 use App\DTO\CallDTO;
 use App\DTO\Config;
-use App\Service\SupervisorsApiManager;
+use App\Service\SupervisorServerProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SupervisorApiClientTest extends WebTestCase
 {
     public function testMethodsNotChanged(): void
     {
-        /** @var SupervisorsApiManager $apiManager */
-        $apiManager = self::getContainer()->get(SupervisorsApiManager::class);
+        /** @var SupervisorServerProvider $serverProvider */
+        $serverProvider = self::getContainer()->get(SupervisorServerProvider::class);
+        $server = $serverProvider->provideList()[0];
 
-        $api = $apiManager->provideAll()[0];
+        /** @var SupervisorApiClient $api */
+        $api = self::getContainer()->get(SupervisorApiClient::class);
 
-        $realMethods = $api->listMethods();
+        $realMethods = $api->listMethods($server);
         $actualMethods = [
             'supervisor.addProcessGroup',
             'supervisor.clearAllProcessLogs',
@@ -146,18 +148,21 @@ class SupervisorApiClientTest extends WebTestCase
 
     public function testProgramAddedAndRemovedSuccessfully(): void
     {
-        /** @var SupervisorsApiManager $apiManager */
-        $apiManager = self::getContainer()->get(SupervisorsApiManager::class);
-        $api = $apiManager->provideAll()[0];
+        /** @var SupervisorServerProvider $serverProvider */
+        $serverProvider = self::getContainer()->get(SupervisorServerProvider::class);
+        $server = $serverProvider->provideList()[0];
+
+        /** @var SupervisorApiClient $api */
+        $api = self::getContainer()->get(SupervisorApiClient::class);
 
         /** @var string $group */
-        $group = $api->getAllConfigInfo()[0]->group;
+        $group = $api->getAllConfigInfo($server)[0]->group;
         $program = 'test'.time();
 
         $config = new Config(command: 'ls /a', exitCodes: [0, 1], startSeconds: -1);
-        $result1 = $api->addProgramToGroup($group, $program, $config);
-        $result2 = $api->stopProcess("$group:$program");
-        $result3 = $api->removeProcessFromGroup($group, $program);
+        $result1 = $api->addProgramToGroup($group, $program, $config, $server);
+        $result2 = $api->stopProcess("$group:$program", $server);
+        $result3 = $api->removeProcessFromGroup($group, $program, $server);
 
         $this->assertTrue($result1->ok && $result2->ok && $result3->ok);
     }

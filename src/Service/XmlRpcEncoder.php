@@ -383,8 +383,6 @@ final readonly class XmlRpcEncoder
     /**
      * Special method for supervisor calls encode
      * See also venv/lib/python3.11/site-packages/supervisor/xmlrpc.py:350
-     * @param CallDTO $call
-     * @return string
      */
     public function encodeCallForSupervisor(CallDTO $call): string
     {
