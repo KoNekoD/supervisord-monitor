@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Output;
 
-use Riverwaysoft\PhpConverter\ClassFilter\Dto;
+use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
 
 #[Dto]
 class AllProcessInfoDTO

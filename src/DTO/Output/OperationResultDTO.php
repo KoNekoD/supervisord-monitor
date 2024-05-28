@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\DTO\Output;
 
 use App\DTO\XmlRpc\ResponseDTO;
+use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
 
+#[Dto]
 final readonly class OperationResultDTO
 {
     public function __construct(public bool $ok, public bool $isFault = false, public ?string $error = null) {}
