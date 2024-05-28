@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Input;
 
-use Riverwaysoft\PhpConverter\ClassFilter\Dto;
+use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
 
 #[Dto]
 readonly class WorkerDTO
