@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\Output;
+namespace App\DTO;
 
-use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
-
-#[Dto]
-class ProcessInfoDTO
+class Process
 {
-    public ?ProcessLogDTO $errLog = null;
-    public ?ProcessLogDTO $outLog = null;
+    public ?ProcessLog $errLog = null;
+    public ?ProcessLog $outLog = null;
 
     public string $descPid = '';
     public string $descUptime = '';

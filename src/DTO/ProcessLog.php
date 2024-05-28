@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\Output;
+namespace App\DTO;
 
-use App\DTO\XmlRpc\ResponseDTO;
-use Riverwaysoft\PhpConverter\Filter\Attributes\Dto;
-
-#[Dto]
-class ProcessLogDTO
+class ProcessLog
 {
     public function __construct(public string $log) {}
 

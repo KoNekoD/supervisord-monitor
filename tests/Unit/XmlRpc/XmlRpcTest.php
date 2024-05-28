@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\XmlRpc;
 
-use App\DTO\Output\ConfigDTO;
-use App\DTO\XmlRpc\CallDTO;
-use App\DTO\XmlRpc\FaultDTO;
-use App\DTO\XmlRpc\MultiCallDTO;
-use App\DTO\XmlRpc\ResponseDTO;
+use App\DTO\CallDTO;
+use App\DTO\Config;
+use App\DTO\FaultDTO;
+use App\DTO\MultiCallDTO;
+use App\DTO\ResponseDTO;
 use App\Exception\XmlRpcException;
 use App\Service\XmlRpcEncoder;
 use PHPUnit\Framework\TestCase;
@@ -286,7 +286,7 @@ class XmlRpcTest extends TestCase
   </params>
 </methodCall>
 ';
-        $call = CallDTO::addProgramToGroup('test', 'test', new ConfigDTO(command: 'test'));
+        $call = CallDTO::addProgramToGroup('test', 'test', new Config(command: 'test'));
         $mainEncoder = new XmlRpcEncoder(new XmlEncoder([XmlEncoder::FORMAT_OUTPUT => true]));
 
         $encoded = $mainEncoder->encodeCallForSupervisor($call);

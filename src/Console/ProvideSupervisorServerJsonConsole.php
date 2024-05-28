@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\DTO\Output\SupervisorServerDTO;
-use App\Service\SerializerService;
+use App\DTO\SupervisorServer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsCommand('app:provide-supervisor-server-json')]
 class ProvideSupervisorServerJsonConsole extends Command
 {
-    public function __construct(private readonly SerializerService $serializerService)
+    public function __construct(private readonly SerializerInterface $serializer)
     {
         parent::__construct();
     }
@@ -52,7 +52,7 @@ class ProvideSupervisorServerJsonConsole extends Command
         /** @var ?string $password */
         $password = $input->getArgument('password') ?? null;
 
-        $DTO = new SupervisorServerDTO(
+        $DTO = new SupervisorServer(
             ip: $ip,
             port: $port,
             name: $name,
@@ -60,7 +60,7 @@ class ProvideSupervisorServerJsonConsole extends Command
             password: $password
         );
 
-        $json = $this->serializerService->serialize($DTO);
+        $json = $this->serializer->serialize($DTO, 'json');
 
         $output->writeln($json);
 

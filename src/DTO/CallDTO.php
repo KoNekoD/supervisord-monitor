@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\Input;
+namespace App\DTO;
 
-class MethodCallDTO
+readonly class CallDTO implements CallInterface
 {
-    public function __construct(public MethodCallInnerDTO $methodCall) {}
+    /**
+     * @param (array<int, int|float|string|bool|array<int, mixed>|array<string, mixed>|null>)|(array<string, mixed>)|null $params
+     */
+    public function __construct(public string $methodName, public ?array $params = []) {}
 
     public static function stopProcess(string $name): self
     {
@@ -19,14 +22,10 @@ class MethodCallDTO
     /** @param array<string, mixed>|array{} $params */
     public static function new(string $method, array $params = []): self
     {
-        return new self(
-            methodCall: new MethodCallInnerDTO(
-                methodName: $method,
-                params: $params
-            )
-        );
+        return new self($method, $params);
     }
 
+    //region Shortcuts
     public static function startProcess(string $name): self
     {
         return self::new(
@@ -72,6 +71,17 @@ class MethodCallDTO
         );
     }
 
+    public static function readProcessStdoutLog(
+        string $name,
+        int $offset,
+        int $length
+    ): self {
+        return self::new(
+            'supervisor.readProcessStdoutLog',
+            ['name' => $name, 'offset' => $offset, 'length' => $length]
+        );
+    }
+
     public static function clearProcessLogs(string $name): self
     {
         return self::new(
@@ -113,15 +123,67 @@ class MethodCallDTO
         return self::new('supervisor.getAllConfigInfo');
     }
 
-    public static function addProgramToGroup(): self
+    /** Working with already defined groups in config(unload, load*) */
+    public static function addProgramToGroup(string $group, string $program, Config $config): self
     {
         return self::new(
             'twiddler.addProgramToGroup',
             [
-                'group_name' => 'default',// todo
-                'program_name' => 'supervisor',
-                'program_options' => [],
+                'group_name' => $group,
+                'program_name' => $program,
+                'program_options' => $config->jsonSerialize(),
             ]
         );
     }
+
+    public static function removeProcessFromGroup(string $group, string $program): self
+    {
+        return self::new(
+            'twiddler.removeProcessFromGroup',
+            [
+                'group_name' => $group,
+                'program_name' => $program,
+            ]
+        );
+    }
+
+    public static function stopProcessGroup(string $name): self
+    {
+        return self::new(
+            'supervisor.stopProcessGroup',
+            [
+                'name' => $name,
+                'wait' => true,
+            ]
+        );
+    }
+
+    public static function startProcessGroup(string $name): self
+    {
+        return self::new(
+            'supervisor.startProcessGroup',
+            [
+                'name' => $name,
+                'wait' => true,
+            ]
+        );
+    }
+
+
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
+        return ['methodName' => $this->methodName, 'params' => $this->params];
+    }
+
+    /** @return (array<int, int|float|string|bool|array<int, mixed>|array<string, mixed>|null>)|(array<string, mixed>) */
+    public function getParams(): array
+    {
+        if (null === $this->params) {
+            return [];
+        }
+
+        return [$this->params];
+    }
+    //endregion Shortcuts
 }

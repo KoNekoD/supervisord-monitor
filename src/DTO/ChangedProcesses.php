@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\DTO\Output;
+namespace App\DTO;
 
-use App\DTO\XmlRpc\ResponseDTO;
-
-class ChangedProcessesDTO
+class ChangedProcesses
 {
-    /** @param ChangedProcessDTO[] $changedProcesses */
+    /** @param ChangedProcess[] $changedProcesses */
     public function __construct(
         public bool $ok,
         public array $changedProcesses,
@@ -24,7 +22,7 @@ class ChangedProcessesDTO
         $changedProcesses = [];
         foreach ($response->getValue() as $changedProcess) {
             /** @var array<string, mixed> $changedProcess */
-            $changedProcesses[] = ChangedProcessDTO::fromArray($changedProcess);
+            $changedProcesses[] = ChangedProcess::fromArray($changedProcess);
         }
 
         return new self(true, $changedProcesses);
