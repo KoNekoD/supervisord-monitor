@@ -45,7 +45,7 @@ RUN if [ "$BUILD_TYPE" = "dev" ]; then \
 
 
 COPY ./config/docker/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./config/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY ./config/docker/nginx/${BUILD_TYPE}/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY ./config/docker/supervisor/supervisord-${BUILD_TYPE}.conf /etc/supervisord.conf
 COPY ./config/docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./config/docker/php/conf.d/*.ini /usr/local/etc/php/conf.d/
