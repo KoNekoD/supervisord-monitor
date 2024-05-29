@@ -16,7 +16,7 @@ class ChangedProcesses
     public static function fromResponse(ResponseDTO $response): self
     {
         if ($response->isFault) {
-            return new self(false, [], $response->getFault()->message);
+            return new self(false, [], $response->getFirstFault()->message);
         }
 
         $changedProcesses = [];

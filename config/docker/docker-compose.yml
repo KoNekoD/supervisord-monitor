@@ -24,8 +24,7 @@ services:
     networks:
       - railgun_network
 
-  railgun-test-server1:
-    container_name: railgun-test-server1
+  railgun-test-server:
     user: app
     build:
       context: ./../../tests/Functional/resources/
@@ -36,58 +35,9 @@ services:
       - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
     networks:
       - railgun_network
-
-  railgun-test-server2:
-    container_name: railgun-test-server2
-    user: app
-    build:
-      context: ./../../tests/Functional/resources/
-      args:
-        - UID=${PUID}
-        - GID=${PGID}
-    volumes:
-      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
-    networks:
-      - railgun_network
-
-  railgun-test-server3:
-    container_name: railgun-test-server3
-    user: app
-    build:
-      context: ./../../tests/Functional/resources/
-      args:
-        - UID=${PUID}
-        - GID=${PGID}
-    volumes:
-      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
-    networks:
-      - railgun_network
-
-  railgun-test-server4:
-    container_name: railgun-test-server4
-    user: app
-    build:
-      context: ./../../tests/Functional/resources/
-      args:
-        - UID=${PUID}
-        - GID=${PGID}
-    volumes:
-      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
-    networks:
-      - railgun_network
-
-  railgun-test-server5:
-    container_name: railgun-test-server5
-    user: app
-    build:
-      context: ./../../tests/Functional/resources/
-      args:
-        - UID=${PUID}
-        - GID=${PGID}
-    volumes:
-      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
-    networks:
-      - railgun_network
+    deploy:
+      mode: replicated
+      replicas: 6
 
 networks:
   railgun_network:

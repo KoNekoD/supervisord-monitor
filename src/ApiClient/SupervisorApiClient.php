@@ -9,6 +9,7 @@ use App\DTO\CallDTO;
 use App\DTO\CallInterface;
 use App\DTO\ChangedProcesses;
 use App\DTO\Config;
+use App\DTO\FaultDTO;
 use App\DTO\MultiCallDTO;
 use App\DTO\OperationResult;
 use App\DTO\ProcessLog;
@@ -31,13 +32,36 @@ final readonly class SupervisorApiClient
         $this->encoder = new XmlRpcEncoder();
     }
 
-    public function getAllProcessInfo(SupervisorServer $server): Supervisor
+    public function getSupervisor(SupervisorServer $server): Supervisor
     {
         try {
             $version = $this->getSupervisorVersion($server);
             $data = $this->request(CallDTO::getAllProcessInfo(), $server)->getValue();
 
-            return Supervisor::fromArray(data: $data, version: $version, server: $server);
+            $dto = Supervisor::fromArray(data: $data, version: $version, server: $server);
+
+            $offset = -10000;
+            $calls = [];
+            foreach ($dto->processes as $process) {
+                $name = $process->getFullProcessName();
+                $calls[] = CallDTO::readProcessStdoutLog(name: $name, offset: $offset, length: 0);
+                $calls[] = CallDTO::readProcessStderrLog(name: $name, offset: $offset, length: 0);
+            }
+
+            $response = $this->request(new MultiCallDTO(calls: $calls), $server);
+
+            if (count($response->array()) !== count($dto->processes) * 2) {
+                throw new LogicException('Response logs count mismatch');
+            }
+
+            /** @var array<int, string|FaultDTO> $processesLogs */
+            $processesLogs = $response->array();
+            foreach ($dto->processes as $key => $process) {
+                $process->outLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2]);
+                $process->errLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2 + 1]);
+            }
+
+            return $dto;
         } catch (BaseException $e) {
             return Supervisor::fail($server, $e->getMessage());
         }
@@ -147,8 +171,8 @@ final readonly class SupervisorApiClient
             server: $server
         );
 
-        if ($response->isFault()) {
-            return new OperationResult(false, true, $response->getFault()->message);
+        if ($response->hasFault()) {
+            return new OperationResult(false, true, $response->getFirstFault()->message);
         }
 
         $ok = true;
@@ -189,8 +213,8 @@ final readonly class SupervisorApiClient
             server: $server
         );
 
-        if ($response->isFault()) {
-            return new OperationResult(ok: false, isFault: true, error: $response->getFault()->message);
+        if ($response->hasFault()) {
+            return new OperationResult(ok: false, isFault: true, error: $response->getFirstFault()->message);
         }
 
         return new OperationResult(ok: true);
@@ -203,7 +227,7 @@ final readonly class SupervisorApiClient
         return new OperationResult(
             ok: !$result->isFault,
             isFault: $result->isFault,
-            error: $result->isFault ? $result->getFault()->message : null
+            error: $result->isFault ? $result->getFirstFault()->message : null
         );
     }
 
@@ -214,7 +238,7 @@ final readonly class SupervisorApiClient
         return new OperationResult(
             ok: !$result->isFault,
             isFault: $result->isFault,
-            error: $result->isFault ? $result->getFault()->message : null
+            error: $result->isFault ? $result->getFirstFault()->message : null
         );
     }
 
@@ -230,8 +254,8 @@ final readonly class SupervisorApiClient
             server: $server
         );
 
-        if ($response->isFault()) {
-            return new OperationResult(false, true, $response->getFault()->message);
+        if ($response->hasFault()) {
+            return new OperationResult(false, true, $response->getFirstFault()->message);
         }
 
         return new OperationResult(true);

@@ -8,16 +8,20 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiClient\SupervisorApiClient;
 use App\DTO\SupervisorManage;
+use App\DTO\SupervisorManageResult;
+use App\DTO\SupervisorServer;
+use App\Enum\SupervisorManageTypeEnum;
 use App\Enum\SupervisorManageTypeEnum as Enum;
-use App\Service\SupervisorServerProvider;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Exception\BaseException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /** @implements ProcessorInterface<SupervisorManage, mixed> */
 final readonly class SupervisorProcessor implements ProcessorInterface
 {
+    /** @param array<string, SupervisorServer> $servers */
     public function __construct(
-        private SupervisorServerProvider $supervisorServerProvider,
-        private SupervisorApiClient $api
+        private SupervisorApiClient $api,
+        #[Autowire(param: 'supervisors_servers')] private array $servers
     ) {}
 
     public function process(
@@ -25,22 +29,21 @@ final readonly class SupervisorProcessor implements ProcessorInterface
         Operation $operation,
         array $uriVariables = [],
         array $context = []
-    ) {
-        /** @var array{server: string, group?: string, process?: string, type: string} $uriVariables */
-
-        $serverString = $uriVariables['server'];
-        $typeString = $uriVariables['type'];
-        $type = Enum::tryFrom($typeString);
-        if (!$type instanceof Enum) {
-            throw new BadRequestHttpException('Unknown type: '.$typeString);
-        }
-        $group = $uriVariables['group'] ?? '';
-        $process = $uriVariables['process'] ?? '';
+    ): SupervisorManageResult
+    {
+        $serverString = (string)$data->server;
+        /** @var SupervisorManageTypeEnum $type */
+        $type = $data->type;
+        $group = (string)$data->group;
+        $process = (string)$data->process;
         $full = $group.':'.$process;
 
-        $server = $this->supervisorServerProvider->provide(server: $serverString);
+        $server = $this->servers[$serverString] ?? null;
+        if (null === $server) {
+            throw new BaseException(sprintf('Server "%s" not found', $serverString));
+        }
 
-        return match ($type) {
+        $typedResult = match ($type) {
             Enum::StartAllProcesses => $this->api->startAllProcesses(server: $server),
             Enum::StopAllProcesses => $this->api->stopAllProcesses(server: $server),
             Enum::RestartAllProcesses => $this->api->restartAllProcesses(server: $server),
@@ -55,5 +58,7 @@ final readonly class SupervisorProcessor implements ProcessorInterface
             Enum::CloneProcess => $this->api->cloneProcess(name: $process, group: $group, server: $server),
             Enum::RemoveProcess => $this->api->removeProcess(name: $process, group: $group, server: $server),
         };
+
+        return new SupervisorManageResult(typedResult: $typedResult);
     }
 }

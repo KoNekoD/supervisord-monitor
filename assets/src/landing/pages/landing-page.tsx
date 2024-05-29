@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import {useStore} from "../../main/context-provider";
 import {observer} from "mobx-react-lite";
 import {SupervisorBlock} from "../components/supervisor-block";
-import {AllProcessInfoDTO} from "../../api-client/generated";
 
 export const LandingPage = observer(() => {
     const {landingStore} = useStore();
@@ -15,7 +14,7 @@ export const LandingPage = observer(() => {
         landingStore.fetchData();
     })
 
-    const blocks_fn = (controlData: AllProcessInfoDTO[]) => {
+    const blocks_fn = (controlData: ApiSupervisor[]) => {
         return controlData.map((item, i) => {
             return <SupervisorBlock item={item} key={"supervisor_" + i}/>
         })

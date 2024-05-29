@@ -3,7 +3,6 @@ import {RiPlayFill, RiStopFill} from "react-icons/ri";
 import {TfiReload} from "react-icons/tfi";
 import React from "react";
 import {useStore} from "../../main/context-provider";
-import {ProcessInfoDTO, WorkerDTO} from "../../api-client/generated";
 
 export const ProcessGroupButtons = ({isAnyProcessRunning, server, group}: { isAnyProcessRunning: boolean, server: string, group: string }) => {
     const {landingStore} = useStore();

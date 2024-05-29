@@ -1,31 +1,25 @@
 import {fromPromise, IPromiseBasedObservable} from "mobx-utils";
-import {apiControlClearAllProcessLogPost, apiControlClearProcessLogServerWorkerPost, apiControlCloneProcessServerWorkerPost, apiControlDataGet, apiControlRemoveProcessServerWorkerPost, apiControlRestartAllServerPost, apiControlRestartProcessGroup, apiControlRestartServerWorkerPost, apiControlStartAllServerPost, apiControlStartProcessGroup, apiControlStartServerWorkerPost, apiControlStopAllServerPost, apiControlStopProcessGroup, apiControlStopServerWorkerPost} from "../../api-client/api-client";
 import {action, makeObservable, observable} from "mobx";
 import {Notificator} from "./notificator";
 import {TokenStorage} from "./token-storage";
-import {AllProcessInfoDTO, WorkerDTO} from "../../api-client/generated";
+import {getSupervisors, manageSupervisor} from "../../api-client/api-client";
 
 export class LandingStore {
 
-    prevData?: IPromiseBasedObservable<AllProcessInfoDTO[]>;
-    actualData?: IPromiseBasedObservable<AllProcessInfoDTO[]>;
+    prevData?: IPromiseBasedObservable<ApiSupervisor[]>;
+    actualData?: IPromiseBasedObservable<ApiSupervisor[]>;
 
     autoRefreshIsActive: boolean;
     isDarkThemeActive: boolean;
     isAllowMutatorsActive: boolean;
 
-    constructor(
-            private notificator: Notificator,
-            private tokenStorage: TokenStorage,
-    ) {
+    constructor(private notificator: Notificator, private tokenStorage: TokenStorage) {
         makeObservable(this, {
             actualData: observable,
             prevData: observable,
-
             autoRefreshIsActive: observable,
             isDarkThemeActive: observable,
             isAllowMutatorsActive: observable,
-
             fetchData: action,
             updateAutoRefresh: action,
             switchTheme: action,
@@ -58,7 +52,7 @@ export class LandingStore {
             this.prevData = this.actualData;
         }
 
-        this.actualData = fromPromise(apiControlDataGet());
+        this.actualData = fromPromise(getSupervisors());
     }
 
     updateAutoRefresh(active: boolean): void {
@@ -101,132 +95,166 @@ export class LandingStore {
         }
     }
 
+    checkValidResultSuccess(result: ApiSupervisorSupervisorManageResult): boolean {
+        if (result.operationResult !== null) {
+            if (result.operationResult.isFault) {
+                this.notificator.error("Operation got fault: " + result.operationResult.error);
+            }
+
+            return result.operationResult.ok;
+        }
+
+        if (result.changedProcesses !== null) {
+            if (!result.changedProcesses.ok) {
+                this.notificator.error("Got error while changing processes: " + result.changedProcesses.error);
+
+            }
+            return result.changedProcesses.ok;
+        }
+
+        return false;
+    }
+
     startAll(server: string): void {
-        apiControlStartAllServerPost(server).then(() => {
-            this.notificator.success(
-                    `All processes started on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'start_all_processes', group: null, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`All processes started on server ${server}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     stopAll(server: string): void {
-        apiControlStopAllServerPost(server).then(() => {
-            this.notificator.success(
-                    `All processes stopped on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'stop_all_processes', group: null, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`All processes stopped on server ${server}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     restartAll(server: string): void {
-        apiControlRestartAllServerPost(server).then(() => {
-            this.notificator.success(
-                    `All processes restarted on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'restart_all_processes', group: null, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`All processes restarted on server ${server}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     clearAllProcessLog(server: string): void {
-        apiControlClearAllProcessLogPost(server).then(() => {
-            this.notificator.success(
-                    `All process logs cleared on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'clear_all_process_log', group: null, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`All process logs cleared on server ${server}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
-    startProcess(worker: WorkerDTO): void {
-        apiControlStartServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} started on server ${worker.server}`
-            )
+    startProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'start_process', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} started on server ${server.name}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
-    stopProcess(worker: WorkerDTO): void {
-        apiControlStopServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} stopped on server ${worker.server}`
-            )
+    stopProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'stop_process', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} stopped on server ${server.name}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     startProcessGroup(server: string, group: string): void {
-        apiControlStartProcessGroup(server, group).then(() => {
-            this.notificator.success(
-                    `Group ${group} started on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'start_process_group', group: group, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Group ${group} started on server ${server}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     stopProcessGroup(server: string, group: string): void {
-        apiControlStopProcessGroup(server, group).then(() => {
-            this.notificator.success(
-                    `Group ${group} stopped on server ${server}`
-            )
+        manageSupervisor({server: server, type: 'stop_process_group', group: group, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Group ${group} stopped on server ${server}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
     restartProcessGroup(server: string, group: string): void {
-        apiControlRestartProcessGroup(server, group).then(() => {
-            this.notificator.success(
-                    `Group ${group} restarted on server ${server}`
-            )
-            this.fetchData()
-        })
-    }
-
-    restartProcess(worker: WorkerDTO): void {
-        apiControlRestartServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} restarted on server ${worker.server}`
-            )
+        manageSupervisor({server: server, type: 'restart_process_group', group: group, process: null}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Group ${group} restarted on server ${server}`)
+            }
             this.fetchData()
         }).catch((err) => {
-            this.notificator.error(err.message)
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
-    clearProcessLog(worker: WorkerDTO): void {
-        apiControlClearProcessLogServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} log cleared on server ${worker.server}`
-            )
+    restartProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'restart_process', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} restarted on server ${server.name}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
-    cloneProcess(worker: WorkerDTO): void {
-        apiControlCloneProcessServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} cloned on server ${worker.server}`
-            )
+    clearProcessLog(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'clear_process_log', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} log cleared on server ${server.name}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 
-    removeProcess(worker: WorkerDTO): void {
-        apiControlRemoveProcessServerWorkerPost(worker).then(() => {
-            this.notificator.success(
-                    `Process ${worker.name} removed on server ${worker.server}`
-            )
+    cloneProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'clone_process', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} cloned on server ${server.name}`)
+            }
             this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
+        })
+    }
+
+    removeProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+        manageSupervisor({server: server.name, type: 'remove_process', group: process.group, process: process.name}).then((result) => {
+            if (this.checkValidResultSuccess(result)) {
+                this.notificator.success(`Process ${process.name} removed on server ${server.name}`)
+            }
+            this.fetchData()
+        }).catch((err) => {
+            this.notificator.error(err.message + "\n\n" + err.response.data.detail)
         })
     }
 }

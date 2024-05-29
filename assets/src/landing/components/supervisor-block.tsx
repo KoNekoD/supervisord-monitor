@@ -1,12 +1,11 @@
 import {ProcessRow} from "./process-row";
 import React, {useState} from "react";
-import {AllProcessInfoDTO, ProcessInfoDTO, SupervisorServerDTO} from "../../api-client/generated";
 import {SupervisorBlockHeader} from "./supervisor-block-header";
 import {FaChevronDown, FaChevronUp, FaSkull} from "react-icons/fa";
 import {ProcessGroupButtons} from "./process-group-buttons";
 
 const err_mark = function (reason: string) {
-    return <div className="mb-3 inline-flex w-full items-center rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
+    return <div className="mb-3 inline-flex w-full items-center bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
         <span className="mr-2"><FaSkull/></span>
         <div className="flex flex-col">
             <span>Server is not available!</span>
@@ -17,8 +16,8 @@ const err_mark = function (reason: string) {
 
 interface AccordItemContentItem {
     content: JSX.Element
-    processes: ProcessInfoDTO[]
-    server: SupervisorServerDTO
+    processes: ApiProcess[]
+    server: ApiSupervisorServer
 }
 
 interface AccordItem {
@@ -64,9 +63,9 @@ const Accordion2 = ({title, content}: { title: string, content: AccordItemConten
     );
 };
 
-export const SupervisorBlock = ({item}: { item: AllProcessInfoDTO }) => {
+export const SupervisorBlock = ({item}: { item: ApiSupervisor }) => {
     // group processes by group key
-    const groupMap = new Map<string, ProcessInfoDTO[]>();
+    const groupMap = new Map<string, ApiProcess[]>();
     item.processes.forEach((process) => {
         if (groupMap.has(process.group)) {
             groupMap.get(process.group)!.push(process);

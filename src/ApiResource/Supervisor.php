@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\DTO\Process;
 use App\DTO\SupervisorManage;
+use App\DTO\SupervisorManageResult;
 use App\DTO\SupervisorServer;
 use App\State\SupervisorProcessor;
 use App\State\SupervisorsCollectionProvider;
@@ -19,29 +20,18 @@ use App\State\SupervisorsCollectionProvider;
             provider: SupervisorsCollectionProvider::class
         ),
         new Post(
-            uriTemplate: '/supervisors/manage/{server}/{type}',
+            uriTemplate: '/supervisors/manage',
             input: SupervisorManage::class,
-            processor: SupervisorProcessor::class
-        ),
-        new Post(
-            uriTemplate: '/supervisors/manage/{server}/{group}/{type}',
-            input: SupervisorManage::class,
-            processor: SupervisorProcessor::class
-        ),
-        new Post(
-            uriTemplate: '/supervisors/manage/{server}/{group}/{process}/{type}',
-            input: SupervisorManage::class,
-            processor: SupervisorProcessor::class
+            output: SupervisorManageResult::class,
+            processor: SupervisorProcessor::class,
         ),
     ]
 )]
 class Supervisor
 {
-    /**
-     * @param Process[] $processes
-     */
+    /** @param array<int, Process> $processes */
     public function __construct(
-        /** @var Process[] $processes */
+        /** @var array<int, Process> $processes */
         public array $processes,
         public string $version,
         public bool $ok,

@@ -7,13 +7,15 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
-    "build-dist": "npm install && npm run build"
+      "build-dist": "npm install && npm run build",
+      "generate:types": "npx esno scripts/gen-types"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "axios": "^1.2.3",
     "dot-object": "^2.1.4",
+      "dotenv": "^16.4.5",
     "final-form": "^4.20.8",
     "history": "^5.3.0",
     "localforage": "^1.10.0",
@@ -29,6 +31,7 @@
     "react-router-dom": "^6.6.2",
     "react-use": "^17.4.0",
     "sort-by": "^1.2.0",
+      "swagger-typescript-api": "^13.0.3",
       "tailwindcss-dark-mode": "^1.1.7",
     "ts-essentials": "^9.3.0",
     "tw-elements": "^1.1.0",
