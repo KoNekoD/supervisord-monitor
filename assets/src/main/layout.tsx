@@ -15,7 +15,7 @@ export const Layout = observer(() => {
     }, []);
 
     return (
-            <div>
+            <div className="min-h-screen">
                 <Toaster/>
                 <Header/>
                 <Outlet/>
