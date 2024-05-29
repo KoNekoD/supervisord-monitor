@@ -8,15 +8,15 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiClient\SupervisorApiClient;
 use App\ApiResource\Supervisor;
-use App\DTO\ProcessLog;
-use App\Exception\XmlRpcException;
-use App\Service\SupervisorServerProvider;
+use App\DTO\SupervisorServer;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class SupervisorsCollectionProvider implements ProviderInterface
 {
+    /** @param array<string, SupervisorServer> $servers */
     public function __construct(
-        private SupervisorServerProvider $supervisorServerProvider,
-        public SupervisorApiClient $api
+        public SupervisorApiClient $api,
+        #[Autowire(param: 'supervisors_servers')] private array $servers
     ) {}
 
     /** @return Supervisor[] */
@@ -25,43 +25,8 @@ final readonly class SupervisorsCollectionProvider implements ProviderInterface
         /** @var Supervisor[] $result */
         $result = [];
 
-        $servers = $this->supervisorServerProvider->provideList();
-
-        foreach ($servers as $server) {
-
-            $dto = $this->api->getAllProcessInfo($server);
-
-            foreach ($dto->processes as $worker) {
-                $outLog = null;
-                try {
-                    $outLog = $this->api->readProcessStdoutLog(
-                        name: $worker->getFullProcessName(),
-                        offset: -10000,
-                        length: 0,
-                        server: $server
-                    );
-                } catch (XmlRpcException $e) { // Caused when supervisor send incorrect formatting data
-                    $outLog = new ProcessLog('Failed to fetch logs. Please clear logs. Error: '.$e->getMessage());
-                }
-
-                $errLog = null;
-                try {
-                    $errLog = $this->api->readProcessStderrLog(
-                        name: $worker->getFullProcessName(),
-                        offset: -10000,
-                        length: 0,
-                        server: $server
-                    );
-                } catch (XmlRpcException $e) { // Caused when supervisor send incorrect formatting data
-                    $errLog = new ProcessLog('Failed to fetch logs. Please clear logs. Error: '.$e->getMessage());
-                }
-
-                $worker->errLog = $errLog;
-                $worker->outLog = $outLog;
-            }
-
-
-            $result[] = $dto;
+        foreach ($this->servers as $server) {
+            $result[] = $this->api->getSupervisor($server);
         }
 
         return $result;

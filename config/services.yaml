@@ -1,5 +1,5 @@
 parameters:
-  supervisors_servers: '%env(json:SUPERVISORS_SERVERS)%'
+  supervisors_servers: '%env(supervisorsServers:SUPERVISORS_SERVERS)%'
 
 services:
   _defaults:

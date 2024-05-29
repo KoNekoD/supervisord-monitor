@@ -8,18 +8,38 @@ use App\Exception\XmlRpcException;
 
 class ResponseDTO
 {
-    /** @param int|float|string|bool|array<int, mixed>|array<string, mixed>|null $value */
-    public function __construct(public int|float|string|bool|array|null $value, public bool $isFault = false) {}
+    public bool $isFault = false;
 
-    public function isFault(): bool
+    /** @var FaultDTO[] $faultInValue */
+    public array $faultInValue = [];
+
+    /** @param int|float|string|bool|array<int, mixed>|array<string, mixed>|null $value */
+    public function __construct(public int|float|string|bool|array|null $value, bool $isFault = false)
     {
-        return $this->isFault;
+        if ($isFault === false && is_array($value)) {
+            foreach ($value as $item) {
+                if (is_array($item) && FaultDTO::is($item)) {
+                    $this->faultInValue[] = FaultDTO::fromArray($item);
+                }
+            }
+        }
+
+        $this->isFault = $isFault;
     }
 
-    public function getFault(): FaultDTO
+    public function hasFault(): bool
+    {
+        return $this->isFault || !empty($this->faultInValue);
+    }
+
+    public function getFirstFault(): FaultDTO
     {
         if (!is_array($this->value)) {
             throw new XmlRpcException('Invalid value for fault');
+        }
+
+        if (!empty($this->faultInValue)) {
+            return $this->faultInValue[0];
         }
 
         if (!$this->isFault && !FaultDTO::is($this->value)) {

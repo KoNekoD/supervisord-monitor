@@ -8,16 +8,35 @@ class ProcessLog
 {
     public function __construct(public string $log) {}
 
-    public static function fromResponse(ResponseDTO $response): ?self
+    public static function fromString(string $log): ?self
     {
-        $log = $response->isFault ? 'Failed to fetch logs. Error: '.$response->getFault()->message : $response->string(
-        );
-
-
         if ($log === '') {
             return null;
         }
 
         return new self($log);
+    }
+
+    public static function fromStringOrFault(string|FaultDTO $log): ?self
+    {
+        if ($log instanceof FaultDTO) {
+            return self::fromFault($log);
+        } else {
+            return self::fromString($log);
+        }
+    }
+
+    public static function fromFault(FaultDTO $fault): self
+    {
+        return new self('Failed to fetch logs. Error: '.$fault->message);
+    }
+
+    public static function fromResponse(ResponseDTO $response): ?self
+    {
+        if ($response->isFault) {
+            return self::fromFault($response->getFirstFault());
+        }
+
+        return self::fromString($response->string());
     }
 }

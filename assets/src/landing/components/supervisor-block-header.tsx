@@ -1,4 +1,3 @@
-import {AllProcessInfoDTO} from "../../api-client/generated";
 import {IoLockClosedSharp} from "react-icons/io5";
 import React from "react";
 import {useStore} from "../../main/context-provider";
@@ -8,7 +7,7 @@ import {ActButton, Type} from "./act-button";
 import {AddProgram} from "./add-program";
 
 
-export const SupervisorBlockHeader = ({item}: { item: AllProcessInfoDTO }) => {
+export const SupervisorBlockHeader = ({item}: { item: ApiSupervisor }) => {
     const {landingStore} = useStore();
 
     const buttons = <div className="flex items-center space-x-1">

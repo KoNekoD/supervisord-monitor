@@ -11,7 +11,7 @@ final readonly class OperationResult
     public static function fromBooleanResponse(ResponseDTO $response): self
     {
         if ($response->isFault) {
-            return new self(false, true, $response->getFault()->message);
+            return new self(false, true, $response->getFirstFault()->message);
         }
 
         if (false === $response->bool()) {

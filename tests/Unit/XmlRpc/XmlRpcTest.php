@@ -148,7 +148,7 @@ class XmlRpcTest extends TestCase
 
         $this->assertIsArray($response->value);
 
-        $this->assertTrue($response->isFault());
+        $this->assertTrue($response->hasFault());
     }
 
     public function testDecodeMultiCallRequest(): void

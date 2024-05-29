@@ -1,4 +1,3 @@
-import {ProcessLogDTO, WorkerDTO} from "../../api-client/generated";
 import React from "react";
 import {IoIosWarning} from "react-icons/io";
 import {useStore} from "../../main/context-provider";
@@ -9,7 +8,7 @@ export enum ProcessLogPurpose {
     StdOut
 }
 
-export const ProcessLog = ({log, worker, purpose}: { worker: WorkerDTO, log: ProcessLogDTO, purpose: ProcessLogPurpose }) => {
+export const ProcessLog = ({server, process, log, purpose}: { server: ApiSupervisorServer, process: ApiProcess, log: ApiProcessLog, purpose: ProcessLogPurpose }) => {
     const {landingStore} = useStore();
 
     const [showModal, setShowModal] = React.useState(false);
@@ -49,7 +48,7 @@ export const ProcessLog = ({log, worker, purpose}: { worker: WorkerDTO, log: Pro
                                             <button type="button"
                                                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
                                                     onClick={() => {
-                                                        landingStore.clearProcessLog(worker);
+                                                        landingStore.clearProcessLog(server, process);
                                                         setShowModal(false)
                                                     }}
                                             >Clear logs

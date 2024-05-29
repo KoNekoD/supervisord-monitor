@@ -19,4 +19,20 @@ enum SupervisorManageTypeEnum: string
     case ClearProcessLogs = 'clear_process_log';
     case CloneProcess = 'clone_process';
     case RemoveProcess = 'remove_process';
+
+    public function isGroupRelated(): bool
+    {
+        return match ($this) {
+            self::StartProcessGroup, self::StopProcessGroup, self::RestartProcessGroup => true,
+            default => false
+        };
+    }
+
+    public function isProcessRelated(): bool
+    {
+        return match ($this) {
+            self::StartProcess, self::StopProcess, self::RestartProcess, self::ClearProcessLogs, self::CloneProcess, self::RemoveProcess => true,
+            default => false
+        };
+    }
 }
