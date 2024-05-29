@@ -13,10 +13,7 @@ readonly class CallDTO implements CallInterface
 
     public static function stopProcess(string $name): self
     {
-        return self::new(
-            'supervisor.stopProcess',
-            ['name' => $name, 'wait' => true]
-        );
+        return self::new('supervisor.stopProcess', ['name' => $name, 'wait' => true]);
     }
 
     /** @param array<string, mixed>|array{} $params */
@@ -25,13 +22,9 @@ readonly class CallDTO implements CallInterface
         return new self($method, $params);
     }
 
-    //region Shortcuts
     public static function startProcess(string $name): self
     {
-        return self::new(
-            'supervisor.startProcess',
-            ['name' => $name, 'wait' => true]
-        );
+        return self::new('supervisor.startProcess', ['name' => $name, 'wait' => true]);
     }
 
     public static function getSupervisorVersion(): self
@@ -46,36 +39,24 @@ readonly class CallDTO implements CallInterface
 
     public static function stopAllProcesses(): self
     {
-        return self::new(
-            'supervisor.stopAllProcesses',
-            ['wait' => true]
-        );
+        return self::new('supervisor.stopAllProcesses', ['wait' => true]);
     }
 
     public static function startAllProcesses(): self
     {
-        return self::new(
-            'supervisor.startAllProcesses',
-            ['wait' => true]
-        );
+        return self::new('supervisor.startAllProcesses', ['wait' => true]);
     }
 
-    public static function readProcessStderrLog(
-        string $name,
-        int $offset,
-        int $length
-    ): self {
+    public static function readProcessStderrLog(string $name, int $offset, int $length): self
+    {
         return self::new(
             'supervisor.readProcessStderrLog',
             ['name' => $name, 'offset' => $offset, 'length' => $length]
         );
     }
 
-    public static function readProcessStdoutLog(
-        string $name,
-        int $offset,
-        int $length
-    ): self {
+    public static function readProcessStdoutLog(string $name, int $offset, int $length): self
+    {
         return self::new(
             'supervisor.readProcessStdoutLog',
             ['name' => $name, 'offset' => $offset, 'length' => $length]
@@ -84,17 +65,12 @@ readonly class CallDTO implements CallInterface
 
     public static function clearProcessLogs(string $name): self
     {
-        return self::new(
-            'supervisor.clearProcessLogs',
-            ['name' => $name]
-        );
+        return self::new('supervisor.clearProcessLogs', ['name' => $name]);
     }
 
     public static function clearAllProcessLogs(): self
     {
-        return self::new(
-            'supervisor.clearAllProcessLogs'
-        );
+        return self::new('supervisor.clearAllProcessLogs');
     }
 
     public static function listMethods(): self
@@ -104,18 +80,12 @@ readonly class CallDTO implements CallInterface
 
     public static function methodSignature(string $method): self
     {
-        return self::new(
-            'system.methodSignature',
-            ['method' => $method]
-        );
+        return self::new('system.methodSignature', ['method' => $method]);
     }
 
     public static function methodHelp(string $method): self
     {
-        return self::new(
-            'system.methodHelp',
-            ['method' => $method]
-        );
+        return self::new('system.methodHelp', ['method' => $method]);
     }
 
     public static function getAllConfigInfo(): self
@@ -149,26 +119,13 @@ readonly class CallDTO implements CallInterface
 
     public static function stopProcessGroup(string $name): self
     {
-        return self::new(
-            'supervisor.stopProcessGroup',
-            [
-                'name' => $name,
-                'wait' => true,
-            ]
-        );
+        return self::new('supervisor.stopProcessGroup', ['name' => $name, 'wait' => true]);
     }
 
     public static function startProcessGroup(string $name): self
     {
-        return self::new(
-            'supervisor.startProcessGroup',
-            [
-                'name' => $name,
-                'wait' => true,
-            ]
-        );
+        return self::new('supervisor.startProcessGroup', ['name' => $name, 'wait' => true,]);
     }
-
 
     /** @return array<string, mixed> */
     public function toArray(): array
@@ -185,5 +142,4 @@ readonly class CallDTO implements CallInterface
 
         return [$this->params];
     }
-    //endregion Shortcuts
 }
