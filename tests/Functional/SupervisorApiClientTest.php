@@ -7,16 +7,17 @@ namespace App\Tests\Functional;
 use App\ApiClient\SupervisorApiClient;
 use App\DTO\CallDTO;
 use App\DTO\Config;
-use App\Service\SupervisorServerProvider;
+use App\DTO\SupervisorServer;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SupervisorApiClientTest extends WebTestCase
 {
     public function testMethodsNotChanged(): void
     {
-        /** @var SupervisorServerProvider $serverProvider */
-        $serverProvider = self::getContainer()->get(SupervisorServerProvider::class);
-        $server = $serverProvider->provideList()[0];
+        /** @var SupervisorServer[] $servers */
+        $servers = self::getContainer()->getParameter('supervisors_servers');
+
+        $server = $servers[0];
 
         /** @var SupervisorApiClient $api */
         $api = self::getContainer()->get(SupervisorApiClient::class);
@@ -148,9 +149,10 @@ class SupervisorApiClientTest extends WebTestCase
 
     public function testProgramAddedAndRemovedSuccessfully(): void
     {
-        /** @var SupervisorServerProvider $serverProvider */
-        $serverProvider = self::getContainer()->get(SupervisorServerProvider::class);
-        $server = $serverProvider->provideList()[0];
+        /** @var SupervisorServer[] $servers */
+        $servers = self::getContainer()->getParameter('supervisors_servers');
+
+        $server = $servers[0];
 
         /** @var SupervisorApiClient $api */
         $api = self::getContainer()->get(SupervisorApiClient::class);

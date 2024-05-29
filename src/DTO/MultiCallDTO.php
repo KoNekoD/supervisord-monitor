@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
-readonly class MultiCallDTO implements CallInterface
+final readonly class MultiCallDTO implements CallInterface
 {
     /** @param CallDTO[] $calls */
     public function __construct(public array $calls) {}

@@ -18,30 +18,19 @@ class SupervisorServer
         public ?string $username,
         public ?string $password
     ) {
-        $this->authenticated = (
-            null !== $this->username && null !== $this->password
-        );
+        $this->authenticated = null !== $this->username && null !== $this->password;
 
         $credentials = '';
         if ($this->authenticated) {
             $credentials = $this->username.':'.$this->password.'@';
         }
 
-        $this->webOpenUrl = sprintf(
-            'http://%s%s:%d/',
-            $credentials,
-            $this->ip,
-            $this->port
-        );
+        $this->webOpenUrl = sprintf('http://%s%s:%d/', $credentials, $this->ip, $this->port);
     }
 
     #[Ignore]
     public function getUrl(): string
     {
-        return sprintf(
-            'http://%s:%s/RPC2',
-            $this->ip,
-            $this->port
-        );
+        return sprintf('http://%s:%s/RPC2', $this->ip, $this->port);
     }
 }
