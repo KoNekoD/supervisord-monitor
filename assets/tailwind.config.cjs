@@ -12,8 +12,17 @@ module.exports = {
     extend: {
       colors: {
         softYellow: {
-          500: 'rgba(250,236,188,0.87)',
+          500: '#F6F49D',
         },
+        softRed: {
+          500: '#FF7676'
+        },
+        softGreen: {
+          500: '#5DAE8B'
+        },
+        softBlue: {
+          500: '#466C95'
+        }
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
