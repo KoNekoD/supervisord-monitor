@@ -29,7 +29,7 @@ class ResponseDTO
 
     public function hasFault(): bool
     {
-        return $this->isFault || !empty($this->faultInValue);
+        return $this->isFault || $this->faultInValue !== [];
     }
 
     public function getFirstFault(): FaultDTO
@@ -38,7 +38,7 @@ class ResponseDTO
             throw new XmlRpcException('Invalid value for fault');
         }
 
-        if (!empty($this->faultInValue)) {
+        if ($this->faultInValue !== []) {
             return $this->faultInValue[0];
         }
 

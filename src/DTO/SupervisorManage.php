@@ -20,7 +20,7 @@ final readonly class SupervisorManage
 
     public function validate(ExecutionContextInterface $context): void
     {
-        if (null === $this->type) {
+        if (!$this->type instanceof SupervisorManageTypeEnum) {
             $context->buildViolation('Type is required')->atPath('type')->addViolation();
 
             return;

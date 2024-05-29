@@ -7,11 +7,7 @@ namespace App\DTO;
 class ChangedProcesses
 {
     /** @param ChangedProcess[] $changedProcesses */
-    public function __construct(
-        public bool $ok,
-        public array $changedProcesses,
-        public ?string $error = null
-    ) {}
+    public function __construct(public bool $ok, public array $changedProcesses, public ?string $error = null) {}
 
     public static function fromResponse(ResponseDTO $response): self
     {

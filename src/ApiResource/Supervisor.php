@@ -31,7 +31,6 @@ class Supervisor
 {
     /** @param array<int, Process> $processes */
     public function __construct(
-        /** @var array<int, Process> $processes */
         public array $processes,
         public string $version,
         public bool $ok,
@@ -40,34 +39,19 @@ class Supervisor
     ) {}
 
     /** @param array<string, mixed> $data */
-    public static function fromArray(
-        array $data,
-        string $version,
-        SupervisorServer $server,
-    ): self {
+    public static function fromArray(array $data, string $version, SupervisorServer $server): self
+    {
         $processes = [];
+        /** @var array<string, array<string, int|string>> $data */
         foreach ($data as $item) {
-            /** @var array<string, int|string> $item */
             $processes[] = Process::fromArray($item);
         }
 
-        return new self(
-            processes: $processes,
-            version: $version,
-            ok: true,
-            server: $server,
-            failError: null
-        );
+        return new self(processes: $processes, version: $version, ok: true, server: $server, failError: null);
     }
 
     public static function fail(SupervisorServer $server, string $error): self
     {
-        return new self(
-            processes: [],
-            version: '',
-            ok: false,
-            server: $server,
-            failError: $error
-        );
+        return new self(processes: [], version: '', ok: false, server: $server, failError: $error);
     }
 }
