@@ -11,7 +11,7 @@ RUN set -eux && \
     /opt/venv/bin/pip install supervisor && \
     /opt/venv/bin/pip uninstall -y pip && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
-    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/* /home/app/.npm /home/app/.composer;
+    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/*
 
 ENV PATH="/opt/venv/bin:$PATH"
 
@@ -66,8 +66,9 @@ WORKDIR /var/www/supervisor-monitor
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
       cd assets && npm install && npm run build && rm -r node_modules && cd ../ && \
       composer install --no-dev --no-scripts && \
-      composer run post-install-cmd && \
+      bin/composer cache:clear && \
       chmod -R g+w var && chgrp -R www-data var; \
+      rm -rf /home/app/.npm /home/app/.composer; \
     fi;
 
 USER www-data
