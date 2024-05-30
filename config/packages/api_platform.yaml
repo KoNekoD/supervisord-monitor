@@ -18,3 +18,9 @@ api_platform:
     pagination_enabled: false
   keep_legacy_inflector: false
   use_symfony_listeners: true
+
+when@dist:
+  api_platform:
+    enable_docs: false
+    enable_entrypoint: false
+    enable_swagger_ui: false
