@@ -11,7 +11,7 @@ RUN set -eux && \
     /opt/venv/bin/pip install supervisor && \
     /opt/venv/bin/pip uninstall -y pip && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
-    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/*;
+    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/* /home/app/.npm /home/app/.composer;
 
 ENV PATH="/opt/venv/bin:$PATH"
 
