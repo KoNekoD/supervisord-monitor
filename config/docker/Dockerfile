@@ -5,12 +5,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions intl xsl zip && \
     apk add --no-cache curl git gettext nginx openssh npm python3 && \
     python3 -m venv /opt/venv && \
     /opt/venv/bin/pip install supervisor && \
     /opt/venv/bin/pip uninstall -y pip && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
-    install-php-extensions intl xsl zip && \
     rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/*;
 
 ENV PATH="/opt/venv/bin:$PATH"
