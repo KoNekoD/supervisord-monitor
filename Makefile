@@ -8,13 +8,14 @@ build:
 
 up:
 	${DC} up -d --remove-orphans
+	${DC_EXEC} bin/console assets:install
 
 down:
 	${DC} down -v --rmi=all --remove-orphans
 
 console:
 	if ! ${DC} ps | grep -q railgun; then make up; fi
-	${DC_EXEC} bash
+	${DC_EXEC} sh
 
 include ./config/docker/.env
 dc_create_network:
