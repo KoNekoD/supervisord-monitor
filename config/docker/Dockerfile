@@ -5,14 +5,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && \
-    apk add --update --no-cache \
-      curl git build-base zlib-dev oniguruma-dev autoconf \
-      bash supervisor gettext nginx openssh supervisor npm python3 py3-pip \
-    && \
-    pip install -U supervisor_twiddler --break-system-packages && \
+    apk add --no-cache curl git gettext nginx openssh npm python3 && \
+    python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install supervisor && \
+    /opt/venv/bin/pip uninstall -y pip && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
-    install-php-extensions intl xsl pdo_pgsql zip && \
-    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf;
+    install-php-extensions intl xsl zip && \
+    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/*;
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 ARG BUILD_TYPE="dist"
 
@@ -63,7 +64,8 @@ COPY --chown=app:app . /var/www/supervisor-monitor
 WORKDIR /var/www/supervisor-monitor
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
-      composer install --no-dev --no-scripts && cd assets && npm run build-dist && cd ../ && \
+      cd assets && npm install && npm run build && rm -r node_modules && cd ../ && \
+      composer install --no-dev --no-scripts && \
       composer run post-install-cmd && \
       chmod -R g+w var && chgrp -R www-data var; \
     fi;
