@@ -5,7 +5,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions intl xsl zip && \
+    install-php-extensions zip && \
     apk add --no-cache curl git gettext nginx openssh npm python3 && \
     python3 -m venv /opt/venv && \
     /opt/venv/bin/pip install supervisor && \
