@@ -13,13 +13,15 @@ FROM php:8.3-fpm-alpine as parent-railgun-php-fpm
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ARG BUILD_TYPE="dist"
+
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions intl zip && \
     apk add --no-cache curl git nginx openssh supervisor && \
+    if [ "${BUILD_TYPE}" = "dev" ]; then apk add npm yarn && npm install -g corepack && corepack enable; fi && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
     rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/*
 
-ARG BUILD_TYPE="dist"
 ARG DEV_HOST_IP=172.18.3.1
 ARG DEV_XDEBUG_AUTOSTART=trigger
 ARG DEV_XDEBUG_IDE_KEY=PHPSTORM
@@ -53,6 +55,8 @@ USER app
 COPY --chown=app:app . /var/www/supervisor-monitor
 COPY --from=build-frontend /app/dist /var/www/supervisor-monitor/assets/dist
 WORKDIR /var/www/supervisor-monitor
+
+RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sources; fi;
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
       composer install --no-dev && chmod -R g+w var && chgrp -R www-data var && \
