@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import React from 'react';
-import { LandingPage } from '../pages/landing-page';
-import { LandingSettingsPage } from '../pages/landing-settings-page';
+import { LandingPage } from '~/pages/home';
+import { LandingSettingsPage } from '~/pages/settings';
 
 export const landingRoutes = [
   {

@@ -1,8 +1,7 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Layout } from './layout';
-import { landingRoutes } from '../landing/routes/landing-routes';
-import React from 'react';
-import { NotFoundPage } from './pages/not-found-page';
+import { landingRoutes } from '~/landing/routes/landing-routes';
+import { NotFoundPage } from '~/pages/not-found';
 
 const routes: RouteObject[] = [
   {
@@ -15,14 +14,6 @@ const routes: RouteObject[] = [
       },
     ],
   },
-  // {
-  //   path: '/login',
-  //   element: <LoginModal />,
-  // },
-  // {
-  //   path: '/register',
-  //   element: <RegisterModal />,
-  // },
 ];
 
 export const browserRouter = createBrowserRouter(routes);
