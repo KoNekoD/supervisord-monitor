@@ -1,11 +1,9 @@
 // @ts-nocheck
-import {FORM_ERROR, SubmissionErrors} from 'final-form';
-import {isEmpty} from 'lodash';
+import { FORM_ERROR, SubmissionErrors } from 'final-form';
+import { isEmpty } from 'lodash';
 import dot from 'dot-object';
 
-export type FormSubmitResponse<T> =
-  | { errors: SubmissionErrors; response: null }
-  | { errors: null; response: T };
+export type FormSubmitResponse<T> = { errors: SubmissionErrors; response: null } | { errors: null; response: T };
 
 export const handleFormSubmit = async <T>(request: Promise<T>): Promise<FormSubmitResponse<T>> => {
   try {
@@ -22,9 +20,7 @@ export const handleFormSubmit = async <T>(request: Promise<T>): Promise<FormSubm
   }
 };
 
-function matchStringifiedArrayOfEntities(
-  string: string
-): { arrayName: string; index: number; itemName: string } | null {
+function matchStringifiedArrayOfEntities(string: string): { arrayName: string; index: number; itemName: string } | null {
   const match = string.match(/(.+)\[(\d+)]\.(.+)/i);
 
   return match ? { arrayName: match[1], index: parseInt(match[2]), itemName: match[3] } : null;

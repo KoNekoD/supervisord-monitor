@@ -20,11 +20,11 @@
  */
 
 import path from 'path';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
-import {generateApi} from 'swagger-typescript-api';
+import { generateApi } from 'swagger-typescript-api';
 import yargs from 'yargs';
-import {hideBin} from 'yargs/helpers';
+import { hideBin } from 'yargs/helpers';
 
 import 'dotenv/config';
 import * as process from 'process';
@@ -32,32 +32,31 @@ import * as process from 'process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const {argv} = yargs(hideBin(process.argv)).options({
-    name: {type: 'string', demandOption: true, alias: 'n', default: 'api.d.ts'},
-    input: {
-        type: 'string',
-        demandOption: true,
-        alias: 'i',
-        default: path.resolve(__dirname, './@types/swagger.json'),
-    },
-    output: {type: 'string', demandOption: true, alias: 'o', default: './@types'},
+const { argv } = yargs(hideBin(process.argv)).options({
+  name: { type: 'string', demandOption: true, alias: 'n', default: 'api.d.ts' },
+  input: {
+    type: 'string',
+    demandOption: true,
+    alias: 'i',
+    default: path.resolve(__dirname, './@types/swagger.json'),
+  },
+  output: { type: 'string', demandOption: true, alias: 'o', default: './@types' },
 });
 
-const {name, input, output} = argv as { name: string; input: string; output: string };
+const { name, input, output } = argv as { name: string; input: string; output: string };
 const inputPath = path.resolve(process.cwd(), input);
 const outputPath = path.resolve(process.cwd(), output);
 
 generateApi({
-    name,
-    url: `${process.env.VITE_API_URL}/docs.json`,
-    input: inputPath,
-    output: outputPath,
-    httpClientType: 'axios',
-    typePrefix: 'Api',
-    templates: path.resolve(__dirname, './templates'),
-    codeGenConstructs: constructs => ({
-        ...constructs,
-        TypeField: ({readonly, key, value}) =>
-                [...(readonly ? ['readonly'] : []), key, ': ', value].join(''),
-    }),
+  name,
+  url: `${process.env.VITE_API_URL}/docs.json`,
+  input: inputPath,
+  output: outputPath,
+  httpClientType: 'axios',
+  typePrefix: 'Api',
+  templates: path.resolve(__dirname, './templates'),
+  codeGenConstructs: constructs => ({
+    ...constructs,
+    TypeField: ({ readonly, key, value }) => [...(readonly ? ['readonly'] : []), key, ': ', value].join(''),
+  }),
 }).finally(() => process.exit(0));

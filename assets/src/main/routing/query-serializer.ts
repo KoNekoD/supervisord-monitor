@@ -1,4 +1,4 @@
-import {parse, stringify} from 'qs';
+import { parse, stringify } from 'qs';
 
 type Window = {
   location: Location;
