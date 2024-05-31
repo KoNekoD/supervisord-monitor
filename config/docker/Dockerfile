@@ -4,30 +4,15 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN set -eux && \
-    chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions zip && \
-    apk add --no-cache curl git gettext nginx openssh npm python3 && \
-    python3 -m venv /opt/venv && \
-    /opt/venv/bin/pip install supervisor && \
-    /opt/venv/bin/pip uninstall -y pip && \
+    chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions intl zip && \
+    apk add --no-cache curl git nginx openssh npm supervisor && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
-    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/* /usr/src/*
-
-ENV PATH="/opt/venv/bin:$PATH"
+    rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/*
 
 ARG BUILD_TYPE="dist"
-
-ARG WEB_PORT=8080
-
-ARG SUPERVISOR_RPC_PORT=9551
-ARG SUPERVISOR_RPC_USERNAME=default
-ARG SUPERVISOR_RPC_PASSWORD=default
-ARG SUPERVISORS_SERVERS=[]
-ENV SUPERVISORS_SERVERS=$SUPERVISORS_SERVERS
-
 ARG DEV_HOST_IP=172.18.3.1
 ARG DEV_XDEBUG_AUTOSTART=trigger
 ARG DEV_XDEBUG_IDE_KEY=PHPSTORM
-
 ARG PHP_IDE_CONFIG="serverName=Docker"
 ENV PHP_IDE_CONFIG=$PHP_IDE_CONFIG
 
@@ -51,27 +36,24 @@ COPY ./config/docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./config/docker/php/conf.d/*.ini /usr/local/etc/php/conf.d/
 COPY ./config/docker/php/fpm-conf.d/*.conf /usr/local/etc/php-fpm.d/
 
-RUN cd /etc/nginx/conf.d && sed -i "s/WEB_PORT/$WEB_PORT/g" default.conf && \
-    cd /etc && envsubst < supervisord.conf > s && mv s supervisord.conf
-
 ARG PUID=1000
 ARG PGID=1000
 RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data
-
 USER app
 COPY --chown=app:app . /var/www/supervisor-monitor
 WORKDIR /var/www/supervisor-monitor
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
       cd assets && npm install && npm run build && rm -r node_modules && cd ../ && \
-      composer install --no-dev --no-scripts && \
-      bin/console cache:clear && \
-      chmod -R g+w var && chgrp -R www-data var && \
+      composer install --no-dev && chmod -R g+w var && chgrp -R www-data var && \
       rm -rf /home/app/.npm /home/app/.composer; \
     fi;
 
 USER www-data
 
-EXPOSE $WEB_PORT
+EXPOSE 8080
+
+ARG SUPERVISORS_SERVERS=[]
+ENV SUPERVISORS_SERVERS=$SUPERVISORS_SERVERS
 
 CMD ["supervisord"]
