@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
   prefix: '',
@@ -20,10 +20,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },
-  plugins: [require('tw-elements/dist/plugin.cjs'), require('tailwindcss-dark-mode')()],
+  plugins: [require('tw-elements/dist/plugin.cjs')],
   variants: ['dark', 'dark-hover', 'dark-group-hover', 'dark-even', 'dark-odd'],
 };
