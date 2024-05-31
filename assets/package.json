@@ -20,6 +20,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@tanstack/react-query": "^5.40.0",
+    "@tanstack/react-query-devtools": "^5.40.0",
     "axios": "^1.2.3",
     "dot-object": "^2.1.4",
     "dotenv": "^16.4.5",
