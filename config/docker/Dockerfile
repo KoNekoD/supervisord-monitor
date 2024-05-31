@@ -1,15 +1,21 @@
+FROM registry.gitlab.com/sdt7772416/infrastructure/node-alpha:latest as build-frontend
+
+COPY assets/ /app
+WORKDIR /app
+RUN corepack enable && \
+    yarn set version from sources && \
+    yarn --immutable && \
+    yarn install && \
+    yarn build
+
 FROM php:8.3-fpm-alpine as parent-railgun-php-fpm
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY assets/package.json /var/www/supervisor-monitor/assets/package.json
-
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions intl zip && \
-    apk add --no-cache curl git nginx openssh npm yarn supervisor && \
-    npm install -g corepack && corepack enable && \
-    cd /var/www/supervisor-monitor/assets && yarn set version from sources && \
+    apk add --no-cache curl git nginx openssh supervisor && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d/ && \
     rm -rf /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /var/cache/apk/*
 
@@ -42,14 +48,13 @@ COPY ./config/docker/php/fpm-conf.d/*.conf /usr/local/etc/php-fpm.d/
 
 ARG PUID=1000
 ARG PGID=1000
-RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data && \
-    chown -R app:app /var/www/supervisor-monitor
+RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data
 USER app
 COPY --chown=app:app . /var/www/supervisor-monitor
+COPY --from=build-frontend /app/dist /var/www/supervisor-monitor/assets/dist
 WORKDIR /var/www/supervisor-monitor
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
-      cd assets && yarn install && yarn build && rm -r node_modules && cd ../ && \
       composer install --no-dev && chmod -R g+w var && chgrp -R www-data var && \
       rm -rf /home/app/.npm /home/app/.composer; \
     fi;
