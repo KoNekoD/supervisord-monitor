@@ -49,7 +49,7 @@ COPY --chown=app:app . /var/www/supervisor-monitor
 WORKDIR /var/www/supervisor-monitor
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
-      cd assets && npm install && npm run build && rm -r node_modules && cd ../ && \
+      cd assets && yarn install && yarn build && rm -r node_modules && cd ../ && \
       composer install --no-dev && chmod -R g+w var && chgrp -R www-data var && \
       rm -rf /home/app/.npm /home/app/.composer; \
     fi;
