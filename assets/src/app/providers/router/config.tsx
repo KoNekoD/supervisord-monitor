@@ -5,7 +5,7 @@ import { SettingsPage } from '~/pages/settings';
 import { ROUTES } from '~/shared/const';
 import { MainLayout } from '~/app/layout/main';
 
-const ErrorPage = () => <div>Ебать ошибка</div>;
+const ErrorPage = () => <div>ERROROORORO SDJSDOJSDIJIO!!!!!!! ERRROR CRITIIACALLLL!!!!!!!!!!!!!</div>;
 
 export const router = createBrowserRouter([
   {
