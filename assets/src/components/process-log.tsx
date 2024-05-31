@@ -1,7 +1,7 @@
 import React from 'react';
 import { IoIosWarning } from 'react-icons/io';
-import { useStore } from '../../main/context-provider';
 import { RiBookletFill, RiCloseFill } from 'react-icons/ri';
+import { useStore } from '~/main/context-provider';
 
 export enum ProcessLogPurpose {
   StdErr,

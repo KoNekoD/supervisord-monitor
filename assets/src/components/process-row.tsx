@@ -1,10 +1,9 @@
-import React from 'react';
-import { useStore } from '../../main/context-provider';
 import { ProcessLog, ProcessLogPurpose } from './process-log';
 import { ActButton, Type } from './act-button';
 import { GoDuplicate } from 'react-icons/go';
 import { GrErase } from 'react-icons/gr';
 import { ProcessButtons } from './process-buttons';
+import { useStore } from '~/main/context-provider';
 
 function Status({ stateName }: { stateName: string }) {
   const success_badge =

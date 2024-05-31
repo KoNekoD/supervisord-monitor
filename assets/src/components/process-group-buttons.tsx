@@ -1,8 +1,7 @@
 import { ActButton, Type } from './act-button';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { TfiReload } from 'react-icons/tfi';
-import React from 'react';
-import { useStore } from '../../main/context-provider';
+import { useStore } from '~/main/context-provider';
 
 export const ProcessGroupButtons = ({
   isAnyProcessRunning,

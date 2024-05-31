@@ -1,10 +1,9 @@
 import { IoLockClosedSharp } from 'react-icons/io5';
-import React from 'react';
-import { useStore } from '../../main/context-provider';
 import { TfiReload } from 'react-icons/tfi';
 import { RiFileShredLine, RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { ActButton, Type } from './act-button';
 import { AddProgram } from './add-program';
+import { useStore } from '~/main/context-provider';
 
 export const SupervisorBlockHeader = ({ item }: { item: ApiSupervisor }) => {
   const { landingStore } = useStore();

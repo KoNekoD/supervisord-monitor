@@ -1,5 +1,5 @@
 import { ProcessRow } from './process-row';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SupervisorBlockHeader } from './supervisor-block-header';
 import { FaChevronDown, FaChevronUp, FaSkull } from 'react-icons/fa';
 import { ProcessGroupButtons } from './process-group-buttons';
