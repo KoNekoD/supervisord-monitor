@@ -1,5 +1,4 @@
-import React from 'react';
-import { useStore } from '../../main/context-provider';
+import { useStore } from '~/main/context-provider';
 import { observer } from 'mobx-react-lite';
 import { Link as ReactLink } from 'react-router-dom';
 
