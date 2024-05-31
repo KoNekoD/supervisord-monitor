@@ -6,7 +6,7 @@ type Props = {
 
 export const ValidationMessage = ({ message }: Props) => {
   return (
-    <div className="invalid-feedback m-0" style={{ display: message ? 'block' : 'none' }}>
+    <div className='invalid-feedback m-0' style={{ display: message ? 'block' : 'none' }}>
       {message}
     </div>
   );

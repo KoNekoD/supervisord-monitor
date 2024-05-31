@@ -12,6 +12,9 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit --pretty",
     "generate:types": "npx esno scripts/gen-types"
   },
   "dependencies": {
