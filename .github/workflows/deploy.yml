@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Create .env file for frontend
-        run: echo "VITE_API_URL='/api'" > .env
+        run: echo "VITE_API_URL='/api'" > assets/.env
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to Docker Registry
