@@ -48,6 +48,19 @@ Did not receive a '200 OK' response from remote server.
 ```
 Having this messages in most cases means that Supervisord Monitoring tools does not have direct network access to the Supervisord RPC2 http interface. Check your firewall and network conectivity.
 
+But it is possible to get error 500, in that case it is a supervisord-monitor problem, run this command to activate the
+profiler.
+Where “my-supervisord-monitor-container-name” is the name of your container, please replace with the one you need
+
+```shell
+container_id=$(docker ps | grep my-supervisord-monitor-container-name |  awk '{ print $1 }'); docker exec -it --user app $container_id sed -i 's/APP_ENV=prod/APP_ENV=dev/g' .env; docker exec -it --user app $container_id composer install
+```
+
+After that try to reproduce the error again and after that you need to share with us the error data from profiler,
+trace, error name.
+To open it add to URL /profiler, it will be something like “http://localhost:10011/_profiler” and find the 500 error you
+need in the profiler.
+
 ---
 
 ```
@@ -65,7 +78,8 @@ To enable the rpc interface add this lines to the configuration file:
 
 *From the Supervisord Docs*
 
-In the sample config file, there is a section which is named [rpcinterface:supervisor]. By default it looks like the following:
+In the sample config file, there is a section which is named [rpcinterface:supervisor]. By default, it looks like the
+following:
 
 ```
 [rpcinterface:supervisor]
