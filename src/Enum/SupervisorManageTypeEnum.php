@@ -23,7 +23,8 @@ enum SupervisorManageTypeEnum: string
     public function isGroupRelated(): bool
     {
         return match ($this) {
-            self::StartProcessGroup, self::StopProcessGroup, self::RestartProcessGroup => true,
+            self::StartProcessGroup, self::StopProcessGroup, self::RestartProcessGroup,
+            self::StartProcess, self::StopProcess, self::RestartProcess, self::ClearProcessLogs, self::CloneProcess, self::RemoveProcess => true,
             default => false
         };
     }
