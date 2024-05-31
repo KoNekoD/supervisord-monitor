@@ -8,7 +8,7 @@ RUN corepack enable && \
     yarn install && \
     yarn build
 
-FROM php:8.3-fpm-alpine as parent-railgun-php-fpm
+FROM php:8.3-fpm-alpine as parent-supervisord-monitor-php-fpm
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

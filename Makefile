@@ -1,7 +1,7 @@
 COMPOSE_FILE = ./config/docker/docker-compose.yml
 ENV_FILE = ./config/docker/.env
 DC = docker compose -f ${COMPOSE_FILE} --env-file ${ENV_FILE}
-DC_EXEC = ${DC} exec railgun
+DC_EXEC = ${DC} exec supervisord-monitor
 
 build:
 	${DC} build
@@ -14,7 +14,7 @@ down:
 	${DC} down -v --rmi=all --remove-orphans
 
 console:
-	if ! ${DC} ps | grep -q railgun; then make up; fi
+	if ! ${DC} ps | grep -q supervisord-monitor; then make up; fi
 	${DC_EXEC} sh
 
 include ./config/docker/.env

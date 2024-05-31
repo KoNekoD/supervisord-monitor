@@ -1,10 +1,10 @@
 version: "3.8"
 
-name: railgun-supervisor-monitor
+name: supervisord-monitor-supervisor-monitor
 
 services:
-  railgun:
-    container_name: railgun
+  supervisord-monitor:
+    container_name: supervisord-monitor
     user: app
     build:
       context: ./../../
@@ -22,9 +22,9 @@ services:
       - ${WEB_PORT}:${WEB_PORT}
       - "5173:5173" # Dev mode
     networks:
-      - railgun_network
+      - supervisord_monitor_network
 
-  railgun-test-server:
+  supervisord-monitor-test-server:
     user: app
     build:
       context: ./../../tests/Functional/resources/
@@ -34,12 +34,12 @@ services:
     volumes:
       - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
     networks:
-      - railgun_network
+      - supervisord_monitor_network
     deploy:
       mode: replicated
       replicas: 6
 
 networks:
-  railgun_network:
+  supervisord_monitor_network:
     name: ${EXTERNAL_NETWORK_NAME}
     external: true
