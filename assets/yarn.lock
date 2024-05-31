@@ -2725,6 +2725,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mobx@npm:^6.12.3":
+  version: 6.12.3
+  resolution: "mobx@npm:6.12.3"
+  checksum: 10c0/33e1d27d33adea0ceb4de32eb66b4384e81a249be5e01baa6bf556f458fd62a83d23bfa0cf8ba9e87c28f0d810ae301ee0e7322fd48a3bf47db33ffb08d5826c
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.1.2":
   version: 2.1.2
   resolution: "ms@npm:2.1.2"
@@ -2754,6 +2761,7 @@ __metadata:
     localforage: "npm:^1.10.0"
     lodash: "npm:^4.17.21"
     match-sorter: "npm:^6.3.1"
+    mobx: "npm:^6.12.3"
     mobx-react-lite: "npm:^3.4.0"
     mobx-utils: "npm:^6.0.5"
     postcss: "npm:^8.4.21"
