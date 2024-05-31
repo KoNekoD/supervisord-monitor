@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const envSchema = z.object({
   PROD: z.boolean(),
   DEV: z.boolean(),
-  VITE_API_URL: z.string().url(),
+  VITE_API_URL: z.string(),
 });
 
 export type EnvType = z.infer<typeof envSchema>;
