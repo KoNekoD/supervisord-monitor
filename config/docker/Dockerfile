@@ -4,8 +4,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN set -eux && \
-    chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions zip && \
+    chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions zip && \
     apk add --no-cache curl git gettext nginx openssh npm python3 && \
     python3 -m venv /opt/venv && \
     /opt/venv/bin/pip install supervisor && \
@@ -18,11 +17,12 @@ ENV PATH="/opt/venv/bin:$PATH"
 ARG BUILD_TYPE="dist"
 
 ARG WEB_PORT=8080
+
 ARG SUPERVISOR_RPC_PORT=9551
 ARG SUPERVISOR_RPC_USERNAME=default
 ARG SUPERVISOR_RPC_PASSWORD=default
 ARG SUPERVISORS_SERVERS=[]
-ENV SUPERVISORS_SERVERS ${SUPERVISORS_SERVERS}
+ENV SUPERVISORS_SERVERS=$SUPERVISORS_SERVERS
 
 ARG DEV_HOST_IP=172.18.3.1
 ARG DEV_XDEBUG_AUTOSTART=trigger
@@ -43,7 +43,6 @@ RUN if [ "$BUILD_TYPE" = "dev" ]; then \
       curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | /bin/sh; \
       apk add --no-cache symfony-cli ranger vim nano vifm; \
   fi;
-
 
 COPY ./config/docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./config/docker/nginx/${BUILD_TYPE}/nginx-default.conf /etc/nginx/conf.d/default.conf
