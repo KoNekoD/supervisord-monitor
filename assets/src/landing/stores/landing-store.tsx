@@ -10,7 +10,6 @@ export class LandingStore {
   actualData?: IPromiseBasedObservable<ApiSupervisor[]>;
 
   autoRefreshIsActive: boolean;
-  isDarkThemeActive: boolean;
   isAllowMutatorsActive: boolean;
 
   constructor(
@@ -21,16 +20,13 @@ export class LandingStore {
       actualData: observable,
       prevData: observable,
       autoRefreshIsActive: observable,
-      isDarkThemeActive: observable,
       isAllowMutatorsActive: observable,
       fetchData: action,
       updateAutoRefresh: action,
-      switchTheme: action,
       switchAllowMutators: action,
     });
 
     this.autoRefreshIsActive = this.tokenStorage.isAutoRefresh();
-    this.isDarkThemeActive = this.tokenStorage.isDarkThemeEnabled();
     this.isAllowMutatorsActive = this.tokenStorage.isAllowMutatorsEnabled();
 
     this.scheduleFetchDataRecursive();
@@ -67,20 +63,6 @@ export class LandingStore {
       this.autoRefreshIsActive = false;
       this.tokenStorage.unsetAutoRefresh();
       this.notificator.success('Auto refresh disabled');
-    }
-  }
-
-  switchTheme(): void {
-    if (this.tokenStorage.isDarkThemeEnabled()) {
-      this.tokenStorage.unsetDarkThemeEnabled();
-      document.querySelector('html')?.classList.remove('dark');
-      this.isDarkThemeActive = false;
-      this.notificator.success('Dark theme disabled');
-    } else {
-      this.tokenStorage.setDarkThemeEnabled();
-      document.querySelector('html')?.classList.add('dark');
-      this.isDarkThemeActive = true;
-      this.notificator.success('Dark theme enabled');
     }
   }
 

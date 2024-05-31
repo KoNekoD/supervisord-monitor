@@ -1,9 +1,11 @@
 import { useStore } from '~/main/context-provider';
 import { observer } from 'mobx-react-lite';
 import { Link as ReactLink } from 'react-router-dom';
+import { useTheme } from '~/app/providers/theme';
 
 export const SettingsPage = observer(() => {
   const { landingStore } = useStore();
+  const { setTheme, theme } = useTheme();
 
   return (
     <div className={'flex h-screen w-full items-center justify-center'}>
@@ -28,8 +30,8 @@ export const SettingsPage = observer(() => {
             type='checkbox'
             value=''
             id='changeThemeCheckbox'
-            checked={landingStore.isDarkThemeActive}
-            onChange={() => landingStore.switchTheme()}
+            checked={theme === 'dark'}
+            onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           />
           <label className='inline-block pl-[0.15rem] hover:cursor-pointer' htmlFor='changeThemeCheckbox'>
             Active dark theme
