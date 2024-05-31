@@ -2,7 +2,7 @@ import { useStore } from '~/main/context-provider';
 import { observer } from 'mobx-react-lite';
 import { Link as ReactLink } from 'react-router-dom';
 
-export const LandingSettingsPage = observer(() => {
+export const SettingsPage = observer(() => {
   const { landingStore } = useStore();
 
   return (

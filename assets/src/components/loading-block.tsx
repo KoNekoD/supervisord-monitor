@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const LoadingBlock = (): JSX.Element => {
   return (
     <div className='mb-4 flex w-full items-center justify-center space-x-4 rounded-lg px-6 py-5 text-base text-neutral-50 dark:bg-neutral-900'>

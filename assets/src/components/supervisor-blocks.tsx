@@ -1,4 +1,3 @@
-import React from 'react';
 import { SupervisorBlock } from './supervisor-block';
 
 export const SupervisorBlocks = ({ blocks }: { blocks: ApiSupervisor[] }): JSX.Element => {

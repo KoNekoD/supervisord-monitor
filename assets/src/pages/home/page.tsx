@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useStore } from '~/main/context-provider';
 import { observer } from 'mobx-react-lite';
-import { SupervisorBlocks } from '~/landing/components/supervisor-blocks';
-import { LoadingBlock } from '~/landing/components/loading-block';
+import { SupervisorBlocks } from '~/components/supervisor-blocks';
+import { LoadingBlock } from '~/components/loading-block';
 
-export const LandingPage = observer(() => {
+export const MainPage = observer(() => {
   const { landingStore } = useStore();
 
   useEffect(() => {

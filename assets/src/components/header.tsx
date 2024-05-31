@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { useLocation } from 'react-router';
-import { useStore } from './context-provider';
 import { Link as ReactLink } from 'react-router-dom';
 import { landingHeaderRoutes } from '~/landing/routes/landing-header-routes';
+import { useStore } from '~/main/context-provider';
 
 type SidebarRoute = {
   title: string;

@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Toaster } from 'react-hot-toast';
-import { Header } from './header';
-import { useStore } from './context-provider';
 import { useEffect } from 'react';
+import { useStore } from '~/main/context-provider';
+import { Header } from '~/components/header';
 
-export const Layout = observer(() => {
+export const MainLayout = observer(() => {
   const { landingStore } = useStore();
   useEffect(() => {
     if (landingStore.isDarkThemeActive) {
