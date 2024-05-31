@@ -35,10 +35,16 @@ final readonly class SupervisorApiClient
     public function getSupervisor(SupervisorServer $server): Supervisor
     {
         try {
-            $version = $this->getSupervisorVersion($server);
-            $data = $this->request(CallDTO::getAllProcessInfo(), $server)->getValue();
+            $calls = [CallDTO::getSupervisorVersion(), CallDTO::getAllProcessInfo()];
+            $response = $this->request(new MultiCallDTO(calls: $calls), $server);
+            if ($response->hasFault()) {
+                return Supervisor::fail($server, $response->getFirstFault()->message);
+            }
 
-            $dto = Supervisor::fromArray(data: $data, version: $version, server: $server);
+            /** @var array{0: string, 1: array<string, mixed>} $data */
+            $data = $response->getValue();
+
+            $dto = Supervisor::fromArray(data: $data[1], version: $data[0], server: $server);
 
             $offset = -10000;
             $calls = [];
@@ -65,11 +71,6 @@ final readonly class SupervisorApiClient
         } catch (BaseException $e) {
             return Supervisor::fail($server, $e->getMessage());
         }
-    }
-
-    public function getSupervisorVersion(SupervisorServer $server): string
-    {
-        return $this->request(CallDTO::getSupervisorVersion(), $server)->string();
     }
 
     /** @param array<string, mixed> $options */
@@ -139,7 +140,13 @@ final readonly class SupervisorApiClient
                 $builtParams[] = $enc[$key];
             }
 
-            $params[] = ['methodName' => $item->methodName, 'params' => $builtParams];
+            $newParamsItem = ['methodName' => $item->methodName];
+
+            if ($builtParams !== []) {
+                $newParamsItem['params'] = $builtParams;
+            }
+
+            $params[] = $newParamsItem;
         }
 
         return new CallDTO("system.multicall", [$params]);
@@ -281,16 +288,6 @@ final readonly class SupervisorApiClient
         );
     }
 
-    public function readProcessStderrLog(string $name, int $offset, int $length, SupervisorServer $server): ?ProcessLog
-    {
-        return ProcessLog::fromResponse(
-            response: $this->request(
-                call: CallDTO::readProcessStderrLog(name: $name, offset: $offset, length: $length),
-                server: $server
-            )
-        );
-    }
-
     public function clearProcessLogs(string $name, SupervisorServer $server): OperationResult
     {
         return OperationResult::fromBooleanResponse(
@@ -312,80 +309,31 @@ final readonly class SupervisorApiClient
         );
     }
 
-    /** @return string[] */
-    public function listMethods(SupervisorServer $server): array
-    {
-        return $this->request(call: CallDTO::listMethods(), server: $server)->arrayOfStrings();
-    }
-
-    /** @return string[] */
-    public function methodSignature(string $method, SupervisorServer $server): array
-    {
-        return $this->request(call: CallDTO::methodSignature(method: $method), server: $server)->arrayOfStrings();
-    }
-
-    public function methodHelp(string $method, SupervisorServer $server): string
-    {
-        return $this->request(call: CallDTO::methodHelp($method), server: $server)->string();
-    }
-
-    /**
-     * High level
-     */
     public function cloneProcess(string $name, string $group, SupervisorServer $server): OperationResult
     {
         foreach ($this->getAllConfigInfo($server) as $config) {
             if ($config->group === $group) {
-                return $this->addProgramToGroup(
-                    group: $config->group,
-                    program: $name.'_'.time(),
-                    config: $config,
-                    server: $server
-                );
+                $call = CallDTO::addProgramToGroup(group: $config->group, program: $name.'_'.time(), config: $config);
+
+                return OperationResult::fromBooleanResponse(response: $this->request(call: $call, server: $server));
             }
         }
 
         throw new LogicException("Group $group not found");
     }
 
-    /** @return Config[] */
-    public function getAllConfigInfo(SupervisorServer $server): array
-    {
-        return Config::fromResponseArray(response: $this->request(call: CallDTO::getAllConfigInfo(), server: $server));
-    }
-
-    public function addProgramToGroup(
-        string $group,
-        string $program,
-        Config $config,
-        SupervisorServer $server
-    ): OperationResult {
-        $call = CallDTO::addProgramToGroup(group: $group, program: $program, config: $config);
-
-        return OperationResult::fromBooleanResponse(response: $this->request(call: $call, server: $server));
-    }
-
-    /**
-     * High level
-     */
     public function removeProcess(string $name, string $group, SupervisorServer $server): OperationResult
     {
         $this->stopProcess(name: $name, server: $server);
 
-        return $this->removeProcessFromGroup(group: $group, program: $name, server: $server);
-    }
-
-    public function removeProcessFromGroup(string $group, string $program, SupervisorServer $server): OperationResult
-    {
-        $call = CallDTO::removeProcessFromGroup(group: $group, program: $program);
+        $call = CallDTO::removeProcessFromGroup(group: $group, program: $name);
 
         return OperationResult::fromBooleanResponse(response: $this->request(call: $call, server: $server));
     }
 
-    public function readProcessStdoutLog(string $name, int $offset, int $length, SupervisorServer $server): ?ProcessLog
+    /** @return Config[] */
+    public function getAllConfigInfo(SupervisorServer $server): array
     {
-        $call = CallDTO::readProcessStdoutLog(name: $name, offset: $offset, length: $length);
-
-        return ProcessLog::fromResponse(response: $this->request(call: $call, server: $server));
+        return Config::fromResponseArray(response: $this->request(call: CallDTO::getAllConfigInfo(), server: $server));
     }
 }

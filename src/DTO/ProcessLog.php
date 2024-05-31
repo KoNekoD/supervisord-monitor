@@ -30,13 +30,4 @@ class ProcessLog
     {
         return new self('Failed to fetch logs. Error: '.$fault->message);
     }
-
-    public static function fromResponse(ResponseDTO $response): ?self
-    {
-        if ($response->isFault) {
-            return self::fromFault($response->getFirstFault());
-        }
-
-        return self::fromString($response->string());
-    }
 }

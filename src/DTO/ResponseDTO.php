@@ -53,7 +53,7 @@ class ResponseDTO
     public function getValue(): array
     {
         if (!is_array($this->value)) {
-            throw new XmlRpcException('Invalid value');
+            throw XmlRpcException::invalidResponseValue($this);
         }
 
         /** @var array<string, mixed> $value */
@@ -62,32 +62,10 @@ class ResponseDTO
         return $value;
     }
 
-    public function string(): string
-    {
-        if (!is_string($this->value)) {
-            throw new XmlRpcException('Invalid value');
-        }
-
-        return $this->value;
-    }
-
-    /** @return string[] */
-    public function arrayOfStrings(): array
-    {
-        if (!is_array($this->value)) {
-            throw new XmlRpcException('Invalid value');
-        }
-
-        /** @var string[] $value */
-        $value = $this->value;
-
-        return $value;
-    }
-
     public function bool(): bool
     {
         if (!is_bool($this->value)) {
-            throw new XmlRpcException('Invalid value');
+            throw XmlRpcException::invalidResponseValue($this);
         }
 
         return $this->value;
@@ -97,7 +75,7 @@ class ResponseDTO
     public function boolArray(): array
     {
         if (!is_array($this->value)) {
-            throw new XmlRpcException('Invalid value');
+            throw XmlRpcException::invalidResponseValue($this);
         }
 
         foreach ($this->value as $item) {
@@ -116,7 +94,7 @@ class ResponseDTO
     public function array(): array
     {
         if (!is_array($this->value)) {
-            throw new XmlRpcException('Invalid value');
+            throw XmlRpcException::invalidResponseValue($this);
         }
 
         /** @var array<string|int, mixed> $value */
@@ -124,5 +102,4 @@ class ResponseDTO
 
         return $value;
     }
-
 }
