@@ -42,7 +42,8 @@ COPY ./config/docker/php/fpm-conf.d/*.conf /usr/local/etc/php-fpm.d/
 
 ARG PUID=1000
 ARG PGID=1000
-RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data
+RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data && \
+    chown -R app:app /var/www/supervisor-monitor
 USER app
 COPY --chown=app:app . /var/www/supervisor-monitor
 WORKDIR /var/www/supervisor-monitor
