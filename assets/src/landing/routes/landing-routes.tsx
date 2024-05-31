@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { LandingPage } from '~/pages/home';
 import { LandingSettingsPage } from '~/pages/settings';
+import { ROUTES } from '~/shared/const';
 
 export const landingRoutes = [
   {
-    path: '/',
+    path: ROUTES.HOME,
     element: <Outlet />,
     children: [
       {
@@ -12,7 +13,7 @@ export const landingRoutes = [
         element: <LandingPage />,
       },
       {
-        path: 'settings',
+        path: ROUTES.SETTINGS,
         element: <LandingSettingsPage />,
       },
     ],
