@@ -1,12 +1,11 @@
-import { RouterProvider as BrowserRouterProvider } from 'react-router-dom';
 import React from 'react';
 import { ProviderRootStore } from '~/main/context-provider';
-import { browserRouter } from '~/main/routes';
+import { AppRouter } from '~/app/providers/router';
 
 export const App = () => (
   <React.StrictMode>
     <ProviderRootStore>
-      <BrowserRouterProvider router={browserRouter} />
+      <AppRouter />
     </ProviderRootStore>
   </React.StrictMode>
 );
