@@ -1,8 +1,13 @@
 {
-  "name": "my-project",
+  "name": "supervisord-monitor-frontend",
+  "description": "A frontend for supervisord-monitor",
+  "author": "velenyx (https://github.com/velenyx)",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
@@ -35,7 +40,8 @@
     "tailwindcss-dark-mode": "^1.1.7",
     "ts-essentials": "^9.3.0",
     "tw-elements": "^1.1.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/dot-object": "^2.1.2",
