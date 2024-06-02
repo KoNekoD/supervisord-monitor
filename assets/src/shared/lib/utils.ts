@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function useNameLen(input: string, postfix: string = ''): string {
+export function trimForProcessBlock(input: string, postfix: string = ''): string {
   const DEFAULT_NAME_LEN =
     window.innerWidth < 640
       ? 35
