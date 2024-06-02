@@ -1,10 +1,10 @@
 version: "3.8"
 
-name: supervisord-monitor-supervisor-monitor
+name: supervisord-monitor
 
 services:
-  supervisord-monitor:
-    container_name: supervisord-monitor
+  supervisord-monitor-app:
+    container_name: supervisord-monitor-app
     user: app
     build:
       context: ./../../

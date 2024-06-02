@@ -6,7 +6,7 @@ import { ProcessGroupButtons } from './process-group-buttons';
 
 const err_mark = function (reason: string) {
   return (
-    <div className='mb-3 inline-flex w-full items-center bg-danger-100 px-6 py-5 text-base text-danger-700' role='alert'>
+    <div className='h-full inline-flex w-full items-center bg-danger-100 dark:bg-transparent px-6 py-5 text-danger-700 dark:text-red-600'>
       <span className='mr-2'>
         <FaSkull />
       </span>

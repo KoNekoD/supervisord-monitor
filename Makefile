@@ -1,7 +1,7 @@
 COMPOSE_FILE = ./config/docker/docker-compose.yml
 ENV_FILE = ./config/docker/.env
 DC = docker compose -f ${COMPOSE_FILE} --env-file ${ENV_FILE}
-DC_EXEC = ${DC} exec supervisord-monitor
+DC_EXEC = ${DC} exec supervisord-monitor-app
 
 build:
 	${DC} build
