@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function trimForProcessBlock(input: string, postfix: string = ''): string {
+export const trimForProcessBlock = (input: string, postfix: string = ''): string => {
   const DEFAULT_NAME_LEN =
     window.innerWidth < 640
       ? 35
@@ -25,4 +25,4 @@ export function trimForProcessBlock(input: string, postfix: string = ''): string
   const truncatedLength = DEFAULT_NAME_LEN - postfixLength;
 
   return input.substring(0, truncatedLength) + '...' + (postfix ? postfix : '');
-}
+};
