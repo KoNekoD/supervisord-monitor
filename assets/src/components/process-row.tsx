@@ -4,7 +4,7 @@ import {GoDuplicate} from 'react-icons/go';
 import {GrErase} from 'react-icons/gr';
 import {ProcessButtons} from './process-buttons';
 import {useStore} from '~/main/context-provider';
-import {useNameLen} from "~/shared/lib/utils";
+import {trimForProcessBlock} from "~/shared/lib/utils";
 
 function Status({ stateName }: { stateName: string }) {
   const success_badge =
@@ -49,7 +49,7 @@ export const ProcessRow = ({ process, server }: { process: ApiProcess; server: A
               data-te-toggle='tooltip'
               title={process.name}
             >
-              {useNameLen(process.name)}
+              {trimForProcessBlock(process.name)}
             </a>
           </p>
         </div>
