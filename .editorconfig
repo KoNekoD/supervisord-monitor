@@ -487,5 +487,7 @@ ij_yaml_spaces_within_brackets = true
 [*.html.twig]
 max_line_length = off
 
-[*.tsx]
-max_line_length = off
+[*.{tsx,ts}]
+indent_size = 2
+tab_width = 2
+ij_continuation_indent_size = 2

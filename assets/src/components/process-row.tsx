@@ -1,9 +1,10 @@
-import { ProcessLog, ProcessLogPurpose } from './process-log';
-import { ActButton, Type } from './act-button';
-import { GoDuplicate } from 'react-icons/go';
-import { GrErase } from 'react-icons/gr';
-import { ProcessButtons } from './process-buttons';
-import { useStore } from '~/main/context-provider';
+import {ProcessLog, ProcessLogPurpose} from './process-log';
+import {ActButton, Type} from './act-button';
+import {GoDuplicate} from 'react-icons/go';
+import {GrErase} from 'react-icons/gr';
+import {ProcessButtons} from './process-buttons';
+import {useStore} from '~/main/context-provider';
+import {useNameLen} from "~/shared/lib/utils";
 
 function Status({ stateName }: { stateName: string }) {
   const success_badge =
@@ -35,18 +36,8 @@ function Status({ stateName }: { stateName: string }) {
 }
 
 export const ProcessRow = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
-  const { landingStore } = useStore();
 
-  const process_name_len =
-    window.innerWidth < 640
-      ? 35
-      : window.innerWidth < 1280
-        ? 55
-        : window.innerWidth < 1536
-          ? 50
-          : window.innerWidth < 1920
-            ? 15
-            : 40;
+  const { landingStore } = useStore();
 
   return (
     <div className='flex h-10 flex-row'>
@@ -58,7 +49,7 @@ export const ProcessRow = ({ process, server }: { process: ApiProcess; server: A
               data-te-toggle='tooltip'
               title={process.name}
             >
-              {process.name.substring(0, process_name_len) + (process.name.length > process_name_len ? '...' : '')}
+              {useNameLen(process.name)}
             </a>
           </p>
         </div>
