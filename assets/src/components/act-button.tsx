@@ -8,21 +8,14 @@ export enum Type {
 }
 
 export const ActButton = ({ children, onClick, type }: { children: React.ReactNode; onClick: () => void; type: Type }) => {
-  let className = 'p-2 text-white rounded';
+  const colors = {
+    [Type.Red]: 'bg-red-500',
+    [Type.Orange]: 'bg-orange-500',
+    [Type.Green]: 'bg-green-500',
+    [Type.Blue]: 'bg-blue-500',
+  };
 
-  if (type === Type.Red) {
-    className += ' bg-red-500';
-  } else if (type === Type.Orange) {
-    className += ' bg-orange-500';
-  } else if (type === Type.Green) {
-    className += ' bg-green-500';
-  } else if (type === Type.Blue) {
-    className += ' bg-blue-500';
-  }
+  const className = `p-2 text-white rounded ${colors[type] || 'bg-gray-500'}`;
 
-  return (
-    <button type='button' className={className} onClick={() => onClick()}>
-      {children}
-    </button>
-  );
+  return <button type='button' className={className} onClick={() => onClick()}>{children}</button>;
 };
