@@ -35,9 +35,9 @@ export const SupervisorBlockHeader = ({ item }: { item: ApiSupervisor }) => {
     </div>
   );
 
-  let serverTitle = item.server.ip;
-  let serverPort = ':' + item.server.port;
-  let fullServerTitle = serverTitle + serverPort;
+  const serverTitle = item.server.ip;
+  const serverPort = ':' + item.server.port;
+  const fullServerTitle = serverTitle + serverPort;
 
   return (
     <div className='lg:flex lg:justify-between'>
