@@ -115,7 +115,7 @@ export const Server = ({ item }: { item: ApiSupervisor }) => {
           <div>
             {item.groups.map((value, index) => {
               const content = (
-                <div key={index}>
+                <div>
                   {value.processes.map((process, index) => {
                     return (
                       <div className='flex h-10 flex-row' key={index}>
@@ -182,7 +182,11 @@ export const Server = ({ item }: { item: ApiSupervisor }) => {
               );
 
               if (value.processes.length === 1) {
-                return content;
+                return (
+                  <div className='border-b border-gray-200 px-2 py-1' key={index}>
+                    {content}
+                  </div>
+                );
               }
 
               const [isActive, setIsActive] = useState(false);
@@ -190,7 +194,8 @@ export const Server = ({ item }: { item: ApiSupervisor }) => {
               let isAnyProcessRunning = value.processes.some(process => process.stateName === 'RUNNING');
 
               return (
-                <div className='accordion-item' key={index}>
+                <div className='border-b border-gray-200 px-2 py-1' key={index}>
+                <div className='accordion-item'>
                   <div className='flex items-center space-x-2'>
                     <div>
                       <div className='transititext-secondary flex cursor-pointer items-center space-x-2 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-secondary-600 focus:text-secondary-600 active:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-500 dark:focus:text-secondary-500 dark:active:text-secondary-600' onClick={() => setIsActive(!isActive)}>
@@ -224,6 +229,7 @@ export const Server = ({ item }: { item: ApiSupervisor }) => {
                     </div>
                   </div>
                   {isActive && <div className='accordion-content'>{content}</div>}
+                </div>
                 </div>
               );
             })}
