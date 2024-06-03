@@ -6,7 +6,7 @@ export const MutatorsButtons = ({ process, server }: { process: ApiProcess; serv
   const { landingStore } = useStore();
 
   return (
-    <div className='text-white space-x-2'>
+    <div className='text-white space-x-1'>
       <button className='rounded bg-red-500 p-2' onClick={() => landingStore.removeProcess(server, process)}>
         <GrErase />
       </button>
