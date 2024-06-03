@@ -14,16 +14,18 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
 
   return (
     <div>
-      {process.outLog && (
-        <button className='rounded bg-gray-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
-          <RiBookletFill />
-        </button>
-      )}
-      {process.errLog && (
-        <button className='rounded bg-red-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.errLog)}>
-          <IoIosWarning />
-        </button>
-      )}
+      <div className='space-x-1'>
+        {process.outLog && (
+          <button className='rounded bg-gray-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
+            <RiBookletFill />
+          </button>
+        )}
+        {process.errLog && (
+          <button className='rounded bg-red-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.errLog)}>
+            <IoIosWarning />
+          </button>
+        )}
+      </div>
       {showModal && log && (
         <div className='fixed left-0 top-0 z-[1055] h-full w-full overflow-y-auto overflow-x-hidden outline-none'>
           <div className='pointer-events-none relative h-full w-full'>
