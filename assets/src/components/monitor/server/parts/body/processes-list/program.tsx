@@ -8,13 +8,13 @@ export const Program = ({ group, server }: { group: ApiProcessGroup; server: Api
   const items = list.map((p, i) => <Process process={p} server={server} key={i} />);
 
   if (group.processes.length === 1) {
-    return <div className='border-b border-gray-200 px-2 py-1'>{items}</div>;
+    return <div className='px-2 py-1'>{items}</div>;
   }
 
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <div className='border-b border-gray-200 px-2 py-1'>
+    <div className='px-2 py-1'>
       <div className='accordion-item'>
         <div className='flex items-center space-x-2'>
           <div>
