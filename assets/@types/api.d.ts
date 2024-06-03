@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -51,12 +50,17 @@ interface ApiProcess {
   fullProcessName: string;
 }
 
+interface ApiProcessGroup {
+  name: string;
+  processes: ApiProcess[];
+}
+
 interface ApiProcessLog {
   log: string;
 }
 
 interface ApiSupervisor {
-  processes: ApiProcess[];
+  groups: ApiProcessGroup[];
   version: string;
   ok: boolean;
   server: ApiSupervisorServer;
