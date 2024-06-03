@@ -5,7 +5,7 @@ import { ServerTitle } from '~/components/monitor/server/parts/header/server-tit
 export const Header = ({ item }: { item: ApiSupervisor }) => {
   return (
     <div className='rounded-t-xl border-b border-l-2 border-r-2 border-t-2 border-gray-200 px-2 py-1'>
-      <div className='lg:flex lg:justify-between'>
+      <div className='lg:flex lg:justify-between space-x-2'>
         <div className='w-full flex justify-between flex-wrap items-center'>
           <ServerTitle item={item} />
           <ServerInfo item={item} />
