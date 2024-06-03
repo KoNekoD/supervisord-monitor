@@ -65,9 +65,6 @@ final readonly class SupervisorApiClient
             foreach ($dto->getProcesses() as $key => $process) {
                 $process->outLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2]);
                 $process->errLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2 + 1]);
-
-                // todo tmp!!!
-                $process->errLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2]);
             }
 
             return $dto;
