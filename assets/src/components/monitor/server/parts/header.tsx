@@ -11,7 +11,7 @@ export const Header = ({ item }: { item: ApiSupervisor }) => {
   const serverName = item.server.name;
 
   return (
-    <div className='border-b border-gray-200 px-2 py-1'>
+    <div className='border-b border-gray-200 px-2 py-1 rounded-t-xl border-l-2 border-r-2 border-t-2'>
       <div className='lg:flex lg:justify-between'>
         <div className='flex flex-wrap items-center'>
           <a href={item.server.webOpenUrl} className='pr-2 text-blue-400'>
