@@ -48,7 +48,7 @@ final readonly class SupervisorApiClient
 
             $offset = -10000;
             $calls = [];
-            foreach ($dto->processes as $process) {
+            foreach ($dto->getProcesses() as $process) {
                 $name = $process->getFullProcessName();
                 $calls[] = CallDTO::readProcessStdoutLog(name: $name, offset: $offset, length: 0);
                 $calls[] = CallDTO::readProcessStderrLog(name: $name, offset: $offset, length: 0);
@@ -56,13 +56,13 @@ final readonly class SupervisorApiClient
 
             $response = $this->request(new MultiCallDTO(calls: $calls), $server);
 
-            if (count($response->array()) !== count($dto->processes) * 2) {
+            if (count($response->array()) !== count($dto->getProcesses()) * 2) {
                 throw new LogicException('Response logs count mismatch');
             }
 
             /** @var array<int, string|FaultDTO> $processesLogs */
             $processesLogs = $response->array();
-            foreach ($dto->processes as $key => $process) {
+            foreach ($dto->getProcesses() as $key => $process) {
                 $process->outLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2]);
                 $process->errLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2 + 1]);
             }

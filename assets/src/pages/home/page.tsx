@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStore } from '~/main/context-provider';
 import { observer } from 'mobx-react-lite';
-import { SupervisorBlocks } from '~/components/supervisor-blocks';
+import { Monitor } from '~/components/monitor/monitor';
 
 export const MainPage = observer(() => {
   const { landingStore } = useStore();
@@ -16,7 +16,7 @@ export const MainPage = observer(() => {
 
   if (landingStore.actualData?.state !== 'fulfilled') {
     if (landingStore.prevData?.state === 'fulfilled') {
-      return <SupervisorBlocks blocks={landingStore.prevData?.value} />;
+      return <Monitor blocks={landingStore.prevData?.value} />;
     }
 
     return <div
@@ -32,5 +32,5 @@ export const MainPage = observer(() => {
     </div>;
   }
 
-  return <SupervisorBlocks blocks={landingStore.actualData?.value}/>;
+  return <Monitor blocks={landingStore.actualData?.value}/>;
 });
