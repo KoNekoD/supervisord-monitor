@@ -26,8 +26,7 @@ export const Program = ({ group, server }: { group: ApiProcessGroup; server: Api
             </div>
           </div>
           <div className='flex flex-grow items-center justify-between'>
-            {/* Костыль чтобы кнопки были на всю ширину */}
-            &nbsp;
+            {/* Костыль чтобы кнопки были на всю ширину */} &nbsp;
             <div>
               <Buttons server={server} group={group} />
             </div>

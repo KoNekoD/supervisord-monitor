@@ -22,6 +22,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
+      screens: {
+        'xs': '480px',
+        '4xl': '3840px',
+      },
     },
   },
   plugins: [require('tw-elements/dist/plugin.cjs')],
