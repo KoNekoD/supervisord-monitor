@@ -7,8 +7,8 @@ export const ProcessesList = ({ groups, server }: { groups: ApiProcessGroup[]; s
         const notLast = index !== groups.length - 1;
 
         return (
-          <div className={notLast ? 'border-b border-gray-200' : ''}>
-            <Program group={value} server={server} key={index} />
+          <div className={notLast ? 'border-b border-gray-200' : ''} key={index}>
+            <Program group={value} server={server} />
           </div>
         );
       })}
