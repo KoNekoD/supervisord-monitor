@@ -10,14 +10,10 @@ export const Process = ({ process, server }: { process: ApiProcess; server: ApiS
 
   return (
     <div className='flex h-10 flex-row'>
-      <div className='flex flex-grow items-center'>
-        <div className='px-2'>
-          <p>
-            <a className='transititext-primary text-sm text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600' data-te-toggle='tooltip' title={process.name}>
-              {trim(process.name)}
-            </a>
-          </p>
-        </div>
+      <div className='flex flex-grow items-center px-1'>
+        <a className='transititext-primary text-sm text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600' data-te-toggle='tooltip' title={process.name}>
+          {trim(process.name)}
+        </a>
       </div>
       <div className='flex flex-nowrap items-center space-x-1'>
         {landingStore.isAllowMutatorsActive && <MutatorsButtons server={server} process={process} />}
