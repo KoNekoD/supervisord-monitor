@@ -29,3 +29,9 @@ body {
         @apply dark:bg-black dark:text-white;
     }
 }
+
+@layer components {
+    .program-title {
+        @apply text-sm text-blue-500 hover:text-blue-700 dark:text-white;
+    }
+}

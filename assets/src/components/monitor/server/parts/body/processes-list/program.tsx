@@ -17,7 +17,7 @@ export const Program = ({ group, server }: { group: ApiProcessGroup; server: Api
     <div className='px-2 py-1'>
       <div className='flex items-center space-x-2'>
         <div>
-          <div className='transititext-secondary flex cursor-pointer items-center space-x-2 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-secondary-600 focus:text-secondary-600 active:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-500 dark:focus:text-secondary-500 dark:active:text-secondary-600' onClick={() => setIsActive(!isActive)}>
+          <div className='flex cursor-pointer items-center space-x-2 program-title' onClick={() => setIsActive(!isActive)}>
             {isActive ? <FaChevronUp className='h-4 w-4' /> : <FaChevronDown className='h-4 w-4' />}
             <div>
               <a>{group.name}</a>

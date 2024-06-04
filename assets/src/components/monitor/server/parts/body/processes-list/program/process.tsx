@@ -10,7 +10,7 @@ export const Process = ({ process, server }: { process: ApiProcess; server: ApiS
   return (
     <div className='flex h-10 flex-row'>
       <div className='no-scrollbar mx-1 flex flex-grow items-center overflow-x-auto px-1'>
-        <a className='whitespace-nowrap text-sm text-primary hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600' data-te-toggle='tooltip' title={process.name}>
+        <a className='whitespace-nowrap program-title' title={process.name}>
           {process.name}
         </a>
       </div>

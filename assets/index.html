@@ -1,13 +1,90 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <link href="/logo.svg" rel="icon" type="image/svg+xml" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Supervisord Monitor</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="/src/index.tsx" type="module"></script>
-  </body>
+</head>
+<body>
+<div id="root"></div>
+<script src="/src/index.tsx" type="module"></script>
+<script>
+    <!--  TODO REMOVE THIS SCRIPT LATER -->
+    function getCssStylesByClassName(className) {
+        const styleSheets = document.styleSheets;
+        let cssRules = [];
+
+        // Iterate over all stylesheets
+        for (let i = 0; i < styleSheets.length; i++) {
+            const rules = styleSheets[i].rules || styleSheets[i].cssRules;
+
+            // Iterate over all rules within a stylesheet
+            for (let j = 0; j < rules.length; j++) {
+                const rule = rules[j];
+
+                className = className.replace('xs', '').replace('md', '').replace('lg', '').replace('xl', '').replace('2xl', '').replace('dark', '');
+
+                // Check if the rule's selector matches the class name
+                if (rule.selectorText && rule.selectorText === '.' + className) {
+                    cssRules.push(rule.cssText);
+                }
+            }
+        }
+
+        return cssRules;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+
+            const allElements = document.querySelectorAll('*'); // Получаем все элементы
+            const unusedClasses = [];
+
+            const skipped = [
+                'light',
+                'dark',
+                'dark:bg-black',
+                'dark:text-white',
+                'xl:grid-cols-2',
+                '2xl:grid-cols-3',
+                '4xl:grid-cols-4',
+                'rounded-t-xl',
+                'lg:flex',
+                'lg:justify-between',
+                'space-x-2',
+                'dark:bg-transparent',
+                'dark:text-red-600',
+                'rounded-b-xl',
+                'space-x-1',
+                'hover:text-gray-700',
+                'hover:text-blue-700',
+                'text-xs',
+                'tsqd-parent-container',
+                'go2420793703',
+                'tsqd-transitions-container',
+                'tsqd-open-btn-container',
+                'tsqd-open-btn',
+            ];
+
+            allElements.forEach(element => {
+                Array.from(element.classList).forEach(className => {
+
+                    if (skipped.includes(className)) {
+                        return;
+                    }
+
+                    const styleApplied = getCssStylesByClassName(className);
+                    if (styleApplied.length === 0) {
+                        unusedClasses.push(className);
+                    }
+                });
+            });
+
+            console.log('Неиспользуемые классы:', [...new Set(unusedClasses)]);
+
+        }, 1000 * 5);
+    });
+</script>
+</body>
 </html>
