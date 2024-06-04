@@ -7,13 +7,13 @@ export const ServerInfo = ({ item }: { item: ApiSupervisor }) => {
     return <Fail />;
   }
 
-  const serverTitle = item.server.ip;
-  const serverPort = `:${item.server.port}`;
-  const serverFullTitle = `${serverTitle}${serverPort}`;
+  const ip = item.server.ip;
+  const port = item.server.port;
+  const full = `${ip}:${port}`;
 
   return (
     <div className='flex flex-wrap items-center space-x-1'>
-      <a title={serverFullTitle}>{trim(serverTitle, serverPort)}</a>
+      <a title={full}>{trim(ip, `:${port}`)}</a>
       <span>{item.server.authenticated && <IoLockClosedSharp color='green' />}</span>
       <span>{item.version}</span>
     </div>
