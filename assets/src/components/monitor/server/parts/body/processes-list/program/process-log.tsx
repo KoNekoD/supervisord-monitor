@@ -16,12 +16,12 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
     <div>
       <div className='space-x-1'>
         {process.outLog && (
-          <button className='rounded bg-gray-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
+          <button className='rounded bg-gray-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
             <RiBookletFill />
           </button>
         )}
         {process.errLog && (
-          <button className='rounded bg-red-500 px-2 py-2 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.errLog)}>
+          <button className='rounded bg-red-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.errLog)}>
             <IoIosWarning />
           </button>
         )}
