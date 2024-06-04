@@ -41,7 +41,6 @@
     "sort-by": "^1.2.0",
     "swagger-typescript-api": "^13.0.3",
     "tailwind-merge": "^2.3.0",
-    "tw-elements": "^1.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
