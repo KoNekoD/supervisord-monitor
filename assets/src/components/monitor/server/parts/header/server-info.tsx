@@ -9,11 +9,11 @@ export const ServerInfo = ({ item }: { item: ApiSupervisor }) => {
 
   const ip = item.server.ip;
   const port = item.server.port;
-  const full = `${ip}:${port}`;
+  const address = `${ip}:${port}`;
 
   return (
     <div className='flex flex-wrap items-center space-x-1'>
-      <a title={full}>{trim(ip, `:${port}`)}</a>
+      <a title={address}>{trim(ip, `:${port}`)}</a>
       <span>{item.server.authenticated && <IoLockClosedSharp color='green' />}</span>
       <span>{item.version}</span>
     </div>
