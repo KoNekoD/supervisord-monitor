@@ -59,7 +59,7 @@ WORKDIR /var/www/supervisor-monitor
 RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sources; fi;
 
 RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
-      composer install --no-dev && chmod -R g+w var && chgrp -R www-data var && \
+      composer install --no-dev && bin/console lexik:jwt:generate-keypair && chmod -R g+w var && chgrp -R www-data var && \
       rm -rf /home/app/.npm /home/app/.composer; \
     fi;
 
@@ -67,7 +67,16 @@ USER www-data
 
 EXPOSE 8080
 
-ARG SUPERVISORS_SERVERS=[]
+ARG SUPERVISORS_SERVERS='[]'
 ENV SUPERVISORS_SERVERS=$SUPERVISORS_SERVERS
+
+ARG API_HOST='localhost'
+ENV API_HOST=$API_HOST
+
+ARG JWT_PASSPHRASE='73e14354e3850602ceb82c34c17c56e4aee66dbc9b0bda91652e2f57cb2200b3'
+ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
+
+ARG APP_CREDENTIALS='admin:admin'
+ENV APP_CREDENTIALS=$APP_CREDENTIALS
 
 CMD ["supervisord"]

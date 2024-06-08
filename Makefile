@@ -24,6 +24,9 @@ dc_create_network:
 app_test_fixtures:
 	${DC_EXEC} php bin/console --env=test doctrine:fixtures:load -n
 
+app_gen_jwt_keypair:
+	${DC_EXEC} php bin/console lexik:jwt:generate-keypair
+
 app_phpunit:
 	${DC_EXEC} composer run phpunit
 
