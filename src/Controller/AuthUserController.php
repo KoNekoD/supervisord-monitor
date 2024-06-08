@@ -8,11 +8,11 @@ use App\ApiResource\User;
 use App\DTO\AuthByCredentialsDTO;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[AsController]
 final readonly class AuthUserController
@@ -27,7 +27,7 @@ final readonly class AuthUserController
         $providedCredentials = sprintf('%s:%s', $DTO->login, $DTO->password);
 
         if ($this->appCredentials !== $providedCredentials) {
-            throw new AccessDeniedHttpException('Invalid credentials.');
+            return new JsonResponse(data: ['detail' => 'Invalid credentials'], status: Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->successHandler->handleAuthenticationSuccess(new User($DTO->login));
