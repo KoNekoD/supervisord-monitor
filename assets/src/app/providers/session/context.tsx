@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getMe } from '~/api/use-get-me';
+import { useGetMe } from '~/api/use-get-me';
 
 export interface ISessionContext {
   user: ApiUser;
@@ -15,33 +15,20 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   const [user, setUser] = useState<ApiUserUserMe>(null);
   const [status, setStatus] = useState<ISessionContext['status']>('loading');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getMe().then(response => {
-          setUser(response.data);
-          setStatus('authenticated');
-        });
-      } catch (error) {
-        setStatus('unauthenticated');
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data, isFetching, error } = useGetMe();
 
   useEffect(() => {
-    if (status === 'loading') {
+    if (isFetching) {
       setStatus('loading');
-    } else if (status === 'unauthenticated') {
+    } else if (error) {
       setStatus('unauthenticated');
-    } else if (user) {
+    } else if (data?.data) {
+      setUser(data?.data);
       setStatus('authenticated');
     } else {
       setStatus('unauthenticated');
     }
-  }, [user, status]);
+  }, [data, error, isFetching]);
 
   return <SessionContext.Provider value={{ user, setUser, status, setStatus }}>{children}</SessionContext.Provider>;
 };
