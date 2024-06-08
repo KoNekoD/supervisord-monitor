@@ -1,20 +1,26 @@
-import { observer } from 'mobx-react-lite';
 import { useLocation } from 'react-router';
 import { Link as ReactLink } from 'react-router-dom';
-import { landingHeaderRoutes } from '~/landing/routes/landing-header-routes';
-import { useStore } from '~/main/context-provider';
+import { ROUTES } from '~/shared/const';
+import { RouteValues } from '~/shared/const/routes';
 
-type SidebarRoute = {
+interface HeaderLinks {
   title: string;
-  url: string;
-  search?: object;
-};
+  url: RouteValues;
+}
 
-const routes: SidebarRoute[] = [...landingHeaderRoutes];
+const HEADER_LINKS: HeaderLinks[] = [
+  {
+    title: 'Dashboard',
+    url: ROUTES.HOME,
+  },
+  {
+    title: 'Settings',
+    url: ROUTES.SETTINGS,
+  },
+];
 
-export const Header = observer(() => {
-  const currentPath = useLocation().pathname;
-  const { querySerializer } = useStore();
+export const Header = () => {
+  const location = useLocation();
 
   return (
     <div className='flex h-16 items-center gap-4 bg-gray-100 px-4 dark:bg-black dark:text-white'>
@@ -23,20 +29,14 @@ export const Header = observer(() => {
           <img loading={'lazy'} src='/logo.svg' className='h-10 w-10' alt={'logo'} />
         </div>
       </ReactLink>
-      {routes.map(route => {
-        const isActive = currentPath == route.url;
+      {HEADER_LINKS.map(route => {
+        const isActive = location.pathname == route.url;
         return (
-          <ReactLink
-            to={{
-              pathname: route.url,
-              search: route.search ? querySerializer.stringifyParams(route.search) : undefined,
-            }}
-            key={route.url}
-          >
+          <ReactLink to={route.url} key={route.url}>
             <button className={isActive ? 'font-bold' : ''}>{route.title}</button>
           </ReactLink>
         );
       })}
     </div>
   );
-});
+};
