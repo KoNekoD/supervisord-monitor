@@ -5,6 +5,7 @@ import { login } from '~/api/use-login';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ROUTES } from '~/shared/const';
+import { useSession } from '~/app/providers/session';
 
 const schema = z.object({
   login: z.string(),
@@ -14,6 +15,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const LoginPage = () => {
+  const { setStatus, setUser } = useSession();
   const navigate = useNavigate();
 
   const form = useForm<Schema>({
@@ -22,8 +24,10 @@ export const LoginPage = () => {
 
   const onSubmit = async (data: Schema) => {
     await login(data)
-      .then(() => {
+      .then(response => {
         toast.success('Logged in successfully');
+        setUser(response.data);
+        setStatus('authenticated');
         navigate(ROUTES.HOME);
       })
       .catch(error => toast.error(error.response.data.detail));
