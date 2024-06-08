@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { login } from '~/api/use-login';
+import { useLogin } from '~/api/use-login';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ROUTES } from '~/shared/const';
-import { useSession } from '~/app/providers/session';
+import { useInvalidateMe } from '~/api/use-get-me';
 
 const schema = z.object({
   login: z.string(),
@@ -15,20 +15,21 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const LoginPage = () => {
-  const { setStatus, setUser } = useSession();
   const navigate = useNavigate();
 
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
   });
 
+  const login = useLogin();
+  const invalidateSession = useInvalidateMe();
+
   const onSubmit = async (data: Schema) => {
-    await login(data)
-      .then(response => {
+    await login
+      .mutateAsync(data)
+      .then(() => {
         toast.success('Logged in successfully');
-        setUser(response.data);
-        setStatus('authenticated');
-        navigate(ROUTES.HOME);
+        invalidateSession().then(() => navigate(ROUTES.HOME));
       })
       .catch(error => toast.error(error.response.data.detail));
   };
