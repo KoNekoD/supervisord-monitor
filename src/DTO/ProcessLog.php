@@ -17,10 +17,11 @@ class ProcessLog
         return new self($log);
     }
 
-    public static function fromStringOrFault(string|FaultDTO $log): ?self
+    /** @param string|array<int|string, mixed> $log */
+    public static function fromStringOrFault(string|array $log): ?self
     {
-        if ($log instanceof FaultDTO) {
-            return self::fromFault($log);
+        if (is_array($log)) {
+            return self::fromFault(FaultDTO::fromArray($log));
         } else {
             return self::fromString($log);
         }

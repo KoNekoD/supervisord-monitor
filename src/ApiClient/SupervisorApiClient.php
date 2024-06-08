@@ -60,7 +60,7 @@ final readonly class SupervisorApiClient
                 throw new LogicException('Response logs count mismatch');
             }
 
-            /** @var array<int, string|FaultDTO> $processesLogs */
+            /** @var array<int, string|array<int|string, mixed>> $processesLogs */
             $processesLogs = $response->array();
             foreach ($dto->getProcesses() as $key => $process) {
                 $process->outLog = ProcessLog::fromStringOrFault($processesLogs[$key * 2]);
