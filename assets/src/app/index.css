@@ -5,8 +5,9 @@
 @tailwind utilities;
 
 html,
-body {
-    min-height: 100%;
+body,
+#root {
+    height: 100%;
 }
 
 body {

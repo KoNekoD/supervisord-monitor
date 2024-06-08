@@ -10,17 +10,20 @@ services:
       context: ./../../
       dockerfile: ./config/docker/Dockerfile
       args:
-        - WEB_PORT=${WEB_PORT}
         - BUILD_TYPE=dev
         - PUID=${PUID}
         - PGID=${PGID}
-        - SUPERVISORS_SERVERS=${SUPERVISORS_SERVERS}
         - DEV_XDEBUG_AUTOSTART=${DEV_XDEBUG_AUTOSTART}
+        - SUPERVISORS_SERVERS=${SUPERVISORS_SERVERS}
+        - API_HOST=${API_HOST}
+        - JWT_PASSPHRASE=${JWT_PASSPHRASE}
+        - APP_CREDENTIALS=${APP_CREDENTIALS}
     volumes:
       - ./../../:/var/www/supervisor-monitor:cached
     ports:
-      - ${WEB_PORT}:${WEB_PORT}
-      - "5173:5173" # Dev mode
+      - "8080:8080" # Dev mode(backend)
+      - "5173:5173" # Dev mode(frontend)
+      - "10011:8080" # Prod mode emulation
     networks:
       - supervisord_monitor_network
 

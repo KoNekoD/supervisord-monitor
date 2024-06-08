@@ -4,16 +4,24 @@ import { NotFoundPage } from '~/pages/not-found';
 import { SettingsPage } from '~/pages/settings';
 import { ROUTES } from '~/shared/const';
 import { MainLayout } from '~/app/layout/main';
+import { LoginPage } from '~/pages/login';
+import { PrivateRoute } from './private-route';
+import { PublicRoute } from '~/app/providers/router/public-route';
 
 const ErrorPage = () => <div>ERROROORORO SDJSDOJSDIJIO!!!!!!! ERRROR CRITIIACALLLL!!!!!!!!!!!!!</div>;
 
 export const router = createBrowserRouter([
   {
-    element: <MainLayout />,
     children: [
       {
         path: ROUTES.HOME,
-        element: <Outlet />,
+        element: (
+          <MainLayout>
+            <PrivateRoute>
+              <Outlet />
+            </PrivateRoute>
+          </MainLayout>
+        ),
         errorElement: <ErrorPage />,
         children: [
           {
@@ -24,11 +32,25 @@ export const router = createBrowserRouter([
             path: ROUTES.SETTINGS,
             element: <SettingsPage />,
           },
+          {
+            path: '*',
+            element: <NotFoundPage />,
+          },
         ],
       },
       {
-        path: '*',
-        element: <NotFoundPage />,
+        element: (
+          <PublicRoute>
+            <Outlet />
+          </PublicRoute>
+        ),
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: ROUTES.LOGIN,
+            element: <LoginPage />,
+          },
+        ],
       },
     ],
   },

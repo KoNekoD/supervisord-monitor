@@ -1,0 +1,26 @@
+lexik_jwt_authentication:
+  secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+  public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+  pass_phrase: '%env(JWT_PASSPHRASE)%'
+  token_ttl: 604800
+  user_id_claim: email
+  token_extractors:
+    authorization_header:
+      enabled: true
+      prefix: Bearer
+      name: Authorization
+    cookie:
+      enabled: true
+      name: api_token
+  set_cookies:
+    api_token:
+      samesite: strict
+      path: /api
+      domain: '%env(API_HOST)%'
+      secure: true
+      httpOnly: true
+
+when@test:
+  lexik_jwt_authentication:
+    encoder:
+      service: app.mock.jwt_encoder
