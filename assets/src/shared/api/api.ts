@@ -7,4 +7,5 @@ export const $api = axios.create({
   validateStatus(status) {
     return status >= 200 && status < 300;
   },
+  withCredentials: true,
 });
