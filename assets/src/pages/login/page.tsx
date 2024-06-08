@@ -44,7 +44,7 @@ export const LoginPage = () => {
                 Login
               </label>
               <div className='mt-2'>
-                <input {...form.register('login')} type='email' autoComplete='email' required className='block w-full rounded-md border-0 bg-gray-200 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder:text-gray-400' />
+                <input {...form.register('login')} required className='block w-full rounded-md border-0 bg-gray-200 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder:text-gray-400' />
               </div>
             </div>
 
