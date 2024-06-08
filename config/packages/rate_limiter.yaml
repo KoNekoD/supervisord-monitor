@@ -1,0 +1,7 @@
+framework:
+  rate_limiter:
+    auth_by_credentials_api:
+      policy: 'fixed_window'
+      limit: 3
+      interval: '1 minute'
+

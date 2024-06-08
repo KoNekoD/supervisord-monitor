@@ -13,17 +13,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 #[AsController]
 final readonly class AuthUserController
 {
     public function __construct(
         private AuthenticationSuccessHandler $successHandler,
+        private RateLimiterFactory $authByCredentialsApiLimiter,
         #[Autowire(param: 'app_credentials')] private string $appCredentials
     ) {}
 
     public function __invoke(#[MapRequestPayload] AuthByCredentialsDTO $DTO, Request $request): Response
     {
+        $limiter = $this->authByCredentialsApiLimiter->create($DTO->login);
+        if (false === $limiter->consume()->isAccepted()) {
+            return new JsonResponse(data: ['detail' => 'Too many requests'], status: Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $providedCredentials = sprintf('%s:%s', $DTO->login, $DTO->password);
 
         if ($this->appCredentials !== $providedCredentials) {
