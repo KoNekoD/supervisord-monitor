@@ -28,6 +28,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tw-elements/dist/plugin.cjs')],
   variants: ['dark', 'dark-hover', 'dark-group-hover', 'dark-even', 'dark-odd'],
 };
