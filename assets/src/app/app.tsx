@@ -10,7 +10,7 @@ export const App = () => (
     <ProviderRootStore>
       <ReactQueryProvider>
         <ThemeProvider defaultTheme='system'>
-          <Toaster position='top-center' reverseOrder={false} />
+          <Toaster position='top-right' reverseOrder={false} />
           <AppRouter />
         </ThemeProvider>
       </ReactQueryProvider>

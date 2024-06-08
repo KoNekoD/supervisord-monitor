@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { login } from '~/api/use-login';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { ROUTES } from '~/shared/const';
 
 const schema = z.object({
   login: z.string(),
@@ -23,7 +24,7 @@ export const LoginPage = () => {
     await login(data)
       .then(() => {
         toast.success('Logged in successfully');
-        navigate('/');
+        navigate(ROUTES.HOME);
       })
       .catch(error => toast.error(error.response.data.detail));
   };
@@ -54,7 +55,7 @@ export const LoginPage = () => {
                 </label>
               </div>
               <div className='mt-2'>
-                <input {...form.register('login')} type='password' autoComplete='current-password' required className='block w-full rounded-md border-0 bg-gray-200 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder:text-gray-400' />
+                <input {...form.register('password')} type='password' autoComplete='current-password' required className='block w-full rounded-md border-0 bg-gray-200 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder:text-gray-400' />
               </div>
             </div>
 
