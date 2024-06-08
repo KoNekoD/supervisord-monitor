@@ -96,7 +96,7 @@ interface ApiUser {
 }
 
 interface ApiUserAuthByCredentialsDTO {
-  email: string;
+  login: string;
   password: string;
 }
 
