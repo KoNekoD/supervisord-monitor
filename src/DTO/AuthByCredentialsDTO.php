@@ -6,5 +6,5 @@ namespace App\DTO;
 
 final readonly class AuthByCredentialsDTO
 {
-    public function __construct(public string $email, public string $password) {}
+    public function __construct(public string $login, public string $password) {}
 }
