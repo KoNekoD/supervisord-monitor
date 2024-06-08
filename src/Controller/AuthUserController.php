@@ -24,12 +24,12 @@ final readonly class AuthUserController
 
     public function __invoke(#[MapRequestPayload] AuthByCredentialsDTO $DTO, Request $request): Response
     {
-        $providedCredentials = sprintf('%s:%s', $DTO->email, $DTO->password);
+        $providedCredentials = sprintf('%s:%s', $DTO->login, $DTO->password);
 
         if ($this->appCredentials !== $providedCredentials) {
             throw new AccessDeniedHttpException('Invalid credentials.');
         }
 
-        return $this->successHandler->handleAuthenticationSuccess(new User($DTO->email));
+        return $this->successHandler->handleAuthenticationSuccess(new User($DTO->login));
     }
 }
