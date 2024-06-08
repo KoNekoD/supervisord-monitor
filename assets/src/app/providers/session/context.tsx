@@ -12,7 +12,7 @@ const SessionContext = createContext<ISessionContext | null>(null);
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   // @ts-ignore
-  const [user, setUser] = useState<ApiUserUserMe>(null);
+  const [user, setUser] = useState<ApiUser>(null);
   const [status, setStatus] = useState<ISessionContext['status']>('loading');
 
   const { data, isFetching, error } = useGetMe();
