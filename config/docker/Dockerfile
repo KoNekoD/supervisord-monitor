@@ -56,27 +56,14 @@ COPY --chown=app:app . /var/www/supervisor-monitor
 COPY --from=build-frontend /app/dist /var/www/supervisor-monitor/assets/dist
 WORKDIR /var/www/supervisor-monitor
 
-RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sources; fi;
-
-ARG JWT_PASSPHRASE='73e14354e3850602ceb82c34c17c56e4aee66dbc9b0bda91652e2f57cb2200b3'
-ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
-
-RUN if [ "${BUILD_TYPE}" = "dist" ]; then \
-      composer install --no-dev && bin/console lexik:jwt:generate-keypair && chmod -R g+w var && chgrp -R www-data var && \
+RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sources; fi && \
+    if [ "${BUILD_TYPE}" = "dist" ]; then \
+      composer install --no-dev && \
+      mkdir "config/jwt" && \
+      chmod -R g+w var && chgrp -R www-data var && \
       rm -rf /home/app/.npm /home/app/.composer; \
     fi;
 
-USER www-data
-
 EXPOSE 8080
-
-ARG SUPERVISORS_SERVERS='[]'
-ENV SUPERVISORS_SERVERS=$SUPERVISORS_SERVERS
-
-ARG API_HOST='localhost'
-ENV API_HOST=$API_HOST
-
-ARG APP_CREDENTIALS='admin:admin'
-ENV APP_CREDENTIALS=$APP_CREDENTIALS
 
 CMD ["supervisord"]
