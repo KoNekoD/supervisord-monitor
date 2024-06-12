@@ -64,6 +64,8 @@ docker buildx build -t supervisord-monitor-override --load .
 docker run --detach --name supervisord-monitor-override -p "10011:8080" supervisord-monitor-override
 ```
 
+The main trick is that you can close write access to these keys so that you can't change them afterward
+
 ### 2. docker-compose
 In a specific folder, create docker-compose.yml:
 Be sure to create a jwt folder that will become volume manually, otherwise the created folder will have root privileges, which will break key creation(The jwt folder should always be there, it contains the keys)
@@ -86,6 +88,9 @@ services:
     ports:  
       - "10011:8080"
 ```
+
+Here you can also change the mount settings in volume to ro after creation keys.
+
 ### 3. Simple run
 jwt keys will be generated automatically via supervisor configured program  
 config/docker/supervisor/supervisord-dist.conf  
