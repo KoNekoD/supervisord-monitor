@@ -13,6 +13,93 @@ Telegram: https://t.me/supervisord_monitor
 * Read stderr log
 * Monitor process uptime status
 
+## How to start
+
+> There are 3 different ways to start. The first is to start by extending a new Dockerfile from the project image and defining the jwt-keys (it may seem complicated, but it is the most reliable and safe). The second is to run via docker-compose with overriding env application parameters and volume for automatically generated keys. And the third option is to just run with env variable definition (the fastest but not the most reliable, jwt key will be recreated uniquely every time).
+
+First let's generate jwt passphrase, we need a random password with a length of 64 characters, as an option use this command:
+
+`tr -dc A-Za-z0-9 </dev/urandom | head -c 64; echo`
+
+### 1. Docker extend
+
+You also need 2 files private.pem and public.pem, you can get them by running the container and copying the automatically generated keys :
+```
+docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE='your-generated-jwt-passphrase' konekod/supervisord-monitor
+docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
+docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/private.pem private.pem
+docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/public.pem public.pem
+docker kill supervisord-monitor
+docker rm supervisord-monitor
+```
+After that, let's create a Dockerfile in a separate directory:
+
+```  
+FROM konekod/supervisord-monitor:latest  
+  
+ENV JWT_PASSPHRASE='your-generated-jwt-passphrase'  
+  
+# Generated jwt keys  
+COPY private.pem config/jwt/private.pem  
+COPY public.pem config/jwt/public.pem  
+  
+# Please set secure credentials for the administrator account instead default admin admin  
+ENV APP_CREDENTIALS='admin:admin'  
+  
+# Host on which it is planned to run supervisord-monitor (needed to set cookie authorization)  
+ENV API_HOST='localhost'  
+  
+# Your remote suprevisors  
+ENV SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}]  
+  
+# Disable r/w access for project(exclude var dir) for improve security  
+USER www-data  
+  
+```
+
+Final start
+```
+docker buildx build -t supervisord-monitor-override --load .
+
+docker run --detach --name supervisord-monitor-override -p "10011:8080" supervisord-monitor-override
+```
+
+### 2. docker-compose
+In a specific folder, create docker-compose.yml:
+Be sure to create a jwt folder that will become volume manually, otherwise the created folder will have root privileges, which will break key creation(The jwt folder should always be there, it contains the keys)
+```
+version: "3.8"  
+  
+name: supervisord-monitor-example  
+  
+services:  
+  supervisord-monitor-app:  
+    container_name: supervisord-monitor-app  
+    image: konekod/supervisord-monitor  
+    user: app  
+    environment:  
+      - API_HOST='localhost'  
+      - APP_CREDENTIALS='admin:admin'  
+      - JWT_PASSPHRASE='your-generated-jwt-passphrase'  
+    volumes:  
+      - ./jwt:/var/www/supervisor-monitor/config/jwt:cached  
+    ports:  
+      - "10011:8080"
+```
+### 3. Simple run
+jwt keys will be generated automatically via supervisor configured program  
+config/docker/supervisor/supervisord-dist.conf  
+see program:generate-jwt-if-not-exists
+```
+docker run \  
+  --detach \  
+  --name supervisord-monitor \  
+  -e APP_CREDENTIALS='admin:admin' \  
+  -e API_HOST='localhost' \  
+  -e SUPERVISORS_SERVERS='[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}]' \  
+  konekod/supervisord-monitor
+```
+
 ## Install
 
 1.Clone supervisord-monitor to your vhost/webroot:
