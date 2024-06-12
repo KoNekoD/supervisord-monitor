@@ -1,6 +1,6 @@
 # Supervisord Multi Server Monitoring Tool
 
-![68747470733a2f2f6769746c61622e636f6d2f736474373737323431362f7261696c67756e2f2d2f77696b69732f75706c6f6164732f32303664333237323837376532393031383535346461633936343162366133332f696d6167652e706e67](https://github.com/KoNekoD/supervisord-monitor/assets/108808201/d486fc99-f352-4112-8581-88303026895b)
+![image](https://github.com/KoNekoD/supervisord-monitor/assets/108808201/b069fda7-0a49-4c4a-8b22-50459eb2eebf)
 
 DockerHub: https://hub.docker.com/r/konekod/supervisord-monitor
 
@@ -12,6 +12,7 @@ Telegram: https://t.me/supervisord_monitor
 * Start/Stop/Restart process
 * Read stderr log
 * Monitor process uptime status
+* Security by password authorization
 
 ## How to start
 
@@ -25,7 +26,7 @@ First let's generate jwt passphrase, we need a random password with a length of 
 
 You also need 2 files private.pem and public.pem, you can get them by running the container and copying the automatically generated keys :
 ```
-docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE='your-generated-jwt-passphrase' konekod/supervisord-monitor
+docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE=your-generated-jwt-passphrase konekod/supervisord-monitor
 docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
 docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/private.pem private.pem
 docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/public.pem public.pem
@@ -37,17 +38,17 @@ After that, let's create a Dockerfile in a separate directory:
 ```  
 FROM konekod/supervisord-monitor:latest  
   
-ENV JWT_PASSPHRASE='your-generated-jwt-passphrase'  
+ENV JWT_PASSPHRASE=your-generated-jwt-passphrase  
   
 # Generated jwt keys  
 COPY private.pem config/jwt/private.pem  
 COPY public.pem config/jwt/public.pem  
   
 # Please set secure credentials for the administrator account instead default admin admin  
-ENV APP_CREDENTIALS='admin:admin'  
+ENV APP_CREDENTIALS=admin:admin  
   
 # Host on which it is planned to run supervisord-monitor (needed to set cookie authorization)  
-ENV API_HOST='localhost'  
+ENV API_HOST=localhost  
   
 # Your remote suprevisors  
 ENV SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}]  
@@ -78,11 +79,10 @@ services:
   supervisord-monitor-app:  
     container_name: supervisord-monitor-app  
     image: konekod/supervisord-monitor  
-    user: app  
     environment:  
-      - API_HOST='localhost'  
-      - APP_CREDENTIALS='admin:admin'  
-      - JWT_PASSPHRASE='your-generated-jwt-passphrase'  
+      - API_HOST=localhost  
+      - APP_CREDENTIALS=admin:admin  
+      - JWT_PASSPHRASE=your-generated-jwt-passphrase  
     volumes:  
       - ./jwt:/var/www/supervisor-monitor/config/jwt:cached  
     ports:  
@@ -99,9 +99,9 @@ see program:generate-jwt-if-not-exists
 docker run \  
   --detach \  
   --name supervisord-monitor \  
-  -e APP_CREDENTIALS='admin:admin' \  
-  -e API_HOST='localhost' \  
-  -e SUPERVISORS_SERVERS='[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}]' \  
+  -e APP_CREDENTIALS=admin:admin \  
+  -e API_HOST=localhost \  
+  -e SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}] \  
   konekod/supervisord-monitor
 ```
 
