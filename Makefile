@@ -11,6 +11,9 @@ up:
 	${DC_EXEC} bin/console assets:install
 
 down:
+	${DC} down
+
+down_force:
 	${DC} down -v --rmi=all --remove-orphans
 
 console:

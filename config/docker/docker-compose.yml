@@ -14,16 +14,21 @@ services:
         - PUID=${PUID}
         - PGID=${PGID}
         - DEV_XDEBUG_AUTOSTART=${DEV_XDEBUG_AUTOSTART}
+    environment:
         - SUPERVISORS_SERVERS=${SUPERVISORS_SERVERS}
         - API_HOST=${API_HOST}
         - JWT_PASSPHRASE=${JWT_PASSPHRASE}
         - APP_CREDENTIALS=${APP_CREDENTIALS}
     volumes:
       - ./../../:/var/www/supervisor-monitor:cached
+      - ./../../config/docker/nginx/dev/supervisord-monitor.local.crt:/etc/nginx/ssl/supervisord-monitor.local.crt
+      - ./../../config/docker/nginx/dev/supervisord-monitor.local.key:/etc/nginx/ssl/supervisord-monitor.local.key
     ports:
-      - "8080:8080" # Dev mode(backend)
-      - "5173:5173" # Dev mode(frontend)
-      - "10011:8080" # Prod mode emulation
+      - "8080:8080" # Dev mode(backend) - Deprecated
+      - "5173:5173" # Dev mode(frontend) - Deprecated
+      - "10011:8080" # Prod mode emulation - Deprecated
+      - "80:8080" # Dev mode(for cookies setup)
+      - "443:4430" # Dev mode(for cookies setup)
     networks:
       - supervisord_monitor_network
 

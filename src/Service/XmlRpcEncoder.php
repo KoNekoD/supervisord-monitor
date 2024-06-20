@@ -90,6 +90,11 @@ final readonly class XmlRpcEncoder
 
     private function decode(string $data): mixed
     {
+        // Replace unacceptable control chars to space
+        $pattern = '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u';
+        /** @var string $data */
+        $data = preg_replace(pattern: $pattern, replacement: ' ', subject: $data);
+
         try {
             $decoded = $this->xmlEncoder->decode($data, '');
             if ($decoded === false) {
@@ -98,7 +103,7 @@ final readonly class XmlRpcEncoder
 
             return $decoded;
         } catch (NotEncodableValueException $e) {
-            throw new XmlRpcException("Not a valid XML-RPC response", 0, $e);
+            throw new XmlRpcException('Invalid XML-RPC response, err:'.$e->getMessage(), 0, $e);
         }
     }
 
@@ -237,7 +242,7 @@ final readonly class XmlRpcEncoder
         } elseif (isset($data['params']['param'])) {
             return new ResponseDTO($this->decodeValue($data['params']['param']['value']));
         } else {
-            throw new XmlRpcException("Not a valid XML-RPC response");
+            throw new XmlRpcException("Not a valid XML-RPC response: No data and No Faults");
         }
     }
 

@@ -45,7 +45,7 @@ class Supervisor
     {
         /** @var array<int, ProcessGroup> $groups */
         $groups = [];
-        /** @var array<string, Process[]> $processes */
+        /** @var array<int|string, Process[]> $processes */
         $processes = [];
 
         /** @var array<string, array<string, int|string>> $data */
@@ -55,7 +55,7 @@ class Supervisor
         }
 
         foreach ($processes as $groupName => $group) {
-            $groups[] = new ProcessGroup(name: $groupName, processes: $group);
+            $groups[] = new ProcessGroup(name: (string)$groupName, processes: $group);
         }
 
         return new self(groups: $groups, version: $version, ok: true, server: $server, failError: null);
