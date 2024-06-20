@@ -3,11 +3,16 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Process } from '~/components/monitor/server/parts/body/processes-list/program/process';
 import { Buttons } from '~/components/monitor/server/parts/body/processes-list/program/buttons';
 
+function isNumeric(n)
+{
+  return !isNaN(n);
+}
+
 export const Program = ({ group, server }: { group: ApiProcessGroup; server: ApiSupervisorServer }) => {
   const list = group.processes;
   const items = list.map((p, i) => <Process process={p} server={server} key={i} />);
 
-  if (group.processes.length === 1) {
+  if (group.processes.length === 1 && !isNumeric(group.processes[0].name)) {
     return <div className='px-2 py-1'>{items}</div>;
   }
 
