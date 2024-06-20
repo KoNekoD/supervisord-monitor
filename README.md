@@ -105,6 +105,30 @@ docker run \
   konekod/supervisord-monitor
 ```
 
+## Running via script
+With this script it is possible to automatically recreate a container with everything needed
+
+```shell
+#!/bin/bash
+
+container_id=$(docker ps | grep my-supervisord-monitor | awk '{ print $1 }')
+
+docker kill "$container_id"
+docker rm "$container_id"
+docker pull konekod/supervisord-monitor
+docker run -d \
+  --name my-supervisord-monitor \
+  -e SUPERVISORS_SERVERS="$(< /home/dev/supervisord_monitor/supervisord_monitor_servers.json)" \
+  -e APP_CREDENTIALS=admin:admin \
+  -e JWT_PASSPHRASE=your-generated-jwt-passphrase \
+  -e API_HOST=supervisord-monitor.site.com \
+  -p 10011:8080 \
+  --restart=always \
+  --network project_network \
+  --volume /home/dev/supervisord_monitor/jwt:/var/www/supervisor-monitor/config/jwt:cached \
+  konekod/supervisord-monitor:latest
+```
+
 ## Install
 
 1.Clone supervisord-monitor to your vhost/webroot:
@@ -159,6 +183,13 @@ need in the profiler.
 Did not receive a '200 OK' response from remote server. (HTTP/1.0 401 Unauthorized)
 ```
 Having `401 Unauthorized` means that you have connection between Supervisord Monitoring tool and Supervisord but the username or password are wrong.
+
+---
+
+```
+NO_FILE
+```
+This error can be seen when reading logs with active flag "redirect_stderr=true", just remove this line, and you will be able to read stderr logs in supervisord-monitor.
 
 ---
 
