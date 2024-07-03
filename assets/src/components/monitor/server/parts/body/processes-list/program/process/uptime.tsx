@@ -3,15 +3,20 @@ import { useEffect, useState } from 'react';
 export const Uptime = ({ process }: { process: ApiProcess }) => {
   const [nowTime, setNowTime] = useState(new Date(process.now * 1000));
 
+  // I think it's a crutch, but without it, the component's state doesn't change
+  // See also assets/src/components/monitor/monitor.tsx:7
   useEffect(() => {
     if (process.stateName === 'STOPPED' || process.stateName === 'EXITED' || process.stateName === 'FATAL') {
-      return () => {};
+      return () => {
+      };
     }
-
     const interval = setInterval(() => {
-      process.now++;
-      setNowTime(new Date(process.now * 1000))
-    }, 1000);
+      const newNowTime = new Date(process.now * 1000);
+      if (newNowTime.getTime() === nowTime.getTime()) {
+        return;
+      }
+      setNowTime(newNowTime);
+    }, 1);
     return () => {
       clearInterval(interval);
     };

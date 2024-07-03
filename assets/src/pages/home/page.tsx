@@ -17,11 +17,11 @@ export const MainPage = observer(() => {
 
   if (landingStore.actualData?.state !== 'fulfilled') {
     if (landingStore.prevData?.state === 'fulfilled') {
-      return <Monitor blocks={landingStore.prevData?.value} />;
+      return <Monitor servers={landingStore.prevData?.value} />;
     }
 
     return <MonitorLoading />;
   }
 
-  return <Monitor blocks={landingStore.actualData?.value} />;
+  return <Monitor servers={landingStore.actualData?.value} />;
 });
