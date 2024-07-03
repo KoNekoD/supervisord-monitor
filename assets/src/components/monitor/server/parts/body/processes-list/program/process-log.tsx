@@ -39,7 +39,7 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
                 </div>
                 <div className='relative overflow-y-auto p-4'>
                   {log.log.split('\n').map((item, index) => (
-                    <p key={index}>{item}</p>
+                    <p className='whitespace-nowrap' key={index}>{item}</p>
                   ))}
                 </div>
                 <div className='flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-gray-100 border-opacity-100 p-4 dark:border-opacity-50'>
