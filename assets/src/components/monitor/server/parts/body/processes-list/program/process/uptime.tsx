@@ -1,26 +1,8 @@
-import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '~/main/context-provider';
 
-export const Uptime = ({ process }: { process: ApiProcess }) => {
-  const [nowTime, setNowTime] = useState(new Date(process.now * 1000));
-
-  // I think it's a crutch, but without it, the component's state doesn't change
-  // See also assets/src/components/monitor/monitor.tsx:7
-  useEffect(() => {
-    if (process.stateName === 'STOPPED' || process.stateName === 'EXITED' || process.stateName === 'FATAL') {
-      return () => {
-      };
-    }
-    const interval = setInterval(() => {
-      const newNowTime = new Date(process.now * 1000);
-      if (newNowTime.getTime() === nowTime.getTime()) {
-        return;
-      }
-      setNowTime(newNowTime);
-    }, 1);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+export const Uptime = observer(({ process }: { process: ApiProcess }) => {
+  const { landingStore } = useStore();
 
   /**
    * STOPPED, EXITED, FATAL - Stop time
@@ -31,17 +13,18 @@ export const Uptime = ({ process }: { process: ApiProcess }) => {
     return <></>;
   }
 
-  const start = new Date(process.start * 1000);
-  const stop = new Date(process.stop * 1000);
+  const start = process.start;
+  const stop = process.stop;
+  const now = process.now + landingStore.serverTimeDiff;
 
   let duration = 0;
   let timeClass = '';
 
   if (process.stateName === 'STOPPED' || process.stateName === 'EXITED' || process.stateName === 'FATAL') {
     timeClass = 'text-gray-400';
-    duration = (stop - start) / 1000;
+    duration = (stop - start);
   } else if (process.stateName === 'RUNNING') {
-    duration = (nowTime - start) / 1000;
+    duration = (now - start);
   }
 
   const years = Math.floor(duration / (60 * 60 * 24 * 365));
@@ -73,4 +56,4 @@ export const Uptime = ({ process }: { process: ApiProcess }) => {
   }
 
   return <span>{timeEl}</span>;
-};
+});

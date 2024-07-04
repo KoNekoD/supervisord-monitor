@@ -11,25 +11,30 @@ export class LandingStore {
 
   autoRefreshIsActive: boolean;
   isAllowMutatorsActive: boolean;
+  serverTimeDiff: number;
 
   constructor(
     private notificator: Notificator,
-    private tokenStorage: TokenStorage
+    private tokenStorage: TokenStorage,
   ) {
     makeObservable(this, {
       actualData: observable,
       prevData: observable,
       autoRefreshIsActive: observable,
       isAllowMutatorsActive: observable,
+      serverTimeDiff: observable,
       fetchData: action,
       updateAutoRefresh: action,
       switchAllowMutators: action,
+      setServerTimeDiff: action,
     });
 
     this.autoRefreshIsActive = this.tokenStorage.isAutoRefresh();
     this.isAllowMutatorsActive = this.tokenStorage.isAllowMutatorsEnabled();
+    this.serverTimeDiff = 0;
 
     this.scheduleFetchDataRecursive();
+    this.scheduleAutoIncrementTimeDiff();
   }
 
   scheduleFetchDataRecursive(): void {
@@ -39,6 +44,12 @@ export class LandingStore {
         this.notificator.success('Data auto-refreshed');
       }
     }, 10 * 1000);
+  }
+
+  scheduleAutoIncrementTimeDiff(): void {
+    setInterval(() => {
+      this.setServerTimeDiff(this.getServerTimeDiff() + 1);
+    }, 1000);
   }
 
   fetchData(): void {
@@ -52,6 +63,11 @@ export class LandingStore {
     }
 
     this.actualData = fromPromise(getSupervisors());
+    this.actualData.then(() => this.resetDiffWhenActualDataIsFetched());
+  }
+
+  async resetDiffWhenActualDataIsFetched() {
+    this.setServerTimeDiff(0);
   }
 
   updateAutoRefresh(active: boolean): void {
@@ -76,6 +92,19 @@ export class LandingStore {
       this.isAllowMutatorsActive = true;
       this.notificator.success('Allow mutators enabled');
     }
+  }
+
+
+  getServerTimeDiff(): number {
+    return this.serverTimeDiff;
+  }
+
+  setServerTimeDiff(value: number) {
+    this.serverTimeDiff = value;
+  }
+
+  notifyErr(err: any) {
+    this.notificator.error(err.message ?? 'Something went wrong: ' + '\n\n' + err.response.data.detail ?? 'No details');
   }
 
   checkValidResultSuccess(result: ApiSupervisorSupervisorManageResult): boolean {
@@ -104,10 +133,7 @@ export class LandingStore {
           this.notificator.success(`All processes started on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   stopAll(server: string): void {
@@ -117,10 +143,7 @@ export class LandingStore {
           this.notificator.success(`All processes stopped on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   restartAll(server: string): void {
@@ -130,10 +153,7 @@ export class LandingStore {
           this.notificator.success(`All processes restarted on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   clearAllProcessLog(server: string): void {
@@ -143,10 +163,7 @@ export class LandingStore {
           this.notificator.success(`All process logs cleared on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   startProcess(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -156,10 +173,7 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} started on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   stopProcess(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -169,10 +183,7 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} stopped on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   startProcessGroup(server: string, group: string): void {
@@ -182,10 +193,7 @@ export class LandingStore {
           this.notificator.success(`Group ${group} started on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   stopProcessGroup(server: string, group: string): void {
@@ -195,10 +203,7 @@ export class LandingStore {
           this.notificator.success(`Group ${group} stopped on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   restartProcessGroup(server: string, group: string): void {
@@ -208,10 +213,7 @@ export class LandingStore {
           this.notificator.success(`Group ${group} restarted on server ${server}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   restartProcess(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -221,10 +223,7 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} restarted on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   clearProcessLog(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -234,10 +233,7 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} log cleared on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   cloneProcess(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -247,10 +243,7 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} cloned on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 
   removeProcess(server: ApiSupervisorServer, process: ApiProcess): void {
@@ -260,9 +253,6 @@ export class LandingStore {
           this.notificator.success(`Process ${process.name} removed on server ${server.name}`);
         }
         this.fetchData();
-      })
-      .catch(err => {
-        this.notificator.error(err.message + '\n\n' + err.response.data.detail);
-      });
+      }).catch(err => this.notifyErr(err));
   }
 }
