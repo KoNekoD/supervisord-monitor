@@ -108,7 +108,7 @@ export class LandingStore {
   }
 
   checkValidResultSuccess(result: ApiSupervisorSupervisorManageResult): boolean {
-    if (result.operationResult !== null) {
+    if (result?.operationResult) {
       if (result.operationResult.isFault) {
         this.notificator.error('Operation got fault: ' + result.operationResult.error);
       }
@@ -116,7 +116,7 @@ export class LandingStore {
       return result.operationResult.ok;
     }
 
-    if (result.changedProcesses !== null) {
+    if (result?.changedProcesses) {
       if (!result.changedProcesses.ok) {
         this.notificator.error('Got error while changing processes: ' + result.changedProcesses.error);
       }
