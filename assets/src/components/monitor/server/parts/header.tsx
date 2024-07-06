@@ -1,16 +1,26 @@
 import { Buttons } from '~/components/monitor/server/parts/header/buttons';
 import { ServerInfo } from '~/components/monitor/server/parts/header/server-info';
 import { ServerTitle } from '~/components/monitor/server/parts/header/server-title';
+import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
 
 export const Header = ({ item }: { item: ApiSupervisor }) => {
+  const { restartAll, stopAll, startAll, clearAllProcessLog } = useOperationsSupervisors();
+
   return (
     <div className='rounded-t-xl border-b border-l-2 border-r-2 border-t-2 border-gray-200 px-2 py-1'>
-      <div className='lg:flex lg:justify-between space-x-2'>
-        <div className='w-full flex justify-between flex-wrap items-center'>
+      <div className='space-x-2 lg:flex lg:justify-between'>
+        <div className='flex w-full flex-wrap items-center justify-between'>
           <ServerTitle item={item} />
           <ServerInfo item={item} />
         </div>
-        {item.ok && <Buttons serverName={item.server.name} />}
+        {item.ok && (
+          <Buttons
+            stopAll={stopAll.bind(null, item.server.name)}
+            restartAll={restartAll.bind(null, item.server.name)}
+            startAll={startAll.bind(null, item.server.name)}
+            clearAllProcessLog={clearAllProcessLog.bind(null, item.server.name)}
+          />
+        )}
       </div>
     </div>
   );
