@@ -8,6 +8,8 @@ export const useOperationsSupervisors = () => {
   const manageSupervisors = useManageSupervisors();
   const invalidateSupervisors = useInvalidateSupervisors();
 
+  /// --- Servers ----
+
   const clearAllProcessLog = (serverName: string) =>
     manageSupervisors
       .mutateAsync({
@@ -72,5 +74,55 @@ export const useOperationsSupervisors = () => {
       })
       .catch(err => notifyError(err));
 
-  return { clearAllProcessLog, startAll, stopAll, restartAll };
+  /// --- Processes ----
+
+  const startProcess = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'start_process',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} started on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const stopProcess = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'stop_process',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} stopped on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const restartProcess = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'restart_process',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} restarted on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  return { clearAllProcessLog, startAll, stopAll, restartAll, startProcess, stopProcess, restartProcess };
 };

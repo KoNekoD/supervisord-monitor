@@ -115,30 +115,6 @@ export class LandingStore {
     return false;
   }
 
-  startProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'start_process', group: process.group, process: process.name })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Process ${process.name} started on server ${server.name}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  stopProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'stop_process', group: process.group, process: process.name })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Process ${process.name} stopped on server ${server.name}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
   startProcessGroup(server: string, group: string): void {
     this.manageSupervisors
       .mutateAsync({ server: server, type: 'start_process_group', group: group, process: null })
@@ -169,18 +145,6 @@ export class LandingStore {
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Group ${group} restarted on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  restartProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'restart_process', group: process.group, process: process.name })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Process ${process.name} restarted on server ${server.name}`);
         }
         this.invalidateSupervisors();
       })
