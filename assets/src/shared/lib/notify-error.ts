@@ -1,3 +1,4 @@
-import { toast } from 'react-hot-toast';
+import { toastManager } from '~/shared/lib/toastManager';
 
-export const notifyError = (err: any) => toast.error(err.message ?? 'Something went wrong: ' + '\n\n' + err.response.data.detail ?? 'No details');
+export const notifyError = (err: any) =>
+  toastManager.error(err.message ?? 'Something went wrong: ' + '\n\n' + err.response.data.detail ?? 'No details');

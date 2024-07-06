@@ -1,8 +1,8 @@
 import { IPromiseBasedObservable } from 'mobx-utils';
 import { action, makeObservable, observable } from 'mobx';
-import { Notificator } from './notificator';
 import { TokenStorage } from './token-storage';
 import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
+import { toastManager } from '~/shared/lib/toastManager';
 
 export class LandingStore {
   prevData?: IPromiseBasedObservable<ApiSupervisor[]>;
@@ -11,12 +11,9 @@ export class LandingStore {
   autoRefreshIsActive: boolean;
   isAllowMutatorsActive: boolean;
   serverTimeDiff: number;
+  invalidateSupervisors: ReturnType<typeof useInvalidateSupervisors>;
 
-  constructor(
-    private notificator: Notificator,
-    private tokenStorage: TokenStorage,
-    private invalidateSupervisors: ReturnType<typeof useInvalidateSupervisors>
-  ) {
+  constructor(private tokenStorage: TokenStorage) {
     makeObservable(this, {
       actualData: observable,
       prevData: observable,
@@ -42,7 +39,7 @@ export class LandingStore {
     setInterval(() => {
       if (this.tokenStorage.isAutoRefresh()) {
         this.invalidateSupervisors();
-        this.notificator.success('Data auto-refreshed');
+        toastManager.success('Data auto-refreshed');
       }
     }, 10 * 1000);
   }
@@ -61,11 +58,11 @@ export class LandingStore {
     if (active) {
       this.autoRefreshIsActive = true;
       this.tokenStorage.setAutoRefresh();
-      this.notificator.success('Auto refresh enabled');
+      toastManager.success('Auto refresh enabled');
     } else {
       this.autoRefreshIsActive = false;
       this.tokenStorage.unsetAutoRefresh();
-      this.notificator.success('Auto refresh disabled');
+      toastManager.success('Auto refresh disabled');
     }
   }
 
@@ -73,11 +70,11 @@ export class LandingStore {
     if (this.tokenStorage.isAllowMutatorsEnabled()) {
       this.tokenStorage.unsetAllowMutatorsEnabled();
       this.isAllowMutatorsActive = false;
-      this.notificator.success('Allow mutators disabled');
+      toastManager.success('Allow mutators disabled');
     } else {
       this.tokenStorage.setAllowMutatorsEnabled();
       this.isAllowMutatorsActive = true;
-      this.notificator.success('Allow mutators enabled');
+      toastManager.success('Allow mutators enabled');
     }
   }
 

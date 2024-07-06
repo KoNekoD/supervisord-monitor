@@ -1,7 +1,7 @@
 import { $api } from '~/shared/api';
 import { API_ENDPOINTS } from '~/shared/const';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { toastManager } from '~/shared/lib/toastManager';
 
 export const useGetSupervisors = () =>
   useQuery({
@@ -13,7 +13,7 @@ export const useInvalidateSupervisors = () => {
   const queryClient = useQueryClient();
 
   const revalidatingNotification = (promise: Promise<void>) => {
-    toast.promise(promise, {
+    toastManager.promise(promise, {
       loading: 'Revalidating...',
       success: 'Revalidated!',
       error: 'Revalidation failed!',

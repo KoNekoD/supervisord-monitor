@@ -1,8 +1,8 @@
 import { useManageSupervisors } from '~/api/use-manage-supervisors';
 import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
 import { checkValidResultSuccess } from '~/shared/lib/check-valid-result-success';
-import toast from 'react-hot-toast';
 import { notifyError } from '~/shared/lib/notify-error';
+import { toastManager } from '~/shared/lib/toastManager';
 
 export const useOperationsSupervisors = () => {
   const manageSupervisors = useManageSupervisors();
@@ -20,7 +20,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`All process logs cleared on server ${serverName}`);
+          toastManager.success(`All process logs cleared on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -36,7 +36,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`All processes started on server ${serverName}`);
+          toastManager.success(`All processes started on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -52,7 +52,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`All processes stopped on server ${serverName}`);
+          toastManager.success(`All processes stopped on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -68,7 +68,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`All processes restarted on server ${serverName}`);
+          toastManager.success(`All processes restarted on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -86,7 +86,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} started on server ${serverName}`);
+          toastManager.success(`Process ${processName} started on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -102,7 +102,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} stopped on server ${serverName}`);
+          toastManager.success(`Process ${processName} stopped on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -118,7 +118,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} restarted on server ${serverName}`);
+          toastManager.success(`Process ${processName} restarted on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -136,7 +136,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Group ${groupName} started on server ${serverName}`);
+          toastManager.success(`Group ${groupName} started on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -152,7 +152,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Group ${groupName} stopped on server ${serverName}`);
+          toastManager.success(`Group ${groupName} stopped on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -168,7 +168,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Group ${groupName} restarted on server ${serverName}`);
+          toastManager.success(`Group ${groupName} restarted on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -186,7 +186,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} log cleared on server ${serverName}`);
+          toastManager.success(`Process ${processName} log cleared on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -202,7 +202,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} cloned on server ${serverName}`);
+          toastManager.success(`Process ${processName} cloned on server ${serverName}`);
         }
         invalidateSupervisors();
       })
@@ -218,7 +218,7 @@ export const useOperationsSupervisors = () => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
-          toast.success(`Process ${processName} removed on server ${serverName}`);
+          toastManager.success(`Process ${processName} removed on server ${serverName}`);
         }
         invalidateSupervisors();
       })
