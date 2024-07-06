@@ -115,59 +115,6 @@ export class LandingStore {
     return false;
   }
 
-  startAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({
-        server: server,
-        type: 'start_all_processes',
-        group: null,
-        process: null,
-      })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`All processes started on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  stopAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'stop_all_processes', group: null, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`All processes stopped on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  restartAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'restart_all_processes', group: null, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`All processes restarted on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  clearAllProcessLog(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'clear_all_process_log', group: null, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`All process logs cleared on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
   startProcess(server: ApiSupervisorServer, process: ApiProcess): void {
     this.manageSupervisors
       .mutateAsync({ server: server.name, type: 'start_process', group: process.group, process: process.name })
