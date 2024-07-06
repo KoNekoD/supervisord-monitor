@@ -28,9 +28,10 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
           cache: "yarn"
-          cache-dependency-path: ./yarn.lock
+          cache-dependency-path: ./assets/yarn.lock
 
       - name: Install yarn and dependencies
+        working-directory: ./assets
         run: |
           npm install --global yarn
           corepack enable
@@ -38,12 +39,15 @@ jobs:
           yarn install --immutable
 
       - name: Lint and Format
+        working-directory: ./assets
         run: |
           yarn lint:check
           yarn format:check
 
       - name: Typecheck
+        working-directory: ./assets
         run: yarn typecheck
 
       - name: Build project
+        working-directory: ./assets
         run: yarn build
