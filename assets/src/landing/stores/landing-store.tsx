@@ -115,42 +115,6 @@ export class LandingStore {
     return false;
   }
 
-  startProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'start_process_group', group: group, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Group ${group} started on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  stopProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'stop_process_group', group: group, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Group ${group} stopped on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
-  restartProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'restart_process_group', group: group, process: null })
-      .then(result => {
-        if (this.checkValidResultSuccess(result)) {
-          this.notificator.success(`Group ${group} restarted on server ${server}`);
-        }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
-  }
-
   clearProcessLog(server: ApiSupervisorServer, process: ApiProcess): void {
     this.manageSupervisors
       .mutateAsync({ server: server.name, type: 'clear_process_log', group: process.group, process: process.name })

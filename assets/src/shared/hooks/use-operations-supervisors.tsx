@@ -124,5 +124,66 @@ export const useOperationsSupervisors = () => {
       })
       .catch(err => notifyError(err));
 
-  return { clearAllProcessLog, startAll, stopAll, restartAll, startProcess, stopProcess, restartProcess };
+  /// --- Process Groups ----
+
+  const startProcessGroup = (serverName: string, groupName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'start_process_group',
+        group: groupName,
+        process: null,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Group ${groupName} started on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const stopProcessGroup = (serverName: string, groupName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'stop_process_group',
+        group: groupName,
+        process: null,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Group ${groupName} stopped on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const restartProcessGroup = (serverName: string, groupName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'restart_process_group',
+        group: groupName,
+        process: null,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Group ${groupName} restarted on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  return {
+    clearAllProcessLog,
+    startAll,
+    stopAll,
+    restartAll,
+    startProcess,
+    stopProcess,
+    restartProcess,
+    startProcessGroup,
+    stopProcessGroup,
+    restartProcessGroup,
+  };
 };
