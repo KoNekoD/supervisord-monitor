@@ -174,6 +174,56 @@ export const useOperationsSupervisors = () => {
       })
       .catch(err => notifyError(err));
 
+  /// --- Other ---
+
+  const clearProcessLog = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'clear_process_log',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} log cleared on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const cloneProcess = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'clone_process',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} cloned on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
+  const removeProcess = (serverName: string, groupName: string, processName: string) =>
+    manageSupervisors
+      .mutateAsync({
+        server: serverName,
+        type: 'remove_process',
+        group: groupName,
+        process: processName,
+      })
+      .then(result => {
+        if (checkValidResultSuccess(result)) {
+          toast.success(`Process ${processName} removed on server ${serverName}`);
+        }
+        invalidateSupervisors();
+      })
+      .catch(err => notifyError(err));
+
   return {
     clearAllProcessLog,
     startAll,
@@ -185,5 +235,8 @@ export const useOperationsSupervisors = () => {
     startProcessGroup,
     stopProcessGroup,
     restartProcessGroup,
+    clearProcessLog,
+    cloneProcess,
+    removeProcess,
   };
 };
