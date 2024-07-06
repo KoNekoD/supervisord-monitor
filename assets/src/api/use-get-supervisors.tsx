@@ -13,5 +13,3 @@ export const useInvalidateSupervisors = () => {
 
   return () => queryClient.invalidateQueries({ queryKey: ['supervisors'] });
 };
-
-export const getSupervisors = (): Promise<ApiSupervisor[]> => $api.get<ApiSupervisor[]>(API_ENDPOINTS.SUPERVISORS()).then(response => response.data);
