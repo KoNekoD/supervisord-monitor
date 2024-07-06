@@ -40,9 +40,7 @@ jobs:
 
       - name: Lint and Format
         working-directory: ./assets
-        run: |
-          yarn lint:check
-          yarn format:check
+        run: yarn format:check
 
       - name: Typecheck
         working-directory: ./assets

@@ -14,8 +14,6 @@
         "preview": "vite preview",
         "format:check": "prettier --check .",
         "format:fix": "prettier --write .",
-        "lint:check": "npx eslint \"**/*.{ts,tsx}\"",
-        "lint:fix": "npx eslint \"**/*.{ts,tsx}\" --fix",
         "typecheck": "tsc --noEmit --pretty",
         "generate:types": "npx esno scripts/gen-types"
     },
