@@ -7,5 +7,9 @@ import { PageLoader } from '~/components/page-loader';
 export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { status } = useSession();
 
-  return <>{status === 'loading' ? <PageLoader /> : status === 'authenticated' ? children : <Navigate to={ROUTES.LOGIN} />}</>;
+  return (
+    <>
+      {status === 'loading' ? <PageLoader /> : status === 'authenticated' ? children : <Navigate to={ROUTES.LOGIN} />}
+    </>
+  );
 };
