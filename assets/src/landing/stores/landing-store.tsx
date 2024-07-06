@@ -1,13 +1,9 @@
-import { IPromiseBasedObservable } from 'mobx-utils';
 import { action, makeObservable, observable } from 'mobx';
 import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
 import { toastManager } from '~/shared/lib/toastManager';
 import { manageTokenStorage } from '~/shared/lib/token-storage';
 
 export class LandingStore {
-  prevData?: IPromiseBasedObservable<ApiSupervisor[]>;
-  actualData?: IPromiseBasedObservable<ApiSupervisor[]>;
-
   autoRefreshIsActive: boolean;
   isAllowMutatorsActive: boolean;
   serverTimeDiff: number;
@@ -15,8 +11,6 @@ export class LandingStore {
 
   constructor() {
     makeObservable(this, {
-      actualData: observable,
-      prevData: observable,
       autoRefreshIsActive: observable,
       isAllowMutatorsActive: observable,
       serverTimeDiff: observable,
@@ -48,10 +42,6 @@ export class LandingStore {
     setInterval(() => {
       this.setServerTimeDiff(this.getServerTimeDiff() + 1);
     }, 1000);
-  }
-
-  async resetDiffWhenActualDataIsFetched() {
-    this.setServerTimeDiff(0);
   }
 
   updateAutoRefresh(active: boolean): void {

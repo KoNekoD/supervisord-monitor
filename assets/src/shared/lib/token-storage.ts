@@ -5,10 +5,6 @@ export type TokenStorageType = {
   unsetAutoRefresh(): void;
   isAutoRefresh(): boolean;
 
-  setDarkThemeEnabled(): void;
-  unsetDarkThemeEnabled(): void;
-  isDarkThemeEnabled(): boolean;
-
   setAllowMutatorsEnabled(): void;
   unsetAllowMutatorsEnabled(): void;
   isAllowMutatorsEnabled(): boolean;
@@ -26,19 +22,6 @@ export const manageTokenStorage: TokenStorageType = {
 
   isAutoRefresh(): boolean {
     return localStorage.getItem(LOCAL_STORAGE_KEYS.AUTO_REFRESH) === '1';
-  },
-
-  /** --- Dark theme --- */
-  setDarkThemeEnabled(): void {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.DARK_THEME_ENABLED, '1');
-  },
-
-  unsetDarkThemeEnabled(): void {
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.DARK_THEME_ENABLED);
-  },
-
-  isDarkThemeEnabled(): boolean {
-    return localStorage.getItem(LOCAL_STORAGE_KEYS.DARK_THEME_ENABLED) === '1';
   },
 
   /* --- Allow Mutators --- */
