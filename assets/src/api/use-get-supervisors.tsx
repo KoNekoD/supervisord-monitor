@@ -14,9 +14,9 @@ export const useInvalidateSupervisors = () => {
 
   const revalidatingNotification = (promise: Promise<void>) => {
     toastManager.promise(promise, {
-      loading: 'Revalidating...',
-      success: 'Revalidated!',
-      error: 'Revalidation failed!',
+      loading: 'Updating servers data...',
+      success: 'Servers data updated',
+      error: 'Error updating servers data',
     });
   };
 

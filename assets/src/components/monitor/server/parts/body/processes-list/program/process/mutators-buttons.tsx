@@ -9,13 +9,13 @@ export const MutatorsButtons = ({ process, server }: { process: ApiProcess; serv
     <div className='flex flex-nowrap space-x-1 text-white'>
       <button
         className='rounded bg-red-500 p-2'
-        onClick={removeProcess.bind(null, server.name, process.group, process.name)}
+        onClick={() => removeProcess(server.name, process.group, process.name)}
       >
         <GrErase />
       </button>
       <button
         className='rounded bg-blue-500 p-2'
-        onClick={cloneProcess.bind(null, server.name, process.group, process.name)}
+        onClick={() => cloneProcess(server.name, process.group, process.name)}
       >
         <GoDuplicate />
       </button>
