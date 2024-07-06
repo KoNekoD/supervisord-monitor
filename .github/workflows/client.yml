@@ -1,0 +1,49 @@
+name: Frontend checker looking for bad code 🪓😵‍💫
+run-name: ${{ github.actor }} is checking frontend code ☺️
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install corepack
+        run: corepack enable
+
+      - name: Set up Node.JS ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node-version}}
+          cache: "yarn"
+          cache-dependency-path: ./yarn.lock
+
+      - name: Install yarn and dependencies
+        run: |
+          npm install --global yarn
+          corepack enable
+          yarn set version from sources
+          yarn install --immutable
+
+      - name: Lint and Format
+        run: |
+          yarn lint:check
+          yarn format:check
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Build project
+        run: yarn build
