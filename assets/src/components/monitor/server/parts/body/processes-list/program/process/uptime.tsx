@@ -22,9 +22,9 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
 
   if (process.stateName === 'STOPPED' || process.stateName === 'EXITED' || process.stateName === 'FATAL') {
     timeClass = 'text-gray-400';
-    duration = (stop - start);
+    duration = stop - start;
   } else if (process.stateName === 'RUNNING') {
-    duration = (now - start);
+    duration = now - start;
   }
 
   const years = Math.floor(duration / (60 * 60 * 24 * 365));
@@ -39,20 +39,32 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   const minutesString = minutes.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
   const secondsString = seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
 
-  const yearsEl = <span className="text-gray-600">{yearsString}</span>;
-  const daysEl = <span className="text-gray-500">{daysString}</span>;
+  const yearsEl = <span className='text-gray-600'>{yearsString}</span>;
+  const daysEl = <span className='text-gray-500'>{daysString}</span>;
   const hoursEl = <span>{hoursString}</span>;
   const minutesEl = <span>{minutesString}</span>;
   const secondsEl = <span>{secondsString}</span>;
 
-  const timeEl = <span className={timeClass}>{hoursEl}:{minutesEl}:{secondsEl}</span>;
+  const timeEl = (
+    <span className={timeClass}>
+      {hoursEl}:{minutesEl}:{secondsEl}
+    </span>
+  );
 
   if (years > 0) {
-    return <span>{yearsEl}:{daysEl}:{timeEl}</span>;
+    return (
+      <span>
+        {yearsEl}:{daysEl}:{timeEl}
+      </span>
+    );
   }
 
   if (days > 0) {
-    return <span>{daysEl}:{timeEl}</span>;
+    return (
+      <span>
+        {daysEl}:{timeEl}
+      </span>
+    );
   }
 
   return <span>{timeEl}</span>;
