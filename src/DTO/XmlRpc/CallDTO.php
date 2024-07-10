@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\DTO;
+namespace App\DTO\XmlRpc;
+
+use App\DTO\Supervisord\Config;
 
 readonly class CallDTO implements CallInterface
 {
