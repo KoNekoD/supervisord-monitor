@@ -52,9 +52,9 @@ ARG PUID=1000
 ARG PGID=1000
 RUN addgroup -g $PGID app && adduser -D -u $PUID -G app app && addgroup app www-data
 USER app
-COPY --chown=app:app . /var/www/supervisor-monitor
-COPY --from=build-frontend /app/dist /var/www/supervisor-monitor/assets/dist
-WORKDIR /var/www/supervisor-monitor
+COPY --chown=app:app . /var/www/supervisord-monitor
+COPY --from=build-frontend /app/dist /var/www/supervisord-monitor/assets/dist
+WORKDIR /var/www/supervisord-monitor
 
 RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sources; fi && \
     if [ "${BUILD_TYPE}" = "dist" ]; then \

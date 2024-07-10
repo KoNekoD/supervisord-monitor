@@ -1,6 +1,6 @@
 parameters:
   supervisors_servers: '%env(supervisorsServers:SUPERVISORS_SERVERS)%'
-  app_credentials: '%env(string:APP_CREDENTIALS)%'
+  app_credentials: '%env(appCredentials:APP_CREDENTIALS)%'
 
 services:
   _defaults:

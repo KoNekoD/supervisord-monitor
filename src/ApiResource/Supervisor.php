@@ -7,11 +7,11 @@ namespace App\ApiResource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\DTO\Process;
-use App\DTO\ProcessGroup;
+use App\DTO\EnvVar\SupervisorServer;
+use App\DTO\Supervisord\Process;
+use App\DTO\Supervisord\ProcessGroup;
 use App\DTO\SupervisorManage;
 use App\DTO\SupervisorManageResult;
-use App\DTO\SupervisorServer;
 use App\State\SupervisorProcessor;
 use App\State\SupervisorsCollectionProvider;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -23,9 +23,10 @@ use Symfony\Component\Serializer\Attribute\Ignore;
         ),
         new Post(
             uriTemplate: '/supervisors/manage',
+            security: 'is_granted("ROLE_MANAGER")',
             input: SupervisorManage::class,
             output: SupervisorManageResult::class,
-            processor: SupervisorProcessor::class,
+            processor: SupervisorProcessor::class
         ),
     ]
 )]

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\DTO\CallDTO;
-use App\DTO\CallInterface;
-use App\DTO\FaultDTO;
-use App\DTO\MultiCallDTO;
-use App\DTO\ResponseDTO;
+use App\DTO\XmlRpc\CallDTO;
+use App\DTO\XmlRpc\CallInterface;
+use App\DTO\XmlRpc\FaultDTO;
+use App\DTO\XmlRpc\MultiCallDTO;
+use App\DTO\XmlRpc\ResponseDTO;
 use App\Exception\XmlRpcException;
 use DateTime;
 use LogicException;

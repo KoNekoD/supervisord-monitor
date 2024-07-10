@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\ApiClient\SupervisorApiClient;
-use App\DTO\CallDTO;
-use App\DTO\SupervisorServer;
+use App\DTO\EnvVar\SupervisorServer;
+use App\DTO\XmlRpc\CallDTO;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SupervisorApiClientTest extends WebTestCase

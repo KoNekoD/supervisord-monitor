@@ -2,8 +2,13 @@ import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { TfiReload } from 'react-icons/tfi';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
 import { Fragment } from 'react';
+import { isHasRoleManager } from '~/app/providers/session/context';
 
 export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
+  if (!isHasRoleManager()) {
+    return <Fragment />;
+  }
+
   const { startProcess, stopProcess, restartProcess } = useOperationsSupervisors();
 
   const inactiveStates = ['STOPPED', 'EXITED', 'FATAL'];

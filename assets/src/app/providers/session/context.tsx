@@ -40,3 +40,7 @@ export const useSession = () => {
   }
   return context;
 };
+
+export const isHasRoleManager = () => {
+  return useSession().user.roles.includes('ROLE_MANAGER')
+}

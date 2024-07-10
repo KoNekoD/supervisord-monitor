@@ -1,8 +1,14 @@
 import { GrErase } from 'react-icons/gr';
 import { GoDuplicate } from 'react-icons/go';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
+import { isHasRoleManager } from '~/app/providers/session/context';
+import { Fragment } from 'react';
 
 export const MutatorsButtons = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
+  if (!isHasRoleManager()) {
+    return <Fragment />;
+  }
+
   const { removeProcess, cloneProcess } = useOperationsSupervisors();
 
   return (
