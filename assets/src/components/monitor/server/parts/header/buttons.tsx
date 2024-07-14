@@ -15,21 +15,22 @@ export const Buttons = ({ clearAllProcessLog, stopAll, startAll, restartAll }: B
     return <Fragment />;
   }
 
-
-  return <div className="flex justify-end">
-    <div className="flex items-center space-x-1 text-white">
-      <button className="rounded bg-orange-500 p-2" onClick={clearAllProcessLog}>
-        <RiFileShredLine />
-      </button>
-      <button className="rounded bg-green-500 p-2" onClick={startAll}>
-        <RiPlayFill />
-      </button>
-      <button className="rounded bg-red-500 p-2" onClick={stopAll}>
-        <RiStopFill />
-      </button>
-      <button className="rounded bg-blue-500 p-2" onClick={restartAll}>
-        <TfiReload />
-      </button>
+  return (
+    <div className='flex justify-end'>
+      <div className='flex items-center space-x-1 text-white'>
+        <button className='rounded bg-orange-500 p-2' onClick={clearAllProcessLog}>
+          <RiFileShredLine />
+        </button>
+        <button className='rounded bg-green-500 p-2' onClick={startAll}>
+          <RiPlayFill />
+        </button>
+        <button className='rounded bg-red-500 p-2' onClick={stopAll}>
+          <RiStopFill />
+        </button>
+        <button className='rounded bg-blue-500 p-2' onClick={restartAll}>
+          <TfiReload />
+        </button>
+      </div>
     </div>
-  </div>;
+  );
 };

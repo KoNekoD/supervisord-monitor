@@ -21,7 +21,6 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   let timeClass = '';
 
   if (process.stateName === 'STOPPED' || process.stateName === 'EXITED' || process.stateName === 'FATAL') {
-
     // In case the program tried to start but did not stop because it failed to start
     // for example, it didn't find an executable file
     if (start > 0 && stop === 0) {
@@ -46,8 +45,8 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   const minutesString = minutes.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
   const secondsString = seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
 
-  const yearsEl = <span className="text-gray-600">{yearsString}</span>;
-  const daysEl = <span className="text-gray-500">{daysString}</span>;
+  const yearsEl = <span className='text-gray-600'>{yearsString}</span>;
+  const daysEl = <span className='text-gray-500'>{daysString}</span>;
   const hoursEl = <span>{hoursString}</span>;
   const minutesEl = <span>{minutesString}</span>;
   const secondsEl = <span>{secondsString}</span>;
