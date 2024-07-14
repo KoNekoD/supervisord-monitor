@@ -47,9 +47,7 @@ export const Header = () => {
             }
 
             useLogoutMutation.mutateAsync(undefined, undefined).then(
-              () => {
-                window.location.reload();
-              },
+              () => window.location.reload(),
             );
           }
         }
