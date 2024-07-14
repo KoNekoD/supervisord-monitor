@@ -42,5 +42,5 @@ export const useSession = () => {
 };
 
 export const isHasRoleManager = () => {
-  return useSession().user.roles.includes('ROLE_MANAGER')
-}
+  return useSession().user.roles.includes('ROLE_MANAGER');
+};

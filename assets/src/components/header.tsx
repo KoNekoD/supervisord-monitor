@@ -29,16 +29,14 @@ export const Header = () => {
       return;
     }
 
-    useLogoutMutation.mutateAsync(undefined, undefined).then(
-      () => window.location.reload(),
-    );
+    useLogoutMutation.mutateAsync(undefined, undefined).then(() => window.location.reload());
   };
 
   return (
-    <div className="flex h-16 items-center gap-4 bg-gray-100 px-4 dark:bg-black dark:text-white">
+    <div className='flex h-16 items-center gap-4 bg-gray-100 px-4 dark:bg-black dark:text-white'>
       <ReactLink to={'/'}>
-        <div className="flex items-center gap-1">
-          <img loading={'lazy'} src="/logo.svg" className="h-10 w-10" alt={'logo'} />
+        <div className='flex items-center gap-1'>
+          <img loading={'lazy'} src='/logo.svg' className='h-10 w-10' alt={'logo'} />
         </div>
       </ReactLink>
       {HEADER_LINKS.map(route => {
