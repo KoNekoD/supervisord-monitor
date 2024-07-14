@@ -24,6 +24,16 @@ export const Header = () => {
   const location = useLocation();
   const useLogoutMutation = useLogout();
 
+  const handleLogout = () => {
+    if (!window.confirm('Are you sure you want to logout?')) {
+      return;
+    }
+
+    useLogoutMutation.mutateAsync(undefined, undefined).then(
+      () => window.location.reload(),
+    );
+  };
+
   return (
     <div className="flex h-16 items-center gap-4 bg-gray-100 px-4 dark:bg-black dark:text-white">
       <ReactLink to={'/'}>
@@ -39,21 +49,7 @@ export const Header = () => {
           </ReactLink>
         );
       })}
-      <button
-        onClick={
-          () => {
-            if (!window.confirm('Are you sure you want to logout?')) {
-              return;
-            }
-
-            useLogoutMutation.mutateAsync(undefined, undefined).then(
-              () => window.location.reload(),
-            );
-          }
-        }
-      >
-        Logout
-      </button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
