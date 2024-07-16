@@ -7,9 +7,9 @@ function isNumeric(n: any) {
   return !isNaN(n);
 }
 
-export const Program = ({ group, server }: { group: ApiProcessGroup; server: ApiSupervisorServer }) => {
+export const Program = ({ group, server, serverTimeDiff }: { group: ApiProcessGroup; server: ApiSupervisorServer, serverTimeDiff: number }) => {
   const list = group.processes;
-  const items = list.map((p, i) => <Process process={p} server={server} key={i} />);
+  const items = list.map((p, i) => <Process process={p} server={server} serverTimeDiff={serverTimeDiff} key={i} />);
 
   if (group.processes.length === 1 && !isNumeric(group.processes[0].name)) {
     return <div className='px-2 py-1'>{items}</div>;
