@@ -2,11 +2,9 @@ import { Buttons } from '~/components/monitor/server/parts/header/buttons';
 import { ServerInfo } from '~/components/monitor/server/parts/header/server-info';
 import { ServerTitle } from '~/components/monitor/server/parts/header/server-title';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
-import { useStore } from '~/main/context-provider';
 
 export const Header = ({ item }: { item: ApiSupervisor }) => {
-  const {landingStore} = useStore();
-  const { restartAll, stopAll, startAll, clearAllProcessLog } = useOperationsSupervisors(landingStore);
+  const { restartAll, stopAll, startAll, clearAllProcessLog } = useOperationsSupervisors();
 
   return (
     <div className='rounded-t-xl border-b border-l-2 border-r-2 border-t-2 border-gray-200 px-2 py-1'>

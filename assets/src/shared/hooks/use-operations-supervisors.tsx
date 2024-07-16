@@ -3,11 +3,10 @@ import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
 import { checkValidResultSuccess } from '~/shared/lib/check-valid-result-success';
 import { notifyError } from '~/shared/lib/notify-error';
 import { toastManager } from '~/shared/lib/toastManager';
-import { LandingStore } from '~/landing/stores/landing-store';
 
-export const useOperationsSupervisors = (landingStore: LandingStore) => {
-  const manageSupervisors = useManageSupervisors(landingStore);
-  const invalidateSupervisors = useInvalidateSupervisors(landingStore);
+export const useOperationsSupervisors = () => {
+  const manageSupervisors = useManageSupervisors();
+  const invalidateSupervisors = useInvalidateSupervisors();
 
   const clearAllProcessLog = (serverName: string) =>
     manageSupervisors

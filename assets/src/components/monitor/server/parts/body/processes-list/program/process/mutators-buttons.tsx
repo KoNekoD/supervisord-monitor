@@ -3,15 +3,13 @@ import { GoDuplicate } from 'react-icons/go';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
 import { isHasRoleManager } from '~/app/providers/session/context';
 import { Fragment } from 'react';
-import { useStore } from '~/main/context-provider';
 
 export const MutatorsButtons = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
   if (!isHasRoleManager()) {
     return <Fragment />;
   }
 
-  const {landingStore} = useStore();
-  const { removeProcess, cloneProcess } = useOperationsSupervisors(landingStore);
+  const { removeProcess, cloneProcess } = useOperationsSupervisors();
 
   return (
     <div className='flex flex-nowrap space-x-1 text-white'>

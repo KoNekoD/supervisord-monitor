@@ -1,11 +1,9 @@
 import { RiStopFill } from 'react-icons/ri';
 import { TfiReload } from 'react-icons/tfi';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
-import { useStore } from '~/main/context-provider';
 
 export const Running = ({ server, group }: { server: ApiSupervisorServer; group: ApiProcessGroup }) => {
-  const {landingStore} = useStore();
-  const { stopProcessGroup, restartProcessGroup } = useOperationsSupervisors(landingStore);
+  const { stopProcessGroup, restartProcessGroup } = useOperationsSupervisors();
 
   return (
     <div className='flex space-x-1'>
