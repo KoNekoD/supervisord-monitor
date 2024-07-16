@@ -17,6 +17,8 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   const stop = process.stop;
   const now = process.now + landingStore.serverTimeDiff;
 
+  console.log(process.now, landingStore.serverTimeDiff);
+
   let duration = 0;
   let timeClass = '';
 
@@ -45,8 +47,8 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   const minutesString = minutes.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
   const secondsString = seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
 
-  const yearsEl = <span className='text-gray-600'>{yearsString}</span>;
-  const daysEl = <span className='text-gray-500'>{daysString}</span>;
+  const yearsEl = <span className="text-gray-600">{yearsString}</span>;
+  const daysEl = <span className="text-gray-500">{daysString}</span>;
   const hoursEl = <span>{hoursString}</span>;
   const minutesEl = <span>{minutesString}</span>;
   const secondsEl = <span>{secondsString}</span>;

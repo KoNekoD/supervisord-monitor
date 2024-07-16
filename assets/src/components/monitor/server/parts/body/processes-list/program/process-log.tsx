@@ -2,9 +2,11 @@ import { RiBookletFill, RiCloseFill } from 'react-icons/ri';
 import React from 'react';
 import { IoIosWarning } from 'react-icons/io';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
+import { useStore } from '~/main/context-provider';
 
 export const ProcessLog = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
-  const { clearProcessLog } = useOperationsSupervisors();
+  const {landingStore} = useStore();
+  const { clearProcessLog } = useOperationsSupervisors(landingStore);
 
   const [showModal, setShowModal] = React.useState(false);
   const [log, setLog] = React.useState<ApiProcessLog | null>(null);

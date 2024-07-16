@@ -1,8 +1,10 @@
 import { RiPlayFill } from 'react-icons/ri';
 import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
+import { useStore } from '~/main/context-provider';
 
 export const Inactive = ({ server, group }: { server: ApiSupervisorServer; group: ApiProcessGroup }) => {
-  const { startProcessGroup } = useOperationsSupervisors();
+  const {landingStore} = useStore();
+  const { startProcessGroup } = useOperationsSupervisors(landingStore);
 
   return (
     <div className='flex space-x-1'>
