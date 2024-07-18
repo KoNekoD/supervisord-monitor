@@ -3,6 +3,8 @@ import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
 import { toastManager } from '~/shared/lib/toastManager';
 import { manageTokenStorage } from '~/shared/lib/token-storage';
 
+let setServerTimeDiffFn: (value: number) => void = () => {};
+
 export class LandingStore {
   autoRefreshIsActive: boolean;
   isAllowMutatorsActive: boolean;
@@ -27,6 +29,8 @@ export class LandingStore {
 
     this.scheduleFetchDataRecursive();
     this.scheduleAutoIncrementTimeDiff();
+
+    setServerTimeDiffFn = this.setServerTimeDiff
   }
 
   scheduleFetchDataRecursive(): void {
