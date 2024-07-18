@@ -3,38 +3,31 @@ import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
 import { toastManager } from '~/shared/lib/toastManager';
 import { manageTokenStorage } from '~/shared/lib/token-storage';
 
-let setServerTimeDiffFn: (value: number) => void = () => {};
+let lastScheduleFetchDataRecursiveId = 0;
 
 export class LandingStore {
-  autoRefreshIsActive: boolean;
-  isAllowMutatorsActive: boolean;
-  serverTimeDiff: number;
+  autoRefresh: boolean;
+  allowMutators: boolean;
   invalidateSupervisors: ReturnType<typeof useInvalidateSupervisors>;
 
   constructor() {
     makeObservable(this, {
-      autoRefreshIsActive: observable,
-      isAllowMutatorsActive: observable,
-      serverTimeDiff: observable,
+      autoRefresh: observable,
+      allowMutators: observable,
       updateAutoRefresh: action,
       switchAllowMutators: action,
-      setServerTimeDiff: action,
     });
 
-    this.autoRefreshIsActive = manageTokenStorage.isAutoRefresh();
-    this.isAllowMutatorsActive = manageTokenStorage.isAllowMutatorsEnabled();
-    this.serverTimeDiff = 0;
-
+    this.autoRefresh = manageTokenStorage.isAutoRefresh();
+    this.allowMutators = manageTokenStorage.isAllowMutatorsEnabled();
     this.invalidateSupervisors = useInvalidateSupervisors();
 
     this.scheduleFetchDataRecursive();
-    this.scheduleAutoIncrementTimeDiff();
-
-    setServerTimeDiffFn = this.setServerTimeDiff
   }
 
   scheduleFetchDataRecursive(): void {
-    setInterval(() => {
+    clearInterval(lastScheduleFetchDataRecursiveId);
+    lastScheduleFetchDataRecursiveId = setInterval(() => {
       if (manageTokenStorage.isAutoRefresh()) {
         this.invalidateSupervisors();
         toastManager.success('Data auto-refreshed');
@@ -42,19 +35,12 @@ export class LandingStore {
     }, 10 * 1000);
   }
 
-  scheduleAutoIncrementTimeDiff(): void {
-    setInterval(() => {
-      this.setServerTimeDiff(this.getServerTimeDiff() + 1);
-    }, 1000);
-  }
-
   updateAutoRefresh(active: boolean): void {
+    this.autoRefresh = active;
     if (active) {
-      this.autoRefreshIsActive = true;
       manageTokenStorage.setAutoRefresh();
       toastManager.success('Auto refresh enabled');
     } else {
-      this.autoRefreshIsActive = false;
       manageTokenStorage.unsetAutoRefresh();
       toastManager.success('Auto refresh disabled');
     }
@@ -63,20 +49,11 @@ export class LandingStore {
   switchAllowMutators(): void {
     if (manageTokenStorage.isAllowMutatorsEnabled()) {
       manageTokenStorage.unsetAllowMutatorsEnabled();
-      this.isAllowMutatorsActive = false;
       toastManager.success('Allow mutators disabled');
     } else {
       manageTokenStorage.setAllowMutatorsEnabled();
-      this.isAllowMutatorsActive = true;
       toastManager.success('Allow mutators enabled');
     }
-  }
-
-  getServerTimeDiff(): number {
-    return this.serverTimeDiff;
-  }
-
-  setServerTimeDiff(value: number) {
-    this.serverTimeDiff = value;
+    this.allowMutators = manageTokenStorage.isAllowMutatorsEnabled();
   }
 }

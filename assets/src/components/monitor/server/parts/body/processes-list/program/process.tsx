@@ -16,7 +16,7 @@ export const Process = ({ process, server, serverTimeDiff }: { process: ApiProce
         </a>
       </div>
       <div className='flex flex-nowrap items-center space-x-1'>
-        {landingStore.isAllowMutatorsActive && <MutatorsButtons server={server} process={process} />}
+        {landingStore.allowMutators && <MutatorsButtons server={server} process={process} />}
         <ProcessLog process={process} server={server} />
         <div className={'flex flex-col items-center'}>
           <Status stateName={process.stateName} />
