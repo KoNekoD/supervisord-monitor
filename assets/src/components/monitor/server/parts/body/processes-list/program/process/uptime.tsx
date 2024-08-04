@@ -1,4 +1,4 @@
-export const Uptime = ({ process, serverTimeDiff }: { process: ApiProcess, serverTimeDiff: number }) => {
+export const Uptime = ({ process, serverTimeDiff }: { process: ApiProcess; serverTimeDiff: number }) => {
   /**
    * STOPPED, EXITED, FATAL - Stop time
    * RUNNING - Start time
@@ -40,26 +40,32 @@ export const Uptime = ({ process, serverTimeDiff }: { process: ApiProcess, serve
   const minutesString = minutes.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
   const secondsString = seconds.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
 
-  const yearsEl = <span className="text-gray-600">{yearsString}</span>;
-  const daysEl = <span className="text-gray-500">{daysString}</span>;
+  const yearsEl = <span className='text-gray-600'>{yearsString}</span>;
+  const daysEl = <span className='text-gray-500'>{daysString}</span>;
   const hoursEl = <span>{hoursString}</span>;
   const minutesEl = <span>{minutesString}</span>;
   const secondsEl = <span>{secondsString}</span>;
 
-  const timeEl = <span className={timeClass}>
+  const timeEl = (
+    <span className={timeClass}>
       {hoursEl}:{minutesEl}:{secondsEl}
-    </span>;
+    </span>
+  );
 
   if (years > 0) {
-    return <span>
+    return (
+      <span>
         {yearsEl}:{daysEl}:{timeEl}
-      </span>;
+      </span>
+    );
   }
 
   if (days > 0) {
-    return <span>
+    return (
+      <span>
         {daysEl}:{timeEl}
-      </span>;
+      </span>
+    );
   }
 
   return <span>{timeEl}</span>;

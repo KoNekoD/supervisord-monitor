@@ -10,21 +10,21 @@ export const MainPage = () => {
   const [serverTimeDiff, setServerTimeDiff] = useState(0);
   clearInterval(serverTimeDiffIntervalId);
   serverTimeDiffIntervalId = setInterval(() => setServerTimeDiff(serverTimeDiff + 1), 1000);
-  const { data, isLoading, isRefetching} = useGetSupervisors();
+  const { data, isLoading, isRefetching } = useGetSupervisors();
 
   const [readData, setReadData] = useState(data?.data);
 
   useEffect(() => {
-      for (let i = 0; i < 10; i++) {
-        let tmpData = JSON.stringify(data?.data);
-        if (tmpData !== undefined && prevDataEncoded !== tmpData) {
-          setServerTimeDiff(0);
-          prevDataEncoded = tmpData;
-          setReadData(data?.data);
-          break;
-        }
-        setTimeout(() => {}, 1000);
+    for (let i = 0; i < 10; i++) {
+      let tmpData = JSON.stringify(data?.data);
+      if (tmpData !== undefined && prevDataEncoded !== tmpData) {
+        setServerTimeDiff(0);
+        prevDataEncoded = tmpData;
+        setReadData(data?.data);
+        break;
       }
+      setTimeout(() => {}, 1000);
+    }
   }, [serverTimeDiff, prevDataEncoded, isRefetching, readData]);
 
   if (isLoading) {
