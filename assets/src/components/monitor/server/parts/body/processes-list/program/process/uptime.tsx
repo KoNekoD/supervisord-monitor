@@ -12,8 +12,6 @@ export const Uptime = ({ process, serverTimeDiff }: { process: ApiProcess, serve
   const stop = process.stop;
   const now = process.now + serverTimeDiff;
 
-  console.log(process.now, serverTimeDiff)
-
   let duration = 0;
   let timeClass = '';
 

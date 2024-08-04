@@ -1,10 +1,9 @@
 import { $api } from '~/shared/api';
 import { API_ENDPOINTS } from '~/shared/const';
-import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toastManager } from '~/shared/lib/toastManager';
-import { AxiosResponse } from 'axios';
 
-export const useGetSupervisors = (): UseQueryResult<AxiosResponse<ApiSupervisor[]>> =>
+export const useGetSupervisors = () =>
   useQuery({
     queryKey: ['supervisors'],
     queryFn: () => $api.get<ApiSupervisor[]>(API_ENDPOINTS.SUPERVISORS()),

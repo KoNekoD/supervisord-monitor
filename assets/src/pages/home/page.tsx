@@ -12,15 +12,12 @@ export const MainPage = () => {
   serverTimeDiffIntervalId = setInterval(() => setServerTimeDiff(serverTimeDiff + 1), 1000);
   const { data, isLoading, isRefetching} = useGetSupervisors();
 
-  console.log({"data": data, "isRefetching": isRefetching});
-
   const [readData, setReadData] = useState(data?.data);
 
   useEffect(() => {
       for (let i = 0; i < 10; i++) {
         let tmpData = JSON.stringify(data?.data);
         if (tmpData !== undefined && prevDataEncoded !== tmpData) {
-          console.log({'changed': true, 'isRefetching': isRefetching, 'same': prevDataEncoded === tmpData })
           setServerTimeDiff(0);
           prevDataEncoded = tmpData;
           setReadData(data?.data);
