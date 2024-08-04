@@ -1,19 +1,24 @@
 FROM registry.gitlab.com/sdt7772416/infrastructure/node-alpha:latest as build-frontend
 
+ARG BUILD_TYPE="dist"
+
 COPY assets/ /app
 WORKDIR /app
-RUN corepack enable && \
-    yarn set version from sources && \
-    yarn --immutable && \
-    yarn install && \
-    yarn build
+RUN mkdir /app/dist && \
+    if [ "${BUILD_TYPE}" = "dist" ]; then \
+        corepack enable && \
+        yarn set version from sources && \
+        yarn --immutable && \
+        yarn install && \
+        yarn build ; \
+    fi
 
 FROM php:8.3-fpm-alpine as parent-supervisord-monitor-php-fpm
 
+ARG BUILD_TYPE="dist"
+
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-ARG BUILD_TYPE="dist"
 
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions intl zip && \

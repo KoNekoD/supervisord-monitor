@@ -1,9 +1,4 @@
-import { observer } from 'mobx-react-lite';
-import { useStore } from '~/main/context-provider';
-
-export const Uptime = observer(({ process }: { process: ApiProcess }) => {
-  const { landingStore } = useStore();
-
+export const Uptime = ({ process, serverTimeDiff }: { process: ApiProcess; serverTimeDiff: number }) => {
   /**
    * STOPPED, EXITED, FATAL - Stop time
    * RUNNING - Start time
@@ -15,7 +10,7 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
 
   const start = process.start;
   const stop = process.stop;
-  const now = process.now + landingStore.serverTimeDiff;
+  const now = process.now + serverTimeDiff;
 
   let duration = 0;
   let timeClass = '';
@@ -74,4 +69,4 @@ export const Uptime = observer(({ process }: { process: ApiProcess }) => {
   }
 
   return <span>{timeEl}</span>;
-});
+};

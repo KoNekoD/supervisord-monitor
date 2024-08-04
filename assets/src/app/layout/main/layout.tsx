@@ -1,11 +1,11 @@
-import { observer } from 'mobx-react-lite';
 import { Header } from '~/components/header';
+import React from 'react';
 
-export const MainLayout = observer(({ children }: { children: any }) => {
+export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='min-h-screen'>
       <Header />
       {children}
     </div>
   );
-});
+};

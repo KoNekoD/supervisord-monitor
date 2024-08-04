@@ -5,7 +5,15 @@ import { Buttons } from '~/components/monitor/server/parts/body/processes-list/p
 import { MutatorsButtons } from '~/components/monitor/server/parts/body/processes-list/program/process/mutators-buttons';
 import { Uptime } from '~/components/monitor/server/parts/body/processes-list/program/process/uptime';
 
-export const Process = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
+export const Process = ({
+  process,
+  server,
+  serverTimeDiff,
+}: {
+  process: ApiProcess;
+  server: ApiSupervisorServer;
+  serverTimeDiff: number;
+}) => {
   const { landingStore } = useStore();
 
   return (
@@ -16,11 +24,11 @@ export const Process = ({ process, server }: { process: ApiProcess; server: ApiS
         </a>
       </div>
       <div className='flex flex-nowrap items-center space-x-1'>
-        {landingStore.isAllowMutatorsActive && <MutatorsButtons server={server} process={process} />}
+        {landingStore.allowMutators && <MutatorsButtons server={server} process={process} />}
         <ProcessLog process={process} server={server} />
         <div className={'flex flex-col items-center'}>
           <Status stateName={process.stateName} />
-          <Uptime process={process} />
+          <Uptime process={process} serverTimeDiff={serverTimeDiff} />
         </div>
         <div>
           <Buttons process={process} server={server} />
