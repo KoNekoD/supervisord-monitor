@@ -45,7 +45,7 @@ COPY private.pem config/jwt/private.pem
 COPY public.pem config/jwt/public.pem  
   
 # Please set secure credentials for the administrator account instead default admin admin  
-ENV APP_CREDENTIALS=admin:admin  
+ENV APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]'  
   
 # Host on which it is planned to run supervisord-monitor (needed to set cookie authorization)  
 ENV API_HOST=localhost  
@@ -81,7 +81,7 @@ services:
     image: konekod/supervisord-monitor  
     environment:  
       - API_HOST=localhost  
-      - APP_CREDENTIALS=admin:admin  
+      - APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]'  
       - JWT_PASSPHRASE=your-generated-jwt-passphrase  
     volumes:  
       - ./jwt:/var/www/supervisord-monitor/config/jwt:cached  
@@ -99,7 +99,7 @@ see program:generate-jwt-if-not-exists
 docker run \  
   --detach \  
   --name supervisord-monitor \  
-  -e APP_CREDENTIALS=admin:admin \  
+  -e APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]' \  
   -e API_HOST=localhost \  
   -e SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}] \  
   konekod/supervisord-monitor
@@ -119,7 +119,7 @@ docker pull konekod/supervisord-monitor
 docker run -d \
   --name my-supervisord-monitor \
   -e SUPERVISORS_SERVERS="$(< /home/dev/supervisord_monitor/supervisord_monitor_servers.json)" \
-  -e APP_CREDENTIALS=admin:admin \
+  -e APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]' \
   -e JWT_PASSPHRASE=your-generated-jwt-passphrase \
   -e API_HOST=supervisord-monitor.site.com \
   -p 10011:8080 \
