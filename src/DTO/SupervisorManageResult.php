@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
+use App\DTO\Supervisord\ChangedProcesses;
+use App\DTO\XmlRpc\OperationResult;
+
 class SupervisorManageResult
 {
     public ?OperationResult $operationResult = null;

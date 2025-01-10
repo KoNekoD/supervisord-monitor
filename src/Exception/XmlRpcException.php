@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use App\DTO\ResponseDTO;
+use App\DTO\XmlRpc\ResponseDTO;
 
 final class XmlRpcException extends BaseException
 {

@@ -10,8 +10,8 @@ RUN addgroup -g $GID app && adduser -D -u $UID -G app app && addgroup app www-da
 
 USER app
 
-COPY --chown=app:app . /var/www/supervisor-monitor
+COPY --chown=app:app . /var/www/supervisord-monitor
 
-WORKDIR /var/www/supervisor-monitor
+WORKDIR /var/www/supervisord-monitor
 
 CMD ["supervisord", "-c", "supervisord.conf"]

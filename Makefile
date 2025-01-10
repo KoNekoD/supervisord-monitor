@@ -21,7 +21,7 @@ console:
 	${DC_EXEC} sh
 
 include ./config/docker/.env
-dc_create_network:
+create_network:
 	docker network create --subnet 172.18.3.0/24 ${EXTERNAL_NETWORK_NAME} >/dev/null 2>&1 || true
 
 app_test_fixtures:
@@ -74,3 +74,6 @@ code_cs_fix_diff_status_no_docker:
 
 gen_ts:
 	${DC_EXEC} composer run gen-ts
+
+front_format_fix: ## Format frontend
+	docker exec supervisord-monitor-app /bin/sh -c 'cd assets && npm run format:fix'

@@ -2,6 +2,7 @@ import { useLocation } from 'react-router';
 import { Link as ReactLink } from 'react-router-dom';
 import { ROUTES } from '~/shared/const';
 import { RouteValues } from '~/shared/const/routes';
+import { useLogout } from '~/api/use-logout';
 
 interface HeaderLinks {
   title: string;
@@ -21,6 +22,15 @@ const HEADER_LINKS: HeaderLinks[] = [
 
 export const Header = () => {
   const location = useLocation();
+  const useLogoutMutation = useLogout();
+
+  const handleLogout = () => {
+    if (!window.confirm('Are you sure you want to logout?')) {
+      return;
+    }
+
+    useLogoutMutation.mutateAsync(undefined, undefined).then(() => window.location.reload());
+  };
 
   return (
     <div className='flex h-16 items-center gap-4 bg-gray-100 px-4 dark:bg-black dark:text-white'>
@@ -37,6 +47,7 @@ export const Header = () => {
           </ReactLink>
         );
       })}
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

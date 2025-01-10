@@ -23,7 +23,7 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
       },
       screens: {
-        'xs': '480px',
+        xs: '480px',
         '4xl': '3840px',
       },
     },

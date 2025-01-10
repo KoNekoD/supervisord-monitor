@@ -29,8 +29,8 @@ You also need 2 files private.pem and public.pem, you can get them by running th
 ```
 docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE=your-generated-jwt-passphrase konekod/supervisord-monitor
 docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
-docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/private.pem private.pem
-docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/public.pem public.pem
+docker cp supervisord-monitor:/var/www/supervisord-monitor/config/jwt/private.pem private.pem
+docker cp supervisord-monitor:/var/www/supervisord-monitor/config/jwt/public.pem public.pem
 docker kill supervisord-monitor
 docker rm supervisord-monitor
 ```
@@ -47,7 +47,7 @@ COPY private.pem config/jwt/private.pem
 COPY public.pem config/jwt/public.pem  
   
 # Please set secure credentials for the administrator account instead default admin admin  
-ENV APP_CREDENTIALS=admin:admin  
+ENV APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]'  
   
 # Host on which it is planned to run supervisord-monitor (needed to set cookie authorization)  
 ENV API_HOST=localhost  
@@ -86,10 +86,10 @@ services:
     image: konekod/supervisord-monitor  
     environment:  
       - API_HOST=localhost  
-      - APP_CREDENTIALS=admin:admin  
+      - APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]'  
       - JWT_PASSPHRASE=your-generated-jwt-passphrase  
     volumes:  
-      - ./jwt:/var/www/supervisor-monitor/config/jwt:cached  
+      - ./jwt:/var/www/supervisord-monitor/config/jwt:cached  
     ports:  
       - "10011:8080"
 ```
@@ -106,7 +106,7 @@ see program:generate-jwt-if-not-exists
 docker run \  
   --detach \  
   --name supervisord-monitor \  
-  -e APP_CREDENTIALS=admin:admin \  
+  -e APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]' \  
   -e API_HOST=localhost \  
   -e SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}] \  
   konekod/supervisord-monitor
@@ -127,13 +127,13 @@ docker pull konekod/supervisord-monitor
 docker run -d \
   --name my-supervisord-monitor \
   -e SUPERVISORS_SERVERS="$(< /home/dev/supervisord_monitor/supervisord_monitor_servers.json)" \
-  -e APP_CREDENTIALS=admin:admin \
+  -e APP_CREDENTIALS='[{"username":"admin","password":"admin","roles":["ROLE_MANAGER"]},{"username":"guest","password":"guest"}]' \
   -e JWT_PASSPHRASE=your-generated-jwt-passphrase \
   -e API_HOST=supervisord-monitor.site.com \
   -p 10011:8080 \
   --restart=always \
   --network project_network \
-  --volume /home/dev/supervisord_monitor/jwt:/var/www/supervisor-monitor/config/jwt:cached \
+  --volume /home/dev/supervisord_monitor/jwt:/var/www/supervisord-monitor/config/jwt:cached \
   konekod/supervisord-monitor:latest
 ```
 

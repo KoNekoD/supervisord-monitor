@@ -7,7 +7,8 @@ namespace App\ApiResource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use App\Controller\AuthUserController;
+use App\Controller\LoginController;
+use App\Controller\LogoutController;
 use App\DTO\AuthByCredentialsDTO;
 use App\State\UserMeProvider;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
@@ -18,8 +19,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
     operations: [
         new Post(
             uriTemplate: '/auth/login',
-            controller: AuthUserController::class,
+            controller: LoginController::class,
             input: AuthByCredentialsDTO::class,
+            output: stdClass::class,
+        ),
+        new Post(
+            uriTemplate: '/auth/logout',
+            controller: LogoutController::class,
+            input: stdClass::class,
             output: stdClass::class,
         ),
         new Get(
@@ -31,7 +38,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User
     implements UserInterface, JWTUserInterface
 {
-    public function __construct(private readonly string $username) {}
+    /** @param string[] $roles */
+    public function __construct(private readonly string $username, private readonly array $roles) {}
 
     public function getUsername(): string
     {
@@ -40,7 +48,7 @@ class User
 
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return array_values(array_unique(array_merge(['ROLE_USER'], $this->roles)));
     }
 
     public function eraseCredentials(): void {}
@@ -50,9 +58,9 @@ class User
         return $this->username;
     }
 
-    /** @param array{} $payload */
+    /** @param array{roles: string[]} $payload */
     public static function createFromPayload($username, array $payload): self
     {
-        return new self($username);
+        return new self($username, $payload['roles']);
     }
 }

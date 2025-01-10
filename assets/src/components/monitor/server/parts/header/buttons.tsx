@@ -1,9 +1,15 @@
 import { RiFileShredLine, RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { TfiReload } from 'react-icons/tfi';
 import { useStore } from '~/main/context-provider';
+import { isHasRoleManager } from '~/app/providers/session/context';
+import { Fragment } from 'react';
 
 export const Buttons = ({ serverName }: { serverName: string }) => {
   const { landingStore } = useStore();
+
+  if (!isHasRoleManager()) {
+    return <Fragment />;
+  }
 
   return (
     <div className='flex justify-end'>

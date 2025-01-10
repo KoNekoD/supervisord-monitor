@@ -1,8 +1,14 @@
 import { useStore } from '~/main/context-provider';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { TfiReload } from 'react-icons/tfi';
+import { Fragment } from 'react';
+import { isHasRoleManager } from '~/app/providers/session/context';
 
 export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
+  if (!isHasRoleManager()) {
+    return <Fragment />;
+  }
+
   const { landingStore } = useStore();
   const inactiveStates = ['STOPPED', 'EXITED', 'FATAL'];
 
