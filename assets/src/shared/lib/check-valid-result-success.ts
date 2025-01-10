@@ -1,9 +1,9 @@
-import { toastManager } from '~/shared/lib/toastManager';
+import toast from 'react-hot-toast';
 
 export const checkValidResultSuccess = (result: ApiSupervisorSupervisorManageResult): boolean => {
   if (result?.operationResult) {
     if (result.operationResult.isFault) {
-      toastManager.error('Operation got fault: ' + result.operationResult.error);
+      toast.error('Operation got fault: ' + result.operationResult.error);
     }
 
     return result.operationResult.ok;
@@ -11,7 +11,7 @@ export const checkValidResultSuccess = (result: ApiSupervisorSupervisorManageRes
 
   if (result?.changedProcesses) {
     if (!result.changedProcesses.ok) {
-      toastManager.error('Got error while changing processes: ' + result.changedProcesses.error);
+      toast.error('Got error while changing processes: ' + result.changedProcesses.error);
     }
     return result.changedProcesses.ok;
   }
