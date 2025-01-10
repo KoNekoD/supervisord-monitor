@@ -37,6 +37,7 @@ export const Header = ({ item }: { item: ApiSupervisor }) => {
       })
       .then(result => {
         if (checkValidResultSuccess(result)) {
+          console.log('@log', '1111');
           toast.success(`All processes started on server ${serverName}`);
         }
         invalidateSupervisors();
