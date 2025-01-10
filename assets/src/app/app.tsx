@@ -8,15 +8,15 @@ import { SessionProvider } from '~/app/providers/session';
 
 export const App = () => (
   <React.StrictMode>
-    <ReactQueryProvider>
-      <ProviderRootStore>
+    <ProviderRootStore>
+      <ReactQueryProvider>
         <SessionProvider>
           <ThemeProvider defaultTheme='system'>
             <Toaster position='top-right' reverseOrder={false} />
             <AppRouter />
           </ThemeProvider>
         </SessionProvider>
-      </ProviderRootStore>
-    </ReactQueryProvider>
+      </ReactQueryProvider>
+    </ProviderRootStore>
   </React.StrictMode>
 );

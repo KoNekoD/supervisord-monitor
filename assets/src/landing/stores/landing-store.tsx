@@ -1,9 +1,9 @@
-import { IPromiseBasedObservable } from 'mobx-utils';
+import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { action, makeObservable, observable } from 'mobx';
 import { Notificator } from './notificator';
 import { TokenStorage } from './token-storage';
-import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
-import { useManageSupervisors } from '~/api/use-manage-supervisors';
+import { getSupervisors } from '~/api/use-get-supervisors';
+import { manageSupervisor } from '~/api/use-manage-supervisors';
 
 export class LandingStore {
   prevData?: IPromiseBasedObservable<ApiSupervisor[]>;
@@ -16,8 +16,6 @@ export class LandingStore {
   constructor(
     private notificator: Notificator,
     private tokenStorage: TokenStorage,
-    private manageSupervisors: ReturnType<typeof useManageSupervisors>,
-    private invalidateSupervisors: ReturnType<typeof useInvalidateSupervisors>
   ) {
     makeObservable(this, {
       actualData: observable,
@@ -25,6 +23,7 @@ export class LandingStore {
       autoRefreshIsActive: observable,
       isAllowMutatorsActive: observable,
       serverTimeDiff: observable,
+      fetchData: action,
       updateAutoRefresh: action,
       switchAllowMutators: action,
       setServerTimeDiff: action,
@@ -34,9 +33,6 @@ export class LandingStore {
     this.isAllowMutatorsActive = this.tokenStorage.isAllowMutatorsEnabled();
     this.serverTimeDiff = 0;
 
-    this.manageSupervisors = useManageSupervisors();
-    this.invalidateSupervisors = useInvalidateSupervisors();
-
     this.scheduleFetchDataRecursive();
     this.scheduleAutoIncrementTimeDiff();
   }
@@ -44,7 +40,7 @@ export class LandingStore {
   scheduleFetchDataRecursive(): void {
     setInterval(() => {
       if (this.tokenStorage.isAutoRefresh()) {
-        this.invalidateSupervisors();
+        this.fetchData();
         this.notificator.success('Data auto-refreshed');
       }
     }, 10 * 1000);
@@ -54,6 +50,20 @@ export class LandingStore {
     setInterval(() => {
       this.setServerTimeDiff(this.getServerTimeDiff() + 1);
     }, 1000);
+  }
+
+  fetchData(): void {
+    if (this.actualData?.state === 'pending') {
+      console.log('already fetching');
+      return;
+    }
+
+    if (this.actualData) {
+      this.prevData = this.actualData;
+    }
+
+    this.actualData = fromPromise(getSupervisors());
+    this.actualData.then(() => this.resetDiffWhenActualDataIsFetched());
   }
 
   async resetDiffWhenActualDataIsFetched() {
@@ -83,6 +93,7 @@ export class LandingStore {
       this.notificator.success('Allow mutators enabled');
     }
   }
+
 
   getServerTimeDiff(): number {
     return this.serverTimeDiff;
@@ -116,163 +127,132 @@ export class LandingStore {
   }
 
   startAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({
-        server: server,
-        type: 'start_all_processes',
-        group: null,
-        process: null,
-      })
+    manageSupervisor({ server: server, type: 'start_all_processes', group: null, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`All processes started on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   stopAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'stop_all_processes', group: null, process: null })
+    manageSupervisor({ server: server, type: 'stop_all_processes', group: null, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`All processes stopped on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   restartAll(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'restart_all_processes', group: null, process: null })
+    manageSupervisor({ server: server, type: 'restart_all_processes', group: null, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`All processes restarted on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   clearAllProcessLog(server: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'clear_all_process_log', group: null, process: null })
+    manageSupervisor({ server: server, type: 'clear_all_process_log', group: null, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`All process logs cleared on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   startProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'start_process', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'start_process', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} started on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   stopProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'stop_process', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'stop_process', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} stopped on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   startProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'start_process_group', group: group, process: null })
+    manageSupervisor({ server: server, type: 'start_process_group', group: group, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Group ${group} started on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   stopProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'stop_process_group', group: group, process: null })
+    manageSupervisor({ server: server, type: 'stop_process_group', group: group, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Group ${group} stopped on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   restartProcessGroup(server: string, group: string): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server, type: 'restart_process_group', group: group, process: null })
+    manageSupervisor({ server: server, type: 'restart_process_group', group: group, process: null })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Group ${group} restarted on server ${server}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   restartProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'restart_process', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'restart_process', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} restarted on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   clearProcessLog(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'clear_process_log', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'clear_process_log', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} log cleared on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   cloneProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'clone_process', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'clone_process', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} cloned on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 
   removeProcess(server: ApiSupervisorServer, process: ApiProcess): void {
-    this.manageSupervisors
-      .mutateAsync({ server: server.name, type: 'remove_process', group: process.group, process: process.name })
+    manageSupervisor({ server: server.name, type: 'remove_process', group: process.group, process: process.name })
       .then(result => {
         if (this.checkValidResultSuccess(result)) {
           this.notificator.success(`Process ${process.name} removed on server ${server.name}`);
         }
-        this.invalidateSupervisors();
-      })
-      .catch(err => this.notifyErr(err));
+        this.fetchData();
+      }).catch(err => this.notifyErr(err));
   }
 }
