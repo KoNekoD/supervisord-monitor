@@ -1,11 +1,10 @@
 import { RiBookletFill, RiCloseFill } from 'react-icons/ri';
 import React from 'react';
+import { useStore } from '~/main/context-provider';
 import { IoIosWarning } from 'react-icons/io';
-import { useOperationsSupervisors } from '~/shared/hooks/use-operations-supervisors';
 
 export const ProcessLog = ({ process, server }: { process: ApiProcess; server: ApiSupervisorServer }) => {
-  const { clearProcessLog } = useOperationsSupervisors();
-
+  const { landingStore } = useStore();
   const [showModal, setShowModal] = React.useState(false);
   const [log, setLog] = React.useState<ApiProcessLog | null>(null);
   const activateLog = (log: ApiProcessLog | null) => {
@@ -17,20 +16,12 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
     <div>
       <div className='space-x-1'>
         {process.outLog && (
-          <button
-            className='rounded bg-gray-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600'
-            type='button'
-            onClick={() => activateLog(process.outLog)}
-          >
+          <button className='rounded bg-gray-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
             <RiBookletFill />
           </button>
         )}
         {process.errLog && (
-          <button
-            className='rounded bg-red-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600'
-            type='button'
-            onClick={() => activateLog(process.errLog)}
-          >
+          <button className='rounded bg-red-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.errLog)}>
             <IoIosWarning />
           </button>
         )}
@@ -42,34 +33,24 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
               <div className='m-8 max-h-[100%-1rem] bg-white dark:bg-gray-600'>
                 <div className='flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-gray-100 border-opacity-100 p-4 dark:border-opacity-50'>
                   <h5 className='text-xl font-medium leading-normal text-gray-800 dark:text-gray-200'>Log</h5>
-                  <button
-                    type='button'
-                    className='box-content h-10 rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none'
-                    onClick={() => setShowModal(false)}
-                  >
+                  <button type='button' className='box-content h-10 rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none' onClick={() => setShowModal(false)}>
                     <RiCloseFill />
                   </button>
                 </div>
                 <div className='relative overflow-y-auto p-4'>
                   {log.log.split('\n').map((item, index) => (
-                    <p className='whitespace-nowrap' key={index}>
-                      {item}
-                    </p>
+                    <p className='whitespace-nowrap' key={index}>{item}</p>
                   ))}
                 </div>
                 <div className='flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-gray-100 border-opacity-100 p-4 dark:border-opacity-50'>
-                  <button
-                    type='button'
-                    onClick={() => setShowModal(false)}
-                    className='background-transparent px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none'
-                  >
+                  <button type='button' onClick={() => setShowModal(false)} className='background-transparent px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none'>
                     Close
                   </button>
                   <button
                     type='button'
                     className='rounded bg-emerald-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600'
                     onClick={() => {
-                      clearProcessLog(server.name, process.group, process.name);
+                      landingStore.clearProcessLog(server, process);
                       setShowModal(false);
                     }}
                   >

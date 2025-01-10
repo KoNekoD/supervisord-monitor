@@ -3,6 +3,7 @@ import { action, makeObservable, observable } from 'mobx';
 import { Notificator } from './notificator';
 import { TokenStorage } from './token-storage';
 import { useInvalidateSupervisors } from '~/api/use-get-supervisors';
+import { useManageSupervisors } from '~/api/use-manage-supervisors';
 
 export class LandingStore {
   prevData?: IPromiseBasedObservable<ApiSupervisor[]>;
@@ -15,6 +16,7 @@ export class LandingStore {
   constructor(
     private notificator: Notificator,
     private tokenStorage: TokenStorage,
+    private manageSupervisors: ReturnType<typeof useManageSupervisors>,
     private invalidateSupervisors: ReturnType<typeof useInvalidateSupervisors>
   ) {
     makeObservable(this, {
@@ -32,6 +34,7 @@ export class LandingStore {
     this.isAllowMutatorsActive = this.tokenStorage.isAllowMutatorsEnabled();
     this.serverTimeDiff = 0;
 
+    this.manageSupervisors = useManageSupervisors();
     this.invalidateSupervisors = useInvalidateSupervisors();
 
     this.scheduleFetchDataRecursive();
@@ -87,5 +90,64 @@ export class LandingStore {
 
   setServerTimeDiff(value: number) {
     this.serverTimeDiff = value;
+  }
+
+  notifyErr(err: any) {
+    this.notificator.error(err.message ?? 'Something went wrong: ' + '\n\n' + err.response.data.detail ?? 'No details');
+  }
+
+  checkValidResultSuccess(result: ApiSupervisorSupervisorManageResult): boolean {
+    if (result?.operationResult) {
+      if (result.operationResult.isFault) {
+        this.notificator.error('Operation got fault: ' + result.operationResult.error);
+      }
+
+      return result.operationResult.ok;
+    }
+
+    if (result?.changedProcesses) {
+      if (!result.changedProcesses.ok) {
+        this.notificator.error('Got error while changing processes: ' + result.changedProcesses.error);
+      }
+      return result.changedProcesses.ok;
+    }
+
+    return false;
+  }
+
+  clearProcessLog(server: ApiSupervisorServer, process: ApiProcess): void {
+    this.manageSupervisors
+      .mutateAsync({ server: server.name, type: 'clear_process_log', group: process.group, process: process.name })
+      .then(result => {
+        if (this.checkValidResultSuccess(result)) {
+          this.notificator.success(`Process ${process.name} log cleared on server ${server.name}`);
+        }
+        this.invalidateSupervisors();
+      })
+      .catch(err => this.notifyErr(err));
+  }
+
+  cloneProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+    this.manageSupervisors
+      .mutateAsync({ server: server.name, type: 'clone_process', group: process.group, process: process.name })
+      .then(result => {
+        if (this.checkValidResultSuccess(result)) {
+          this.notificator.success(`Process ${process.name} cloned on server ${server.name}`);
+        }
+        this.invalidateSupervisors();
+      })
+      .catch(err => this.notifyErr(err));
+  }
+
+  removeProcess(server: ApiSupervisorServer, process: ApiProcess): void {
+    this.manageSupervisors
+      .mutateAsync({ server: server.name, type: 'remove_process', group: process.group, process: process.name })
+      .then(result => {
+        if (this.checkValidResultSuccess(result)) {
+          this.notificator.success(`Process ${process.name} removed on server ${server.name}`);
+        }
+        this.invalidateSupervisors();
+      })
+      .catch(err => this.notifyErr(err));
   }
 }
