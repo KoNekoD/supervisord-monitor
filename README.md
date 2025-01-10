@@ -25,6 +25,7 @@ First let's generate jwt passphrase, we need a random password with a length of 
 ### 1. Docker extend
 
 You also need 2 files private.pem and public.pem, you can get them by running the container and copying the automatically generated keys :
+
 ```
 docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE=your-generated-jwt-passphrase konekod/supervisord-monitor
 docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
@@ -33,9 +34,10 @@ docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/public.pem 
 docker kill supervisord-monitor
 docker rm supervisord-monitor
 ```
+
 After that, let's create a Dockerfile in a separate directory:
 
-```  
+```
 FROM konekod/supervisord-monitor:latest  
   
 ENV JWT_PASSPHRASE=your-generated-jwt-passphrase  
@@ -59,6 +61,7 @@ USER www-data
 ```
 
 Final start
+
 ```
 docker buildx build -t supervisord-monitor-override --load .
 
@@ -68,8 +71,10 @@ docker run --detach --name supervisord-monitor-override -p "10011:8080" supervis
 The main trick is that you can close write access to these keys so that you can't change them afterward
 
 ### 2. docker-compose
+
 In a specific folder, create docker-compose.yml:
 Be sure to create a jwt folder that will become volume manually, otherwise the created folder will have root privileges, which will break key creation(The jwt folder should always be there, it contains the keys)
+
 ```
 version: "3.8"  
   
@@ -92,9 +97,11 @@ services:
 Here you can also change the mount settings in volume to ro after creation keys.
 
 ### 3. Simple run
-jwt keys will be generated automatically via supervisor configured program  
-config/docker/supervisor/supervisord-dist.conf  
+
+jwt keys will be generated automatically via supervisor configured program
+config/docker/supervisor/supervisord-dist.conf
 see program:generate-jwt-if-not-exists
+
 ```
 docker run \  
   --detach \  
@@ -106,6 +113,7 @@ docker run \
 ```
 
 ## Running via script
+
 With this script it is possible to automatically recreate a container with everything needed
 
 ```shell
@@ -132,36 +140,43 @@ docker run -d \
 ## Install
 
 1.Clone supervisord-monitor to your vhost/webroot:
+
 ```
 git clone git@github.com:KoNekoD/supervisord-monitor.git
 ```
 
 2.Copy config/docker/.env.dist to config/docker/.env
+
 ```
 cp config/docker/.env.dist config/docker/.env
 ```
 
 3.Enable/Uncomment inet_http_server (found in supervisord.conf) for all your supervisord servers.
+
 ```ini
 [inet_http_server]
 port=*:9001
 username="yourusername"
 password="yourpass"
 ```
+
 Do not forget to restart supervisord service after changing supervisord.conf
 
 4.Edit supervisord-monitor configuration file and add all your supervisord servers
+
 ```
 nvim config/docker/.env
 ```
 
-5.Open web browser and enter your url localhost:$NGINX_HOST_HTTP_PORT, 
-    where $NGINX_HOST_HTTP_PORT must be set in copied .env - custom port
+5.Open web browser and enter your url localhost:$NGINX_HOST_HTTP_PORT,
+where $NGINX_HOST_HTTP_PORT must be set in copied .env - custom port
 
 ## Troubleshooting
+
 ```
 Did not receive a '200 OK' response from remote server.
 ```
+
 Having this messages in most cases means that Supervisord Monitoring tools does not have direct network access to the Supervisord RPC2 http interface. Check your firewall and network conectivity.
 
 But it is possible to get error 500, in that case it is a supervisord-monitor problem, run this command to activate the
@@ -182,6 +197,7 @@ need in the profiler.
 ```
 Did not receive a '200 OK' response from remote server. (HTTP/1.0 401 Unauthorized)
 ```
+
 Having `401 Unauthorized` means that you have connection between Supervisord Monitoring tool and Supervisord but the username or password are wrong.
 
 ---
@@ -189,6 +205,7 @@ Having `401 Unauthorized` means that you have connection between Supervisord Mon
 ```
 NO_FILE
 ```
+
 This error can be seen when reading logs with active flag "redirect_stderr=true", just remove this line, and you will be able to read stderr logs in supervisord-monitor.
 
 ---
@@ -196,6 +213,7 @@ This error can be seen when reading logs with active flag "redirect_stderr=true"
 ```
 UNKNOWN_METHOD
 ```
+
 Having this message means that your supervisord service doesn't have rpc interface enabled (only for v3+ of Supervisord).
 To enable the rpc interface add this lines to the configuration file:
 
@@ -217,9 +235,12 @@ http://supervisord.org/configuration.html#rpcinterface-x-section-settings
 
 ---
 
-## Who uses Supervisord Monitor? ##
+## Star History
+
+![https://api.star-history.com/svg?repos=KoNekoD/supervisord-monitor&type=Date](https://api.star-history.com/svg?repos=KoNekoD/supervisord-monitor&type=Date)
+
+## Who uses Supervisord Monitor?
 
 just me
-
 
 If you've used Supervisord Monitor Tool send me email to moskva111@yahoo.com to add your project/company to this list.
