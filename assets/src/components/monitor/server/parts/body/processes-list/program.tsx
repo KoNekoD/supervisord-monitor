@@ -3,7 +3,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Process } from '~/components/monitor/server/parts/body/processes-list/program/process';
 import { Buttons } from '~/components/monitor/server/parts/body/processes-list/program/buttons';
 
-function isNumeric(n) {
+function isNumeric(n: any) {
   return !isNaN(n);
 }
 
