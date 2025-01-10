@@ -40,7 +40,6 @@ export class LandingStore {
 
   scheduleAutoIncrementTimeDiff(): void {
     setInterval(() => {
-      console.log('@autoIncrementTimeDiff');
       this.setServerTimeDiff(this.getServerTimeDiff() + 1);
     }, 1000);
   }

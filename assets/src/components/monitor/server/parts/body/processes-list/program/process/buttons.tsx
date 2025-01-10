@@ -18,13 +18,13 @@ export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiS
       <div className='flex space-x-1'>
         <button
           className='rounded bg-red-500 p-2 text-white'
-          onClick={() => stopProcess(server.name, process.group, process.name)}
+          onClick={stopProcess.bind(null, server.name, process.group, process.name)}
         >
           <RiStopFill />
         </button>
         <button
           className='rounded bg-blue-500 p-2 text-white'
-          onClick={() => restartProcess(server.name, process.group, process.name)}
+          onClick={restartProcess.bind(null, server.name, process.group, process.name)}
         >
           <TfiReload />
         </button>
@@ -37,7 +37,7 @@ export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiS
       <div className='flex space-x-1'>
         <button
           className='rounded bg-green-500 p-2 text-white'
-          onClick={() => startProcess(server.name, process.group, process.name)}
+          onClick={startProcess.bind(null, server.name, process.group, process.name)}
         >
           <RiPlayFill />
         </button>
@@ -45,5 +45,5 @@ export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiS
     );
   }
 
-  return <Fragment />;
+  return <div></div>;
 };

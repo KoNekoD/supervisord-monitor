@@ -12,7 +12,7 @@ export const App = () => (
       <ProviderRootStore>
         <SessionProvider>
           <ThemeProvider defaultTheme='system'>
-            <Toaster position='top-right' reverseOrder={true} />
+            <Toaster position='top-right' reverseOrder={false} />
             <AppRouter />
           </ThemeProvider>
         </SessionProvider>

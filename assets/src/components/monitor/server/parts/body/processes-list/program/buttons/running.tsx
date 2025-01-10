@@ -7,12 +7,15 @@ export const Running = ({ server, group }: { server: ApiSupervisorServer; group:
 
   return (
     <div className='flex space-x-1'>
-      <button className='rounded bg-red-500 p-2 text-white' onClick={() => stopProcessGroup(server.name, group.name)}>
+      <button
+        className='rounded bg-red-500 p-2 text-white'
+        onClick={stopProcessGroup.bind(null, server.name, group.name)}
+      >
         <RiStopFill />
       </button>
       <button
         className='rounded bg-blue-500 p-2 text-white'
-        onClick={() => restartProcessGroup(server.name, group.name)}
+        onClick={restartProcessGroup.bind(null, server.name, group.name)}
       >
         <TfiReload />
       </button>
