@@ -8,6 +8,8 @@ export const useOperationsSupervisors = () => {
   const manageSupervisors = useManageSupervisors();
   const invalidateSupervisors = useInvalidateSupervisors();
 
+  /// --- Servers ----
+
   const clearAllProcessLog = (serverName: string) =>
     manageSupervisors
       .mutateAsync({
@@ -72,6 +74,8 @@ export const useOperationsSupervisors = () => {
       })
       .catch(err => notifyError(err));
 
+  /// --- Processes ----
+
   const startProcess = (serverName: string, groupName: string, processName: string) =>
     manageSupervisors
       .mutateAsync({
@@ -120,6 +124,8 @@ export const useOperationsSupervisors = () => {
       })
       .catch(err => notifyError(err));
 
+  /// --- Process Groups ----
+
   const startProcessGroup = (serverName: string, groupName: string) =>
     manageSupervisors
       .mutateAsync({
@@ -167,6 +173,8 @@ export const useOperationsSupervisors = () => {
         invalidateSupervisors();
       })
       .catch(err => notifyError(err));
+
+  /// --- Other ---
 
   const clearProcessLog = (serverName: string, groupName: string, processName: string) =>
     manageSupervisors
