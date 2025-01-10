@@ -21,7 +21,7 @@ console:
 	${DC_EXEC} sh
 
 include ./config/docker/.env
-dc_create_network:
+create_network:
 	docker network create --subnet 172.18.3.0/24 ${EXTERNAL_NETWORK_NAME} >/dev/null 2>&1 || true
 
 app_test_fixtures:
