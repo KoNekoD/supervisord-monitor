@@ -11,6 +11,7 @@ export type TokenStorageType = {
 };
 
 export const manageTokenStorage: TokenStorageType = {
+  /** --- Auto refresh --- */
   setAutoRefresh(): void {
     localStorage.setItem(LOCAL_STORAGE_KEYS.AUTO_REFRESH, '1');
   },
@@ -23,6 +24,7 @@ export const manageTokenStorage: TokenStorageType = {
     return localStorage.getItem(LOCAL_STORAGE_KEYS.AUTO_REFRESH) === '1';
   },
 
+  /* --- Allow Mutators --- */
   setAllowMutatorsEnabled(): void {
     localStorage.setItem(LOCAL_STORAGE_KEYS.ALLOW_MUTATORS_ENABLED, '1');
   },
