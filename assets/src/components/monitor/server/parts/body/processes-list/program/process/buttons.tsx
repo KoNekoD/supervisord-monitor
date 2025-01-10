@@ -18,10 +18,7 @@ export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiS
         <button className='rounded bg-red-500 p-2 text-white' onClick={() => landingStore.stopProcess(server, process)}>
           <RiStopFill />
         </button>
-        <button
-          className='rounded bg-blue-500 p-2 text-white'
-          onClick={() => landingStore.restartProcess(server, process)}
-        >
+        <button className='rounded bg-blue-500 p-2 text-white' onClick={() => landingStore.restartProcess(server, process)}>
           <TfiReload />
         </button>
       </div>
@@ -31,10 +28,7 @@ export const Buttons = ({ process, server }: { process: ApiProcess; server: ApiS
   if (inactiveStates.includes(process.stateName)) {
     return (
       <div className='flex space-x-1'>
-        <button
-          className='rounded bg-green-500 p-2 text-white'
-          onClick={() => landingStore.startProcess(server, process)}
-        >
+        <button className='rounded bg-green-500 p-2 text-white' onClick={() => landingStore.startProcess(server, process)}>
           <RiPlayFill />
         </button>
       </div>

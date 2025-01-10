@@ -74,3 +74,6 @@ code_cs_fix_diff_status_no_docker:
 
 gen_ts:
 	${DC_EXEC} composer run gen-ts
+
+front_format_fix: ## Format frontend
+	docker exec supervisord-monitor-app /bin/sh -c 'cd assets && npm run format:fix'

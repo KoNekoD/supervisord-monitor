@@ -3,8 +3,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Process } from '~/components/monitor/server/parts/body/processes-list/program/process';
 import { Buttons } from '~/components/monitor/server/parts/body/processes-list/program/buttons';
 
-function isNumeric(n)
-{
+function isNumeric(n) {
   return !isNaN(n);
 }
 
@@ -22,7 +21,7 @@ export const Program = ({ group, server }: { group: ApiProcessGroup; server: Api
     <div className='px-2 py-1'>
       <div className='flex items-center space-x-2'>
         <div>
-          <div className='flex cursor-pointer items-center space-x-2 program-title' onClick={() => setIsActive(!isActive)}>
+          <div className='program-title flex cursor-pointer items-center space-x-2' onClick={() => setIsActive(!isActive)}>
             {isActive ? <FaChevronUp className='h-4 w-4' /> : <FaChevronDown className='h-4 w-4' />}
             <div>
               <a>{group.name}</a>
