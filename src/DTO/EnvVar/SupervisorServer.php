@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\DTO;
+namespace App\DTO\EnvVar;
 
 use Symfony\Component\Serializer\Attribute\Ignore;
 

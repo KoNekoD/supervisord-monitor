@@ -29,8 +29,8 @@ You also need 2 files private.pem and public.pem, you can get them by running th
 ```
 docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE=your-generated-jwt-passphrase konekod/supervisord-monitor
 docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
-docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/private.pem private.pem
-docker cp supervisord-monitor:/var/www/supervisor-monitor/config/jwt/public.pem public.pem
+docker cp supervisord-monitor:/var/www/supervisord-monitor/config/jwt/private.pem private.pem
+docker cp supervisord-monitor:/var/www/supervisord-monitor/config/jwt/public.pem public.pem
 docker kill supervisord-monitor
 docker rm supervisord-monitor
 ```
@@ -89,7 +89,7 @@ services:
       - APP_CREDENTIALS=admin:admin  
       - JWT_PASSPHRASE=your-generated-jwt-passphrase  
     volumes:  
-      - ./jwt:/var/www/supervisor-monitor/config/jwt:cached  
+      - ./jwt:/var/www/supervisord-monitor/config/jwt:cached  
     ports:  
       - "10011:8080"
 ```
@@ -133,7 +133,7 @@ docker run -d \
   -p 10011:8080 \
   --restart=always \
   --network project_network \
-  --volume /home/dev/supervisord_monitor/jwt:/var/www/supervisor-monitor/config/jwt:cached \
+  --volume /home/dev/supervisord_monitor/jwt:/var/www/supervisord-monitor/config/jwt:cached \
   konekod/supervisord-monitor:latest
 ```
 

@@ -8,7 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiClient\SupervisorApiClient;
 use App\ApiResource\Supervisor;
-use App\DTO\SupervisorServer;
+use App\DTO\EnvVar\SupervisorServer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class SupervisorsCollectionProvider implements ProviderInterface

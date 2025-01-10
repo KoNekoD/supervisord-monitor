@@ -20,7 +20,7 @@ services:
         - JWT_PASSPHRASE=${JWT_PASSPHRASE}
         - APP_CREDENTIALS=${APP_CREDENTIALS}
     volumes:
-      - ./../../:/var/www/supervisor-monitor:cached
+      - ./../../:/var/www/supervisord-monitor:cached
       - ./../../config/docker/nginx/dev/supervisord-monitor.local.crt:/etc/nginx/ssl/supervisord-monitor.local.crt
       - ./../../config/docker/nginx/dev/supervisord-monitor.local.key:/etc/nginx/ssl/supervisord-monitor.local.key
     ports:
@@ -40,7 +40,7 @@ services:
         - UID=${PUID}
         - GID=${PGID}
     volumes:
-      - ./../../tests/Functional/resources/:/var/www/supervisor-monitor:cached
+      - ./../../tests/Functional/resources/:/var/www/supervisord-monitor:cached
     networks:
       - supervisord_monitor_network
     deploy:

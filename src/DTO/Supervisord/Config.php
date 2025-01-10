@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\DTO;
+namespace App\DTO\Supervisord;
 
+use App\DTO\XmlRpc\ResponseDTO;
 use App\Exception\XmlRpcException;
 use JsonSerializable;
 

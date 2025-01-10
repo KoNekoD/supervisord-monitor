@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\ApiResource\User;
 use App\DTO\AuthByCredentialsDTO;
+use App\DTO\EnvVar\AppCredentialsItem;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,12 +17,13 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 #[AsController]
-final readonly class AuthUserController
+final readonly class LoginController
 {
+    /** @param array<string, AppCredentialsItem> $appCredentials */
     public function __construct(
         private AuthenticationSuccessHandler $successHandler,
         private RateLimiterFactory $authByCredentialsApiLimiter,
-        #[Autowire(param: 'app_credentials')] private string $appCredentials
+        #[Autowire(param: 'app_credentials')] private array $appCredentials
     ) {}
 
     public function __invoke(#[MapRequestPayload] AuthByCredentialsDTO $DTO, Request $request): Response
@@ -33,10 +35,14 @@ final readonly class AuthUserController
 
         $providedCredentials = sprintf('%s:%s', $DTO->login, $DTO->password);
 
-        if ($this->appCredentials !== $providedCredentials) {
+        $found = $this->appCredentials[$providedCredentials] ?? null;
+
+        if (null === $found) {
             return new JsonResponse(data: ['detail' => 'Invalid credentials'], status: Response::HTTP_UNAUTHORIZED);
         }
 
-        return $this->successHandler->handleAuthenticationSuccess(new User($DTO->login));
+        $user = new User($found->username, $found->roles);
+
+        return $this->successHandler->handleAuthenticationSuccess($user);
     }
 }
