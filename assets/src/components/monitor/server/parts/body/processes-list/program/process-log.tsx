@@ -14,7 +14,7 @@ export const ProcessLog = ({ process, server }: { process: ApiProcess; server: A
 
   return (
     <div>
-      <div className='space-x-1'>
+      <div className='flex flex-nowrap space-x-1'>
         {process.outLog && (
           <button className='rounded bg-gray-500 px-2 py-2 font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600' type='button' onClick={() => activateLog(process.outLog)}>
             <RiBookletFill />
