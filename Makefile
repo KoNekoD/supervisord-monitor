@@ -1,79 +1,56 @@
-COMPOSE_FILE = ./config/docker/docker-compose.yml
-ENV_FILE = ./config/docker/.env
-DC = docker compose -f ${COMPOSE_FILE} --env-file ${ENV_FILE}
-DC_EXEC = ${DC} exec supervisord-monitor-app
+init: down build up
 
 build:
-	${DC} build
+	docker compose build
 
 up:
-	${DC} up -d --remove-orphans
-	${DC_EXEC} bin/console assets:install
+	docker compose up -d --remove-orphans
+	docker compose exec supervisord-monitor-app bin/console assets:install
 
 down:
-	${DC} down
+	docker compose down
 
 down_force:
-	${DC} down -v --rmi=all --remove-orphans
+	docker compose down -v --rmi=all --remove-orphans
 
 console:
-	if ! ${DC} ps | grep -q supervisord-monitor; then make up; fi
-	${DC_EXEC} sh
+	if ! docker compose ps | grep -q supervisord-monitor; then make up; fi
+	docker compose exec supervisord-monitor-app sh
 
-include ./config/docker/.env
 create_network:
-	docker network create --subnet 172.18.3.0/24 ${EXTERNAL_NETWORK_NAME} >/dev/null 2>&1 || true
-
-app_test_fixtures:
-	${DC_EXEC} php bin/console --env=test doctrine:fixtures:load -n
+	docker network create --subnet 172.18.3.0/24 supervisord_monitor_network >/dev/null 2>&1 || true
 
 app_gen_jwt_keypair:
-	${DC_EXEC} php bin/console lexik:jwt:generate-keypair
+	docker compose exec supervisord-monitor-app php bin/console lexik:jwt:generate-keypair
 
 app_phpunit:
-	${DC_EXEC} composer run phpunit
-
-db_migrate:
-	${DC_EXEC} bin/console doctrine:migrations:migrate --no-interaction
-
-db_diff:
-	${DC_EXEC} bin/console doctrine:migrations:diff --no-interaction
+	docker compose exec supervisord-monitor-app composer run phpunit
 
 code_phpstan:
-	${DC_EXEC} composer run phpstan
-
-code_deptrac:
-	${DC_EXEC} composer run deptrac
+	docker compose exec supervisord-monitor-app composer run phpstan
 
 code_cs_fix:
-	${DC_EXEC} composer run cs-fixer
+	docker compose exec supervisord-monitor-app composer run cs-fixer
 
 code_rector:
-	${DC_EXEC} composer run rector
+	docker compose exec supervisord-monitor-app composer run rector
 
 code_cs_fix_diff:
-	${DC_EXEC} composer run cs-fixer-diff
+	docker compose exec supervisord-monitor-app composer run cs-fixer-diff
 
 code_cs_fix_diff_status:
 	if make code_cs_fix_diff; then \
-	    printf '\n\n\n [OK] \n\n\n'; \
-	    exit 0; \
+	    printf '\n\n\n [OK] \n\n\n'; exit 0; \
 	else \
-	    printf '\n\n\n [FAIL] \n\n\n'; \
-	    exit 1; \
+	    printf '\n\n\n [FAIL] \n\n\n'; exit 1; \
 	fi
 
 code_cs_fix_diff_status_no_docker:
 	if make code_cs_fix_diff_no_docker; then \
-	    printf '\n\n\n [OK] \n\n\n'; \
-	    exit 0; \
+	    printf '\n\n\n [OK] \n\n\n'; exit 0; \
 	else \
-	    printf '\n\n\n [FAIL] \n\n\n'; \
-	    exit 1; \
+	    printf '\n\n\n [FAIL] \n\n\n'; exit 1; \
 	fi
-
-gen_ts:
-	${DC_EXEC} composer run gen-ts
 
 front_format_fix: ## Format frontend
 	docker exec supervisord-monitor-app /bin/sh -c 'cd assets && npm run format:fix'

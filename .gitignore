@@ -19,6 +19,6 @@
 
 /.php-cs-fixer.php
 
-/docker/.env
-
-
+/docker-compose.override.yml
+/var/data_dev.db
+/var/data_dev.db-journal

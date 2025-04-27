@@ -21,7 +21,7 @@ final readonly class SupervisorProcessor implements ProcessorInterface
     /** @param array<string, SupervisorServer> $servers */
     public function __construct(
         private SupervisorApiClient $api,
-        #[Autowire(param: 'supervisors_servers')] private array $servers
+        #[Autowire(param: 'supervisordServers')] private array $servers
     ) {}
 
     public function process(

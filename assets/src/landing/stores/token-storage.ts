@@ -17,6 +17,7 @@ export type TokenStorageType = {
 export class TokenStorage implements TokenStorageType {
   constructor(
     private autoRefreshKey: string,
+    private syncRefreshKey: string,
     private darkThemeEnabledKey: string,
     private allowMutatorsEnabledKey: string
   ) {
@@ -34,6 +35,19 @@ export class TokenStorage implements TokenStorageType {
 
   isAutoRefresh(): boolean {
     return localStorage.getItem(this.autoRefreshKey) === '1';
+  }
+
+  /** Sync refresh */
+  setSyncRefresh(): void {
+    localStorage.setItem(this.syncRefreshKey, '1');
+  }
+
+  unsetSyncRefresh(): void {
+    localStorage.removeItem(this.syncRefreshKey);
+  }
+
+  isSyncRefresh(): boolean {
+    return localStorage.getItem(this.syncRefreshKey) === '1';
   }
 
   /** Dark theme */

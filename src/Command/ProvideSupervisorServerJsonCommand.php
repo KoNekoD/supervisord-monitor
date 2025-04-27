@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Assert\Assert;
 
 #[AsCommand('app:build-server-json')]
-class ProvideSupervisorServerJsonConsole extends Command
+class ProvideSupervisorServerJsonCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

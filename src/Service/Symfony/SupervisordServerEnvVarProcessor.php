@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Symfony;
 
-use App\DTO\EnvVar\AppCredentialsItem;
+use App\DTO\EnvVar\SupervisorServer;
 use Closure;
 use Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
 use Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
@@ -12,45 +12,44 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 
-final readonly class AppCredentialsEnvVarProcessor implements EnvVarProcessorInterface
+final readonly class SupervisordServerEnvVarProcessor implements EnvVarProcessorInterface
 {
     public function __construct(private SerializerInterface&DenormalizerInterface $serializer) {}
 
     public static function getProvidedTypes(): array
     {
         return [
-            'appCredentials' => 'string',
+            'supervisordServers' => 'string',
         ];
     }
 
-    /** @return array<string, AppCredentialsItem> */
+    /** @return array<string, SupervisorServer> */
     public function getEnv(string $prefix, string $name, Closure $getEnv): array
     {
-        $type = AppCredentialsItem::class.'[]';
+        $type = SupervisorServer::class.'[]';
 
         try {
             $data = $getEnv($name);
 
-            /** @var AppCredentialsItem[] $items */
-            $items = $this->serializer->deserialize($data, $type, 'json');
+            /** @var SupervisorServer[] $servers */
+            $servers = $this->serializer->deserialize($data, $type, 'json');
         } catch (EnvNotFoundException) {
-            $data = Yaml::parseFile('/var/www/supervisord-monitor/config/app/app_credentials.yaml');
+            $data = Yaml::parseFile('/var/www/supervisord-monitor/config/app/supervisord_servers.yaml');
             if (!is_array($data)) {
                 $data = [];
             } else {
-                $data = $data['app_credentials'] ?? [];
+                $data = $data['supervisors_servers'] ?? [];
             }
 
-            /** @var AppCredentialsItem[] $items */
-            $items = $this->serializer->denormalize($data, $type, 'json');
+            /** @var SupervisorServer[] $servers */
+            $servers = $this->serializer->denormalize($data, $type, 'json');
         }
+
 
         $result = [];
 
-        foreach ($items as $item) {
-            $pass = sprintf('%s:%s', $item->username, $item->password);
-
-            $result[$pass] = $item;
+        foreach ($servers as $server) {
+            $result[$server->name] = $server;
         }
 
         return $result;

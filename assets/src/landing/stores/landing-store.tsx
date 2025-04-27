@@ -10,6 +10,7 @@ export class LandingStore {
   actualData?: IPromiseBasedObservable<ApiSupervisor[]>;
 
   autoRefreshIsActive: boolean;
+  syncRefreshIsActive: boolean;
   isAllowMutatorsActive: boolean;
   serverTimeDiff: number;
 
@@ -21,15 +22,18 @@ export class LandingStore {
       actualData: observable,
       prevData: observable,
       autoRefreshIsActive: observable,
+      syncRefreshIsActive: observable,
       isAllowMutatorsActive: observable,
       serverTimeDiff: observable,
       fetchData: action,
       updateAutoRefresh: action,
+      updateSyncRefresh: action,
       switchAllowMutators: action,
       setServerTimeDiff: action,
     });
 
     this.autoRefreshIsActive = this.tokenStorage.isAutoRefresh();
+    this.syncRefreshIsActive = this.tokenStorage.isSyncRefresh();
     this.isAllowMutatorsActive = this.tokenStorage.isAllowMutatorsEnabled();
     this.serverTimeDiff = 0;
 
@@ -62,7 +66,7 @@ export class LandingStore {
       this.prevData = this.actualData;
     }
 
-    this.actualData = fromPromise(getSupervisors());
+    this.actualData = fromPromise(getSupervisors(this.syncRefreshIsActive));
     this.actualData.then(() => this.resetDiffWhenActualDataIsFetched());
   }
 
@@ -79,6 +83,18 @@ export class LandingStore {
       this.autoRefreshIsActive = false;
       this.tokenStorage.unsetAutoRefresh();
       this.notificator.success('Auto refresh disabled');
+    }
+  }
+
+  updateSyncRefresh(active: boolean): void {
+    if (active) {
+      this.syncRefreshIsActive = true;
+      this.tokenStorage.setSyncRefresh();
+      this.notificator.success('Sync refresh enabled');
+    } else {
+      this.syncRefreshIsActive = false;
+      this.tokenStorage.unsetSyncRefresh();
+      this.notificator.success('Sync refresh disabled');
     }
   }
 
