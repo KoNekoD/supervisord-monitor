@@ -17,6 +17,9 @@ console:
 	if ! docker compose ps | grep -q supervisord-monitor; then make up; fi
 	docker compose exec supervisord-monitor-app sh
 
+stop:
+	docker compose stop
+
 create_network:
 	docker network create --subnet 172.18.3.0/24 supervisord_monitor_network >/dev/null 2>&1 || true
 
