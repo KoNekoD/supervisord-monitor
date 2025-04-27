@@ -5,8 +5,8 @@ services:
     container_name: supervisord-monitor-app
     user: app
     build:
-      context: ./../../
-      dockerfile: ./config/docker/Dockerfile
+      context: ..
+      dockerfile: Dockerfile
       args:
         - BUILD_TYPE=dev
         - PUID=${PUID}
@@ -33,7 +33,7 @@ services:
   supervisord-monitor-test-server:
     user: app
     build:
-      context: ./../../tests/Functional/resources/
+      context: ../tests/Functional/resources
       args:
         - UID=${PUID}
         - GID=${PGID}

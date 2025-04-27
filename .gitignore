@@ -1,27 +1,24 @@
 /.idea/
+
+/config/jwt/*.pem
 /.env.local
 /.env.local.php
 /.env.*.local
+
 /config/secrets/prod/prod.decrypt.private.php
+
 /public/bundles/
+
 /var/cache
 /var/log
 /var/.tmp/
 /vendor/
+
 /phpunit.xml
+.phpunit.result.cache
+
 /.php-cs-fixer.php
-/config/docker/.env
 
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
+/docker/.env
 
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
 
-###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
-###< lexik/jwt-authentication-bundle ###
