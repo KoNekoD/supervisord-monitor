@@ -1,22 +1,19 @@
-import React from 'react';
-import { ProviderRootStore } from '~/main/context-provider';
-import { AppRouter } from '~/app/providers/router';
-import { ThemeProvider } from '~/app/providers/theme';
-import { ReactQueryProvider } from '~/app/providers/react-query';
+import { AppRouter } from '~/providers/router';
+import { ReactQueryProvider } from '~/providers/react-query';
 import { Toaster } from 'react-hot-toast';
-import { SessionProvider } from '~/app/providers/session';
+import { SessionProvider } from '~/providers/session';
+import { StrictMode } from 'react';
+import { ClockProvider } from '~/providers/clock/context';
 
 export const App = () => (
-  <React.StrictMode>
-    <ProviderRootStore>
-      <ReactQueryProvider>
-        <SessionProvider>
-          <ThemeProvider defaultTheme='system'>
-            <Toaster position='top-right' reverseOrder={false} />
-            <AppRouter />
-          </ThemeProvider>
-        </SessionProvider>
-      </ReactQueryProvider>
-    </ProviderRootStore>
-  </React.StrictMode>
+  <StrictMode>
+    <ReactQueryProvider>
+      <SessionProvider>
+        <ClockProvider>
+          <Toaster position='top-right' reverseOrder={false} />
+          <AppRouter />
+        </ClockProvider>
+      </SessionProvider>
+    </ReactQueryProvider>
+  </StrictMode>
 );
