@@ -37,4 +37,4 @@ export const useSettings = () => {
     allowMutators,
     setAllowMutators,
   };
-}
+};

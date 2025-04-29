@@ -17,4 +17,4 @@ export const checkSupervisorManageResult = (result: ApiSupervisorSupervisorManag
   }
 
   return false;
-}
+};

@@ -1,6 +1,14 @@
 export const Erase = () => {
   return (
-    <svg stroke='currentColor' fill='currentColor' strokeWidth='0' viewBox='0 0 24 24' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      stroke='currentColor'
+      fill='currentColor'
+      strokeWidth='0'
+      viewBox='0 0 24 24'
+      height='1em'
+      width='1em'
+      xmlns='http://www.w3.org/2000/svg'
+    >
       <path fill='none' strokeWidth='2' d='M7,21 L22,6 L18,2 L2,18 L5,21 L19,21 M6,14 L10,18'></path>
     </svg>
   );

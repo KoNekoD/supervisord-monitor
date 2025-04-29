@@ -7,13 +7,7 @@ interface ToastOptions {
   duration?: number;
   className?: string;
   style?: CSSProperties;
-  position?:
-    | 'top-center'
-    | 'top-right'
-    | 'top-left'
-    | 'bottom-center'
-    | 'bottom-right'
-    | 'bottom-left';
+  position?: 'top-center' | 'top-right' | 'top-left' | 'bottom-center' | 'bottom-right' | 'bottom-left';
 }
 
 type Renderable = JSX.Element | string | null;

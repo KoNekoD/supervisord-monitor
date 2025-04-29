@@ -7,5 +7,9 @@ import { ReactNode } from 'react';
 export const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { status } = useSession();
 
-  return <>{status === 'loading' ? <PageLoader /> : status === 'authenticated' ? children : <Navigate to={ROUTES.LOGIN} />}</>;
+  return (
+    <>
+      {status === 'loading' ? <PageLoader /> : status === 'authenticated' ? children : <Navigate to={ROUTES.LOGIN} />}
+    </>
+  );
 };

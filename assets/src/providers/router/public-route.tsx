@@ -8,5 +8,9 @@ import { ReactNode } from 'react';
 export const PublicRoute = ({ children }: { children: ReactNode }) => {
   const { status } = useSession();
 
-  return <>{status === 'loading' ? <PageLoader /> : status === 'unauthenticated' ? children : <Navigate to={ROUTES.HOME} />}</>;
+  return (
+    <>
+      {status === 'loading' ? <PageLoader /> : status === 'unauthenticated' ? children : <Navigate to={ROUTES.HOME} />}
+    </>
+  );
 };
