@@ -31,9 +31,4 @@ export const useInvalidateSupervisors = () => {
     queryClient.invalidateQueries({
       queryKey: ['getSupervisors'],
     });
-
-  // todo: this.actualData.then(() => this.resetDiffWhenActualDataIsFetched());
-  // async resetDiffWhenActualDataIsFetched() {
-  //     this.setServerTimeDiff(0);
-  //   }
 };
