@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '~/api/use-login';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { ROUTES } from 'src/const';
 import { useInvalidateMe } from '~/api/use-get-me';
+import { ROUTES } from '~/const';
 
 const schema = z.object({
   login: z.string(),

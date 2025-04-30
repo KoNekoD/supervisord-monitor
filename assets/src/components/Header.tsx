@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router';
 import { Link as ReactLink } from 'react-router-dom';
-import { ROUTES } from 'src/const';
-import { RouteValues } from '~/const/routes';
+import { ROUTES, RouteValues } from '~/const/routes';
 import { useLogout } from '~/api/use-logout';
 
 interface HeaderLinks {
