@@ -18,7 +18,7 @@ type ValueOrFunction<TValue, TArg> = TValue | ValueFunction<TValue, TArg>;
 
 const initialOptions: ToastOptions = {
   position: 'top-right',
-}
+};
 
 export const toastManager = {
   success(message: string, options?: ToastOptions) {
