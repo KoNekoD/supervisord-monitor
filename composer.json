@@ -8,6 +8,10 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^3.3",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.14",
+        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "doctrine/orm": "^3.3",
         "lexik/jwt-authentication-bundle": "^3.0",
         "nelmio/cors-bundle": "^2.4",
         "phpdocumentor/reflection-docblock": "^5.4",
@@ -82,9 +86,6 @@
         ],
         "test": [
             "@phpstan"
-        ],
-        "gen-ts": [
-            "vendor/bin/php-converter --from=src --to=assets/src/api-client --config=config/php-converter-ts.php"
         ],
         "phpunit": [
             "vendor/bin/phpunit -c config/code/phpunit.xml.dist tests"

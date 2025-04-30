@@ -1,5 +1,5 @@
-import { $api } from '~/shared/api';
-import { API_ENDPOINTS } from '~/shared/const';
+import { $api } from 'src/api/api';
+import { API_ENDPOINTS } from 'src/const';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetMe = () =>

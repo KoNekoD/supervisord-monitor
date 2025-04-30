@@ -1,0 +1,8 @@
+# SUPERVISORS_SERVERS Env var fallback. Can be used with a large number of servers.
+# If no SUPERVISORS_SERVERS environment variable has been set this configuration will be taken.
+supervisors_servers:
+    - ip: 127.0.0.1
+      port: 9551
+      name: default
+      username: default
+      password: default
