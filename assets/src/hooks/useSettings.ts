@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 export const useSettings = () => {
   const [autoRefresh, setAutoRefresh] = useLocalStorage('auto-refresh', false);
+  const [autoRefreshInterval, setAutoRefreshInterval] = useLocalStorage('auto-refresh-interval', 10);
   const [syncRefresh, setSyncRefresh] = useLocalStorage('sync-refresh', false);
   const [theme, setTheme] = useLocalStorage('theme', Theme.system);
   const [allowMutators, setAllowMutators] = useLocalStorage('allow-mutators', false);
@@ -30,10 +31,12 @@ export const useSettings = () => {
   return {
     autoRefresh,
     setAutoRefresh,
+    autoRefreshInterval,
+    setAutoRefreshInterval,
     syncRefresh,
     setSyncRefresh,
     theme,
-    setTheme: (theme: Theme) => setTheme(theme),
+    setTheme,
     allowMutators,
     setAllowMutators,
   };

@@ -16,17 +16,21 @@ type ValueFunction<TValue, TArg> = (arg: TArg) => TValue;
 
 type ValueOrFunction<TValue, TArg> = TValue | ValueFunction<TValue, TArg>;
 
+const initialOptions: ToastOptions = {
+  position: 'top-right',
+}
+
 export const toastManager = {
   success(message: string, options?: ToastOptions) {
-    toast.success(message, options);
+    toast.success(message, { ...initialOptions, ...options });
   },
 
   error(message: string, options?: ToastOptions) {
-    toast.error(message, options);
+    toast.error(message, { ...initialOptions, ...options });
   },
 
   loading(message: string, options?: ToastOptions) {
-    toast.loading(message, options);
+    toast.loading(message, { ...initialOptions, ...options });
   },
 
   promise<T>(

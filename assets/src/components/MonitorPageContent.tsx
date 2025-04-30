@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 export const MonitorPageContent = () => {
   const { data, isLoading } = useGetSupervisors();
-  const { autoRefresh } = useSettings();
+  const { autoRefresh, autoRefreshInterval } = useSettings();
   const invalidateSupervisors = useInvalidateSupervisors();
 
   useEffect(() => {
@@ -17,10 +17,10 @@ export const MonitorPageContent = () => {
           toastManager.success('Data auto-refreshed');
         });
       }
-    }, 10 * 1000);
+    }, autoRefreshInterval * 1000);
 
     return () => clearInterval(interval);
-  }, [data]);
+  }, [autoRefresh, autoRefreshInterval, data]);
 
   if (isLoading) {
     return <PageLoader />;

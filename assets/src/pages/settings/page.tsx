@@ -4,11 +4,22 @@ import { useSettings } from '~/hooks/useSettings';
 import { toastManager } from '~/util/toastManager';
 import { Checkbox } from '~/components/ui/Checkbox';
 import { Theme } from '~/config/theme';
+import { Input } from '~/components/ui/Input';
 
 export const SettingsPage = () => {
   const isManager = isHasRoleManager();
-  const { autoRefresh, setAutoRefresh, syncRefresh, setSyncRefresh, theme, setTheme, allowMutators, setAllowMutators } =
-    useSettings();
+  const {
+    autoRefresh,
+    setAutoRefresh,
+    autoRefreshInterval,
+    setAutoRefreshInterval,
+    syncRefresh,
+    setSyncRefresh,
+    theme,
+    setTheme,
+    allowMutators,
+    setAllowMutators,
+  } = useSettings();
 
   return (
     <div className={'flex h-screen w-full items-center justify-center'}>
@@ -21,6 +32,19 @@ export const SettingsPage = () => {
           onChange={e => {
             setAutoRefresh(e.target.checked);
             toastManager.success(e.target.checked ? 'Auto refresh enabled' : 'Auto refresh disabled');
+          }}
+        />
+        <Input
+          id='changeAutoRefreshIntervalInput'
+          text='Auto-refresh interval'
+          value={autoRefreshInterval}
+          type='number'
+          onChange={e => {
+            const value = parseInt(e.target.value);
+            if (value > 0) {
+              setAutoRefreshInterval(value);
+              toastManager.success(`Auto refresh set to ${value}`);
+            }
           }}
         />
         <Checkbox
