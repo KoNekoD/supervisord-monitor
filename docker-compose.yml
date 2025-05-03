@@ -10,7 +10,6 @@ services:
         - PUID=1000
         - PGID=1000
         - DEV_XDEBUG_AUTOSTART=trigger
-        - PHP_IDE_CONFIG=serverName=Docker
     environment:
       - PHP_IDE_CONFIG=serverName=Docker
       - API_HOST=localhost

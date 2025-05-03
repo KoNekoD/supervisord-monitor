@@ -14,7 +14,6 @@ ARG BUILD_TYPE="dist"
 ARG DEV_HOST_IP=172.18.3.1
 ARG DEV_XDEBUG_AUTOSTART=trigger
 ARG DEV_XDEBUG_IDE_KEY=PHPSTORM
-ARG PHP_IDE_CONFIG="serverName=Docker"
 
 RUN set -eux && \
     chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions @composer intl zip && \
