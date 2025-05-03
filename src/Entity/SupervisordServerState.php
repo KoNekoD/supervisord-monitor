@@ -16,27 +16,19 @@ class SupervisordServerState
 
     /** @var array<int, array<string, mixed>> $groups */
     #[ORM\Column(type: 'json', options: ['jsonb' => true])]
-    public array $groups;
+    public array $groups = [];
 
     #[ORM\Column]
-    public string $version;
+    public string $version = '';
 
     #[ORM\Column]
-    public bool $ok;
+    public bool $ok = true;
 
     #[ORM\Column]
-    public string $server;
+    public string $server = '';
 
     #[ORM\Column(type: 'text', nullable: true)]
-    public ?string $failError;
-
-    public function __construct() {
-        $this->groups = [];
-        $this->version = '';
-        $this->ok = true;
-        $this->server = '';
-        $this->failError = null;
-    }
+    public ?string $failError = null;
 
     public function getId(): ?int
     {
@@ -54,6 +46,8 @@ class SupervisordServerState
     /** @param array<int, ProcessGroup> $groups */
     public function setGroups(array $groups): self
     {
+        /** @var array<int, array<string, mixed>> $groups */
+
         $this->groups = $groups;
 
         return $this;

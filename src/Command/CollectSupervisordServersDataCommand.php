@@ -40,10 +40,13 @@ class CollectSupervisordServersDataCommand extends Command
             $process = new Process(['bin/console', CollectSupervisordServerDataCommand::COMMAND, $server->name]);
             $process->mustRun();
 
-            if ($out = $process->getOutput()) {
+            $out = $process->getOutput();
+            if ('' !== $out) {
                 $output->writeln($out);
             }
-            if ($err = $process->getErrorOutput()) {
+
+            $err = $process->getErrorOutput();
+            if ('' !== $err) {
                 $output->writeln('<error>'.$err.'</error>');
             }
         }
