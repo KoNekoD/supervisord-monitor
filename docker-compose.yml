@@ -20,7 +20,6 @@ services:
       - ./:/var/www/supervisord-monitor:cached
       - ./docker/nginx/dev/supervisord-monitor.local.crt:/etc/nginx/ssl/supervisord-monitor.local.crt
       - ./docker/nginx/dev/supervisord-monitor.local.key:/etc/nginx/ssl/supervisord-monitor.local.key
-      - ./tests/Functional/resources/supervisord_servers.yaml:/var/www/supervisord-monitor/config/app/supervisord_servers.yaml
       - ./docker/supervisor/supervisord-dev.conf:/etc/supervisord.conf
     ports:
       - "8080:8080" # Dev mode(backend) - Deprecated
