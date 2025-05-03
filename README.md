@@ -27,13 +27,15 @@ Telegram: https://t.me/supervisord_monitor
 
 First let's generate jwt passphrase, we need a random password with a length of 64 characters, just use this command:
 
-`tr -dc A-Za-z0-9 </dev/urandom | head -c 64; echo`
+```shell
+tr -dc A-Za-z0-9 </dev/urandom | head -c 64; echo
+```
 
 ### 1. Docker extend
 
 It needs 2 files private.pem and public.pem, which can be obtained by running the container and copying the keys:
 
-```
+```shell
 docker run --detach --name supervisord-monitor -e JWT_PASSPHRASE=generated-jwt-passphrase konekod/supervisord-monitor
 docker exec --user app -it supervisord-monitor php bin/console lexik:jwt:generate-keypair
 docker cp supervisord-monitor:/var/www/supervisord-monitor/config/jwt/private.pem private.pem
@@ -44,7 +46,7 @@ docker rm supervisord-monitor
 
 After that, let's create a Dockerfile in a separate directory:
 
-```
+```dockerfile
 FROM konekod/supervisord-monitor:latest
 
 ENV JWT_PASSPHRASE=generated-jwt-passphrase
@@ -67,7 +69,7 @@ ENV SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"fron
 
 Final start
 
-```
+```shell
 docker buildx build -t supervisord-monitor-override --load .
 
 docker run --detach --name supervisord-monitor-override -p "10011:8080" supervisord-monitor-override
@@ -82,7 +84,7 @@ Be sure to create a jwt folder that will become volume manually,
 otherwise the created folder will have root privileges, 
 which will break key creation (the jwt folder should always be there, it contains the keys)
 
-```
+```yaml
 version: "3.8"
 
 name: supervisord-monitor-example
@@ -108,7 +110,7 @@ Here it is possible to change the volume mount settings to ro after creating the
 Jwt keys are automatically generated on the first startup themselves
 (In `docker/supervisor/supervisord-dist.conf` there is `program:generate-jwt-if-not-exists`)
 
-```
+```shell
 docker run \  
   --detach \  
   --name supervisord-monitor \  
@@ -206,9 +208,9 @@ tests/Functional/resources/supervisord.conf for an example), clone or delete pro
 
 Additionally, bulk operations are supported, such as:
 
-    Clearing logs for all processes on a server.
+* Clearing logs for all processes on a server.
 
-    Starting, stopping, or restarting all processes simultaneously.
+* Starting, stopping, or restarting all processes simultaneously.
 
 The interface is fully responsive and supports access from mobile devices.
 
@@ -348,7 +350,7 @@ it will forcibly create them with overwriting.
 
 1.Clone supervisord-monitor to server vhost/webroot:
 
-```
+```shell
 git clone git@github.com:KoNekoD/supervisord-monitor.git
 ```
 
