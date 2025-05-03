@@ -65,6 +65,9 @@ ENV API_HOST=example.com
 
 # Remote suprevisors
 ENV SUPERVISORS_SERVERS=[{"ip":"app-container-frontent","port":9551,"name":"frontent","username":"default","password":"default"},{"ip":"app-container-backend","port":9551,"name":"backend","username":"default","password":"default"}]  
+
+# Disable r/w access for project(exclude var dir) for improve security
+USER www-data
 ```
 
 Final start

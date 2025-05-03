@@ -55,7 +55,4 @@ EXPOSE 8080
 # 100000 microseconds = 0.1 seconds
 ENV COLLECT_INTERVAL_IN_MICROSECONDS=100000
 
-# Disable r/w access for project(exclude var dir) for improve security
-USER www-data
-
 CMD ["supervisord"]
