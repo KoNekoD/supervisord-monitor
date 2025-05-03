@@ -58,9 +58,9 @@ class User
         return $this->username;
     }
 
-    /** @param array{roles: string[]} $payload */
+    /** @param array{roles?: string[]} $payload */
     public static function createFromPayload($username, array $payload): self
     {
-        return new self($username, $payload['roles']);
+        return new self($username, $payload['roles'] ?? []);
     }
 }

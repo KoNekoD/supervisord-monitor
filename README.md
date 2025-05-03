@@ -332,22 +332,17 @@ APP_ENV environment variable.
 ### Backend scripts
 
 There are 2 scripts to simplify the work with this tool:
-`bin/database_provision.sh`, `bin/fix_if_invalid_jwt.sh` and `bin/generate_jwt_if_not_exists.sh`.
+`bin/database_provision.sh` and `bin/generate_jwt_if_not_exists.sh`.
 
 #### bin/database_provision.sh
 
 Automatically runs in production environment and creates the database if it does not exist.
 Also performs migrations regardless of the need to create a database.
 
-#### bin/fix_if_invalid_jwt.sh
-
-Automatically runs in production environment and if JWT keys are broken or missing it will force their 
-creation with overwriting.
-
 #### bin/generate_jwt_if_not_exists.sh
 
-Automatically starts in the production environment and if there are no files physically present, 
-it will forcibly create them with overwriting.
+Automatically runs in production environment and if JWT keys are broken or missing it will force their
+creation with overwriting.
 
 ## Manual install
 
