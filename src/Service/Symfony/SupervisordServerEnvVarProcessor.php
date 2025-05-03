@@ -35,11 +35,7 @@ final readonly class SupervisordServerEnvVarProcessor implements EnvVarProcessor
             $servers = $this->serializer->deserialize($data, $type, 'json');
         } catch (EnvNotFoundException) {
             $data = Yaml::parseFile('/var/www/supervisord-monitor/config/app/supervisord_servers.yaml');
-            if (!is_array($data)) {
-                $data = [];
-            } else {
-                $data = $data['supervisors_servers'] ?? [];
-            }
+            $data = is_array($data) ? $data['supervisors_servers'] ?? [] : [];
 
             /** @var SupervisorServer[] $servers */
             $servers = $this->serializer->denormalize($data, $type, 'json');

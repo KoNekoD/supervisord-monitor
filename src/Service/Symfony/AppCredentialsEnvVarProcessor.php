@@ -35,11 +35,7 @@ final readonly class AppCredentialsEnvVarProcessor implements EnvVarProcessorInt
             $items = $this->serializer->deserialize($data, $type, 'json');
         } catch (EnvNotFoundException) {
             $data = Yaml::parseFile('/var/www/supervisord-monitor/config/app/app_credentials.yaml');
-            if (!is_array($data)) {
-                $data = [];
-            } else {
-                $data = $data['app_credentials'] ?? [];
-            }
+            $data = is_array($data) ? $data['app_credentials'] ?? [] : [];
 
             /** @var AppCredentialsItem[] $items */
             $items = $this->serializer->denormalize($data, $type, 'json');
