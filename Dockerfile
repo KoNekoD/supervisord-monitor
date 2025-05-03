@@ -53,4 +53,7 @@ RUN if [ "${BUILD_TYPE}" = "dev" ]; then cd assets && yarn set version from sour
 
 EXPOSE 8080
 
+# 100000 microseconds = 0.1 seconds
+ENV COLLECT_INTERVAL_IN_MICROSECONDS=100000
+
 CMD ["supervisord"]

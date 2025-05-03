@@ -15,6 +15,7 @@ services:
       - PHP_IDE_CONFIG=serverName=Docker
       - API_HOST=localhost
       - JWT_PASSPHRASE=73e14354e3850602ceb82c34c17c56e4aee66dbc9b0bda91652e2f57cb2200b3
+      - COLLECT_INTERVAL_IN_MICROSECONDS=100000 # 0.1s
     volumes:
       - ./:/var/www/supervisord-monitor:cached
       - ./docker/nginx/dev/supervisord-monitor.local.crt:/etc/nginx/ssl/supervisord-monitor.local.crt

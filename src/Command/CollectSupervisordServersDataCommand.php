@@ -19,7 +19,8 @@ class CollectSupervisordServersDataCommand extends Command
     /** @param array<string, SupervisorServer> $supervisorServers */
     public function __construct(
         public SupervisorApiClient $api,
-        #[Autowire(param: 'supervisordServers')] private readonly array $supervisorServers
+        #[Autowire(param: 'supervisordServers')] private readonly array $supervisorServers,
+        #[Autowire(param: 'collectIntervalInMicroseconds')] private readonly int $collectIntervalInMicroseconds,
     ) {
         parent::__construct();
     }
@@ -29,7 +30,7 @@ class CollectSupervisordServersDataCommand extends Command
         // @phpstan-ignore-next-line
         while (true) {
             $this->collect($output);
-            usleep(100000); // 0.1s
+            usleep($this->collectIntervalInMicroseconds);
         }
     }
 
