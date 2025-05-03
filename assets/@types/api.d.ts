@@ -68,7 +68,20 @@ interface ApiSupervisor {
 }
 
 interface ApiSupervisorSupervisorManage {
-  type: 'start_all_processes' | 'stop_all_processes' | 'restart_all_processes' | 'clear_all_process_log' | 'start_process_group' | 'stop_process_group' | 'restart_process_group' | 'start_process' | 'stop_process' | 'restart_process' | 'clear_process_log' | 'clone_process' | 'remove_process';
+  type:
+    | 'start_all_processes'
+    | 'stop_all_processes'
+    | 'restart_all_processes'
+    | 'clear_all_process_log'
+    | 'start_process_group'
+    | 'stop_process_group'
+    | 'restart_process_group'
+    | 'start_process'
+    | 'stop_process'
+    | 'restart_process'
+    | 'clear_process_log'
+    | 'clone_process'
+    | 'remove_process';
   server: string | null;
   group: string | null;
   process: string | null;

@@ -1,6 +1,6 @@
-import { $api } from '~/shared/api';
+import { $api } from 'src/api/api';
 import { useMutation } from '@tanstack/react-query';
-import { API_ENDPOINTS } from '~/shared/const';
+import { API_ENDPOINTS } from 'src/const';
 
 export const useLogout = () =>
   useMutation({

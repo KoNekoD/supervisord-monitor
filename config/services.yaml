@@ -1,6 +1,7 @@
 parameters:
-  supervisors_servers: '%env(supervisorsServers:SUPERVISORS_SERVERS)%'
-  app_credentials: '%env(appCredentials:APP_CREDENTIALS)%'
+  supervisordServers: '%env(supervisordServers:SUPERVISORS_SERVERS)%'
+  appCredentials: '%env(appCredentials:APP_CREDENTIALS)%'
+  collectIntervalInMicroseconds: '%env(int:COLLECT_INTERVAL_IN_MICROSECONDS)%'
 
 services:
   _defaults:

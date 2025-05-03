@@ -23,7 +23,7 @@ final readonly class LoginController
     public function __construct(
         private AuthenticationSuccessHandler $successHandler,
         private RateLimiterFactory $authByCredentialsApiLimiter,
-        #[Autowire(param: 'app_credentials')] private array $appCredentials
+        #[Autowire(param: 'appCredentials')] private array $appCredentials
     ) {}
 
     public function __invoke(#[MapRequestPayload] AuthByCredentialsDTO $DTO, Request $request): Response
