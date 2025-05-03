@@ -1,4 +1,4 @@
-init: down build up
+init: down build create_network up
 
 build:
 	docker compose build
@@ -43,13 +43,6 @@ code_cs_fix_diff:
 
 code_cs_fix_diff_status:
 	if make code_cs_fix_diff; then \
-	    printf '\n\n\n [OK] \n\n\n'; exit 0; \
-	else \
-	    printf '\n\n\n [FAIL] \n\n\n'; exit 1; \
-	fi
-
-code_cs_fix_diff_status_no_docker:
-	if make code_cs_fix_diff_no_docker; then \
 	    printf '\n\n\n [OK] \n\n\n'; exit 0; \
 	else \
 	    printf '\n\n\n [FAIL] \n\n\n'; exit 1; \
