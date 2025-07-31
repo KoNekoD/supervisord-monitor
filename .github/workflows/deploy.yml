@@ -16,15 +16,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Create .env file for frontend
         run: echo "VITE_API_URL='/api'" > assets/.env
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Login to Docker Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-      - name: Build and Push Docker Image
-        run: docker buildx build -t $IMAGE_WITH_TAG --load .
-      - name: Push Docker Image
-        run: docker push $IMAGE_WITH_TAG
-      - name: Set as latest
-        run: docker tag $IMAGE_WITH_TAG $LATEST_IMAGE
-      - name: Push Docker Image
-        run: docker push $LATEST_IMAGE
+      - name: Build and Push Docker Image (multi-arch)
+        run: docker buildx build --platform linux/amd64,linux/arm64 --push -t $IMAGE_WITH_TAG -t $LATEST_IMAGE .
